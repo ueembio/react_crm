@@ -3,38 +3,38 @@ import {Link,useLocation} from 'react-router-dom';
 import { getList } from '../../services/products';
 
 function ViewProducts() {  
+    let mounted = true;
     const [products, setList] = useState([]);
     const [alert, setAlert] = useState(false);
     let location = useLocation();
 
     useEffect(() => {
-      console.log(location.pathname); 
+        console.log(location.pathname); 
       console.log(location.search); 
       console.log(location.state.alert);
-      setAlert(location.state.alert); 
-   }, [location]);
+      //setAlert(location.state.alert); 
+      if(products.length && !alert) {
+        mounted = true;          
+          return;
+        }
 
-
-    useEffect(() => {
-        let mounted = true;
         getList()
           .then(items => {
             if(mounted) {
-              setList(items)
+              mounted = false;
+              
             }
           })
         return () => mounted = false;
-      }, [])
-
-      
-
-      useEffect(() => {
+      }, [alert,products,location])
+    
+     /* useEffect(() => {
         if(alert) {
           setTimeout(() => {
             setAlert(false);
           }, 1000)
         }
-      }, [alert])
+      }, [alert])*/
 
 
     return(
