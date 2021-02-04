@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 var product = [ {
   'id':1,
@@ -45,7 +50,18 @@ app.use('/login', (req, res) => {
     });
 });
 
-app.use('/products',(req,res) => {
+app.get('/products',(req,res) => {
+  console.log(req.body);
+  res.send(product);
+});
+
+app.post('/products',(req,res) => {
+  console.log(req.body);
+  //p = JSON.parse(req.body);
+  //console.log(p);
+  //var user_name = p.itemName;
+  //var password = p.itemCode;
+  //console.log("User name = "+user_name+", password is "+password);
   res.send(product);
 });
 
