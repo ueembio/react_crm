@@ -7,13 +7,21 @@ function AddProduct({setAlert}) {
     const [itemName, setItemName] = useState();
     const [itemCode, setItemCode] = useState();
     const history = useHistory();
+    
+
+    
+
     //Comment Added
     const handleSubmit = (e) => {
         console.log('hello');
         e.preventDefault();
         var product = {'id':1, 'name':itemName,'pnumber':itemCode}    
         setList({itemName,itemCode});
-        history.push('/ViewProducts/');                  
+        history.push({
+           pathname: '/ViewProducts/',
+           search: '?query=abc',
+           state:{alert:true}
+        });                  
       };
     
       return (

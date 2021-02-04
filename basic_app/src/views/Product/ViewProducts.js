@@ -1,11 +1,20 @@
 import React,{ useEffect, useState } from 'react';
-import {Link} from 'react-router-dom';
+import {Link,useLocation} from 'react-router-dom';
 import { getList } from '../../services/products';
 
 function ViewProducts() {  
     const [products, setList] = useState([]);
     const [alert, setAlert] = useState(false);
-    
+    let location = useLocation();
+
+    useEffect(() => {
+      console.log(location.pathname); 
+      console.log(location.search); 
+      console.log(location.state.alert);
+      setAlert(location.state.alert); 
+   }, [location]);
+
+
     useEffect(() => {
         let mounted = true;
         getList()
@@ -16,6 +25,8 @@ function ViewProducts() {
           })
         return () => mounted = false;
       }, [])
+
+      
 
       useEffect(() => {
         if(alert) {
