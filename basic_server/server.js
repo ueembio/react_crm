@@ -3,9 +3,9 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-//app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
-//app.use(bodyParser.raw());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 var product = [ {
   'id':1,
@@ -55,9 +55,12 @@ app.get('/products',(req,res) => {
   res.send(product);
 });
 
-app.post('/products',(req,res) => {
-  
-  console.log(req.body);
+app.post('/products',(req,res) => {  
+  console.log('In Post command');
+  console.log(req.body.item.itemName);  
+  console.log(req.body.item.itemCode);
+  var p = {'id':product.length+1,'name':req.body.item.itemName,'pnumber':req.body.item.itemCode};  
+  product.push(p);
   res.send(product);
 });
 
