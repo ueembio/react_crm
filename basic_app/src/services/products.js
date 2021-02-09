@@ -9,6 +9,17 @@ export function getList() {
       .then(data => data.json())
   }
 
+  export function updateProduct(id,item) {
+    return fetch('http://localhost:8080/products/'+id, {
+      method: 'PUT',
+      headers: {
+       'Content-Type': 'application/json'
+      },    
+      body: JSON.stringify({item})
+})
+  .then(data => data.json())
+  }
+
 
 export function setList(item) {   
     return fetch('http://localhost:8080/products', {

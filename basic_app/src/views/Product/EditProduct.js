@@ -1,11 +1,12 @@
 import React,{ useEffect, useState } from 'react';
 import {Link,Redirect,useHistory,useParams} from 'react-router-dom';
-import { getProduct,updateList} from '../../services/products';
+import { getProduct,updateList,updateProduct} from '../../services/products';
 import ViewProducts from './ViewProducts';
 
 
 function EditProduct({setAlert}) { 
     const { id } = useParams();
+    const history = useHistory();
         const [user, setUser] = useState({
             name: "",
             pnumber: "",
@@ -24,6 +25,12 @@ function EditProduct({setAlert}) {
         })
         }, []);
 
+        const onSubmit = async e => {
+            e.preventDefault();
+            updateProduct(id,user);            
+            history.push("/ViewProducts");
+          };    
+
         return (
         <div className="container-fluid">            
             <div class="row">
@@ -32,7 +39,7 @@ function EditProduct({setAlert}) {
                     <div class="card-header">
                         <h3 class="card-title">Add Product</h3>
                     </div>                
-                    <form >
+                    <form onSubmit={e => onSubmit(e)}>
                         <div className="card-body">
                         <div className="form-group">
                             <label for="exampleInputName">Product Name</label>

@@ -50,6 +50,15 @@ app.use('/login', (req, res) => {
     });
 });
 
+app.put('/products/:id',(req,res) =>{
+  console.log('In Put command');
+  console.log(req.body.item.name);  
+  console.log(req.body.item.pnumber);
+  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
+  product[req.params.id] = p;
+  res.send(product);
+});
+
 app.get('/products',(req,res) => {
   console.log(req.body);
   res.send(product);
