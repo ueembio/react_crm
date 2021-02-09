@@ -55,6 +55,11 @@ app.get('/products',(req,res) => {
   res.send(product);
 });
 
+app.get('/products/:id', function(req, res) {
+  res.send(product[req.params.id]);
+});
+
+
 app.post('/products',(req,res) => {  
   console.log('In Post command');
   console.log(req.body.item.itemName);  

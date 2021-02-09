@@ -14,7 +14,7 @@ function Content() {
             <Route exact path="/dashboard" component={Dashboard} />            
             <Route exact path="/ViewProducts" component={ViewProducts} />            
             <Route exact path="/AddProduct" component={AddProduct} /> 
-            <Route exact path="/EditProduct" component={EditProduct} /> 
+            <Route exact path="/product/edit/:id" component={EditProduct} /> 
             <Redirect from='/AddProduct/' to="/ViewProducts/" />           
       </Switch>
   );    

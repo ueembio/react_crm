@@ -3,6 +3,13 @@ export function getList() {
       .then(data => data.json())
   }
 
+  export function getProduct(id) {
+    console.log(id);
+    return fetch('http://localhost:8080/products/'+id)
+      .then(data => data.json())
+  }
+
+
 export function setList(item) {   
     return fetch('http://localhost:8080/products', {
       method: 'POST',
