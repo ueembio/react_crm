@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import {Link} from 'react-router-dom';
 
 function Sidebar() {
+
+  const [pathname, setPathname] = useState(window.location.pathname);
+
+    useEffect(() => {        
+        console.log('Hello WOrld');
+        
+    }, [pathname]);
   
+    handleClick = event => {
+      console.log('Hello WOrld');
+      setPathname(window.location.pathname);
+    }
+
   return (
+  
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
     <Link to="/dashboard" className="brand-link">
       <img src="/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{"opacity": ".8"}} />
@@ -34,7 +47,7 @@ function Sidebar() {
       <nav className="mt-2">
         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li className="nav-item">
-                <Link to="/" className="nav-link">
+                <Link to="/dashboard"  onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/') ? "active " : " ")}>
                 <i className="nav-icon fas fa-th"></i>
                 <p>
                     Dashboard
@@ -43,7 +56,7 @@ function Sidebar() {
           </li>
 
           <li className="nav-item menu-open">
-            <Link href="#" className="nav-link active">
+            <Link href="#" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Products
@@ -52,13 +65,13 @@ function Sidebar() {
             </Link>
             <ul className="nav nav-treeview">
               <li className="nav-item">
-                <Link to="/AddProduct" className="nav-link active">
+                <Link to="/AddProduct" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
                   <i className="far fa-circle nav-icon"></i>
                   <p>Add Products</p>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/viewProducts" className="nav-link">
+                <Link to="/viewProducts" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/viewProducts') ? "active " : " ")}>
                   <i className="far fa-circle nav-icon"></i>
                   <p>View Products</p>
                 </Link>
@@ -69,9 +82,7 @@ function Sidebar() {
         </ul>
       </nav>
     </div>
-  </aside>
-        
-  
+  </aside>        
   );
 }
 

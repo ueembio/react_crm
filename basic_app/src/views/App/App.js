@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Dashboard from '../Dashboard/Dashboard';
-import Preferences from '../Preference/Preferences';
+import { BrowserRouter } from 'react-router-dom';
 import Login from '../Login/Login';
 import useToken from './useToken';
 import Sidebar from './Sidebar';

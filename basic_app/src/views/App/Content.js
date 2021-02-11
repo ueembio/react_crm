@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter,Switch, Route,Redirect} from 'react-router-dom';
+import {Switch, Route,Redirect} from 'react-router-dom';
 import Dashboard from '../Dashboard/Dashboard';
 import ViewProducts from '../Product/ViewProducts';
 import AddProduct from '../Product/AddProduct';
