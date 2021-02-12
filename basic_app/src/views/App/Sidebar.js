@@ -1,19 +1,27 @@
 import React, { useEffect,useState } from 'react';
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
 
 function Sidebar() {
 
   const [pathname, setPathname] = useState(window.location.pathname);
+  Array.prototype.contains = function(obj) {
+    return this.indexOf(obj) > -1;};
+  const history = useHistory();
 
-    useEffect(() => {        
-        console.log('Hello WOrld');
-        
-    }, [pathname]);
-  
-    handleClick = event => {
+  useEffect(() => {        
       console.log('Hello WOrld');
-      setPathname(window.location.pathname);
-    }
+      //setPathname(window.location.pathname);         
+  }, [pathname]);
+
+  function toggle(e,data){
+    e.preventDefault();  
+    console.log(data); 
+    //console.log(window.location.pathname);
+    setPathname(data);
+    history.push({
+      pathname: data
+    });                  
+  }
 
   return (
   
@@ -47,7 +55,7 @@ function Sidebar() {
       <nav className="mt-2">
         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li className="nav-item">
-                <Link to="/dashboard"  onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/') ? "active " : " ")}>
+                <Link to="/dashboard"  onClick={((e) => toggle(e, '/dashboard'))} className={"nav-link " +(pathname.match('/dashboard') ? "active " : " ")}>
                 <i className="nav-icon fas fa-th"></i>
                 <p>
                     Dashboard
@@ -56,7 +64,7 @@ function Sidebar() {
           </li>
 
           <li className="nav-item menu-open">
-            <Link href="#" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
+            <Link href="#"   className={"nav-link " +(['/AddProduct', '/viewProducts'].contains(pathname)?"active":"")}>
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Products
@@ -65,13 +73,13 @@ function Sidebar() {
             </Link>
             <ul className="nav nav-treeview">
               <li className="nav-item">
-                <Link to="/AddProduct" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))}  className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
                   <i className="far fa-circle nav-icon"></i>
                   <p>Add Products</p>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/viewProducts" onClick={this.toggle.bind(this)} className={"nav-link " +(pathname.match('/viewProducts') ? "active " : " ")}>
+                <Link to="/viewProducts" onClick={((e) => toggle(e, '/viewProducts'))}  className={"nav-link " +(pathname.match('/viewProducts') ? "active " : " ")}>
                   <i className="far fa-circle nav-icon"></i>
                   <p>View Products</p>
                 </Link>
