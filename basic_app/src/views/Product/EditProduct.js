@@ -32,14 +32,14 @@ function EditProduct({ setAlert }) {
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Edit Product</h3>
+                            <h3 class="card-title">Edit Device Information</h3>
                         </div>
                         <form onSubmit={e => onSubmit(e)}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label for="exampleInputName">Product Name</label>
+                                    <label for="exampleInputName">Device Name</label>
                                     <input type="text" className="form-control" id="exampleInputId" type="hidden" value={id} />
-                                    <input type="text" className="form-control" id="exampleInputName" placeholder="Product Name" name="name" defaultValue={itemName}
+                                    <input type="text" className="form-control" id="exampleInputName" placeholder="Enter Name" name="name" defaultValue={itemName}
                                         onChange={event => setItemName(event.target.value)} />
                                 </div>
                                 <div className="form-group">

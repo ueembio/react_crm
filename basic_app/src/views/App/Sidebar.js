@@ -60,7 +60,7 @@ function Sidebar() {
               <Link href="#" className={"nav-link " + (['/AddProduct', '/viewProducts'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Products
+                  Devices
                 <i className="right fas fa-angle-left"></i>
                 </p>
               </Link>
@@ -68,13 +68,13 @@ function Sidebar() {
                 <li className="nav-item">
                   <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))} className={"nav-link " + (pathname.match('/AddProduct') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
-                    <p>Add Product</p>
+                    <p>Add Device</p>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link to="/viewProducts" onClick={((e) => toggle(e, '/viewProducts'))} className={"nav-link " + (pathname.match('/viewProducts') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
-                    <p>View Products</p>
+                    <p>View Devices</p>
                   </Link>
                 </li>
               </ul>

@@ -27,12 +27,12 @@ function AddProduct({ setAlert }) {
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Add Product</h3>
+                            <h3 class="card-title">Add Device</h3>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label for="exampleInputName">Product Name</label>
+                                    <label for="exampleInputName">Device Name</label>
                                     <input type="text" className="form-control" id="exampleInputName" placeholder="Enter Name" onChange={event => setItemName(event.target.value)} value={itemName} />
                                 </div>
                                 <div className="form-group">
