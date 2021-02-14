@@ -1,12 +1,23 @@
 export function getList() {
-  return fetch('http://localhost:8080/products')
+  //console.log('getList()');
+  return fetch('http://localhost:8080/products',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     .then(data => data.json())
 }
 
 export function getProduct(id) {
-  console.log(id);
-  return fetch('http://localhost:8080/products/' + id)
-    .then(data => data.json())
+  //console.log(id);
+  return fetch('http://localhost:8080/products/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(data => data.json())
 }
 
 export function updateProduct(id, item) {

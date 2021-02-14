@@ -40,8 +40,8 @@ function AddProduct({ setAlert }) {
                                     <input type="text" className="form-control" id="exampleInputCode" placeholder="Description" onChange={event => setItemDescription(event.target.value)} value={itemDescription} />
                                 </div>
                                 <div className="form-group">
-                                    <label for="exampleInputSKU">SKU</label>
-                                    <input type="text" className="form-control" id="exampleInputSKU" placeholder="Stock Keeping Unit" onChange={event => setItemSKU(event.target.value)} value={itemSKU} />
+                                    <label for="exampleInputSKU">Hardware Serial No.</label>
+                                    <input type="text" className="form-control" id="exampleInputSKU" placeholder="Hardware Serial Number" onChange={event => setItemSKU(event.target.value)} value={itemSKU} />
                                 </div>
                             </div>
                             <div className="card-footer">

@@ -43,21 +43,47 @@ app.use('/login', (req, res) => {
 });
 
 app.put('/products/:id', (req, res) => {
-  console.log('In Put command');
+  console.log('in put command');
+  console.log(req.params.id)
+  console.log(req.body.item);
   console.log(req.body.item.name);
   console.log(req.body.item.pnumber);
-  var p = { 'name': req.body.item.name, 'pnumber': req.body.item.pnumber };
-  product[req.params.id] = p;
-  res.send(product);
+
+  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in product');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
 });
 
 app.get('/products', (req, res) => {
   console.log(req.body);
-  res.send(product);
+  var sql = 'SELECT * FROM product';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
 });
 
 app.get('/products/:id', function (req, res) {
-  res.send(product[req.params.id]);
+  console.log('in get command');
+  console.log(req.params.id)
+
+  var sql = 'SELECT * FROM product WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
 });
 
 
@@ -76,11 +102,8 @@ app.post('/products', (req, res) => {
       console.log('data inserted in product');
       logger.info('successfully saved in database.');
     }
-
-    res.send(product);
+    res.status(200).json({ 'message': 'Data inserted successfully' });
   });
 });
-  
+
 app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
-
-
