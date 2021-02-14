@@ -33,7 +33,7 @@ function Sidebar() {
       </Link>
 
       <div className="sidebar">
-        
+
         <div className="form-inline">
           <div className="input-group" data-widget="sidebar-search">
             <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
@@ -68,7 +68,7 @@ function Sidebar() {
                 <li className="nav-item">
                   <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))} className={"nav-link " + (pathname.match('/AddProduct') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
-                    <p>Add Products</p>
+                    <p>Add Product</p>
                   </Link>
                 </li>
                 <li className="nav-item">
