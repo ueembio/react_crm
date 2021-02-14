@@ -46,7 +46,7 @@ export default function Dashboard() {
             <div className="small-box bg-warning">
               <div className="inner">
                 <h3>65</h3>
-                <p>User Registrations</p>
+                <p>Device Registrations</p>
               </div>
               <div className="icon">
                 <i className="ion ion-pie-graph"></i>
