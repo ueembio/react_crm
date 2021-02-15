@@ -120,10 +120,10 @@ app.get('/company',(req,res) => {
 app.put('/company/:id', (req, res) => {
   console.log('in put command');
   console.log(req.params.id);
-  console.log(req.body.item.name);
-  console.log(req.body.item.number);
-  console.log(req.body.item.address);
-  var sql = `UPDATE company SET Name='${req.body.item.name}', Phone='${req.body.item.number}', Address='${req.body.item.address}' WHERE Id=${req.params.id}`;
+  console.log(req.body.item.itemName);
+  console.log(req.body.item.itemNumber);
+  console.log(req.body.item.itemAddress);
+  var sql = `UPDATE company SET Name='${req.body.item.itemName}', Phone='${req.body.item.itemNumber}', Address='${req.body.item.itemAddress}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -159,18 +159,9 @@ app.get('/company/:id', function (req, res) {
   });
 });
 
-app.put('/rent/:id',(req,res) =>{
-  console.log('In Put command');
-  console.log(req.body.item.name);  
-  console.log(req.body.item.pnumber);
-  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
-  product[req.params.id] = p;
-  res.send(product);
-});
-
 app.post('/company', (req, res) => {
-  //console.log('company post');
-  //console.log(req.body.item);
+  console.log('company post');
+  console.log(req.body.item);
 
   var sql = `INSERT INTO company (Name, Phone, Email, Address) VALUES ('${req.body.item.itemName}', '${req.body.item.itemNumber}', '', '${req.body.item.itemAddress}')`;
   connection.query(sql, (error, result) => {
@@ -186,7 +177,14 @@ app.post('/company', (req, res) => {
 
 });
 
-
+app.put('/rent/:id',(req,res) =>{
+  console.log('In Put command');
+  console.log(req.body.item.name);  
+  console.log(req.body.item.pnumber);
+  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
+  product[req.params.id] = p;
+  res.send(product);
+});
 
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
