@@ -21,7 +21,7 @@ function AddCompany({setAlert}) {
         console.log('hello');
         e.preventDefault();
         var product = {'id':1, 'name':name,'pnumber':number,'address':address}    
-        setList({name,number,address});
+        setCompany({name,number,address});
         history.push({
            pathname: '/ViewProducts/',
            search: '?query=abc',

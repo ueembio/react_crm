@@ -9,74 +9,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 
-<<<<<<< HEAD
-var product = [ {
-  'id':1,
-  'name':'product 1',
-  'pnumber':'SNA12' 
-},
-{
-  'id':2,
-  'name':'product 2',
-  'pnumber':'SNA13' 
-},
-{
-  'id':3,
-  'name':'product 2',
-  'pnumber':'SNA12' 
-},
-{
-  'id':4,
-  'name':'product 4',
-  'pnumber':'SNA14' 
-},
-{
-  'id':5,
-  'name':'product 5',
-  'pnumber':'SNA15' 
-},
-{
-  'id':6,
-  'name':'product 6',
-  'pnumber':'SNA16' 
-},]
-var companies = [ {
-  'id':1,
-  'name':'company 1',
-  'number':'COMP1',
-  'address':'XYZ' 
-},
-{
-  'id':2,
-  'name':'company 2',
-  'number':'COMP2',
-  'address':'XYZ' 
-},
-{
-  'id':3,
-  'name':'company 3',
-  'number':'COMP3',
-  'address':'XYZ' 
-},
-{
-  'id':4,
-  'name':'company 4',
-  'number':'COMP4',
-  'address':'XYZ' 
-},
-{
-  'id':5,
-  'name':'company 5',
-  'number':'COMP5',
-  'address':'XYZ'  
-},
-{
-  'id':6,
-  'name':'company 6',
-  'number':'COMP6',
-  'address':'XYZ' 
-},]
-=======
 log4js.configure({
   appenders: { mylogger: { type: "file", filename: "site.log" } },
   categories: { default: { appenders: ["mylogger"], level: "ALL" } }
@@ -100,7 +32,6 @@ connection.connect(error => {
   console.log("Successfully connected to the database.");
   logger.info('Successfully connected to the database.');
 });
->>>>>>> master
 
 app.use(cors());
 
@@ -155,7 +86,6 @@ app.get('/products/:id', function (req, res) {
   });
 });
 
-<<<<<<< HEAD
 //Companies API
 app.put('/company/:id',(req,res) =>{
   console.log('In Put command');
@@ -174,8 +104,6 @@ app.get('/company',(req,res) => {
 app.get('/company/:id', function(req, res) {
   res.send(companies[req.params.id]);
 });
-=======
->>>>>>> master
 
 app.post('/products', (req, res) => {
   console.log('in post products');
@@ -196,7 +124,6 @@ app.post('/products', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 app.post('/company',(req,res) => {  
   console.log('In Post command');
   console.log(req.body.item.itemName);  
@@ -212,6 +139,3 @@ app.listen(8080, () => console.log('API is running on http://localhost:8080/logi
 
 //FOr Logout
 //sessionStorage.clear()
-=======
-app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
->>>>>>> master
