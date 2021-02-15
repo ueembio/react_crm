@@ -42,26 +42,6 @@ app.use('/login', (req, res) => {
   });
 });
 
-app.put('/products/:id', (req, res) => {
-  console.log('in put command');
-  console.log(req.params.id)
-  console.log(req.body.item);
-  console.log(req.body.item.name);
-  console.log(req.body.item.pnumber);
-
-  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}' WHERE Id=${req.params.id}`;
-  connection.query(sql, (error, result) => {
-    if (error) {
-      console.log(error);
-      logger.info('error in saving database.');
-    } else {
-      console.log('data updated in product');
-      logger.info('successfully updated in database.');
-    }
-    res.status(200).json({ 'message': 'Data updated successfully' });
-  });
-});
-
 app.get('/products', (req, res) => {
   console.log(req.body);
   var sql = 'SELECT * FROM product';
@@ -86,28 +66,24 @@ app.get('/products/:id', function (req, res) {
   });
 });
 
-//Companies API
-app.put('/company/:id',(req,res) =>{
-  console.log('In Put command');
-  console.log(req.body.item.name);  
+app.put('/products/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id)
+  console.log(req.body.item);
+  console.log(req.body.item.name);
   console.log(req.body.item.pnumber);
-  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
-  product[req.params.id] = p;
-  res.send(product);
-});
 
-app.get('/company',(req,res) => {
-  var sql = 'SELECT * FROM company';
-  connection.query(sql, function (error, result) {
-    if (error)
-      throw err;
-    console.log(result);
-    res.status(200).json(result)
+  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in product');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
   });
-});
-
-app.get('/company/:id', function(req, res) {
-  res.send(companies[req.params.id]);
 });
 
 app.post('/products', (req, res) => {
@@ -129,6 +105,30 @@ app.post('/products', (req, res) => {
   });
 });
 
+//Companies API
+app.get('/company',(req,res) => {
+  var sql = 'SELECT * FROM company';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.get('/company/:id', function(req, res) {
+  res.send(companies[req.params.id]);
+});
+
+app.put('/company/:id',(req,res) =>{
+  console.log('In Put command');
+  console.log(req.body.item.name);  
+  console.log(req.body.item.pnumber);
+  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
+  product[req.params.id] = p;
+  res.send(product);
+});
+
 app.post('/company',(req,res) => {  
   console.log('In Post command');
   console.log(req.body.item.itemName);  
@@ -137,6 +137,41 @@ app.post('/company',(req,res) => {
   product.push(p);
   res.send(companies);
 });
+
+
+//Rent API
+app.get('/rent',(req,res) => {
+  var sql = 'SELECT * FROM productsrent';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.get('/rent/:id', function(req, res) {
+  res.send(companies[req.params.id]);
+});
+
+app.put('/rent/:id',(req,res) =>{
+  console.log('In Put command');
+  console.log(req.body.item.name);  
+  console.log(req.body.item.pnumber);
+  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
+  product[req.params.id] = p;
+  res.send(product);
+});
+
+app.post('/rent',(req,res) => {  
+  console.log('In Post command');
+  console.log(req.body.item.itemName);  
+  console.log(req.body.item.itemCode);
+  var p = {'id':product.length+1,'name':req.body.item.name,'number':req.body.item.number,'address':req.body.item.address};  
+  product.push(p);
+  res.send(companies);
+});
+
 
 
 

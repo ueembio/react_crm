@@ -120,6 +120,14 @@ function Sidebar() {
                   <p>Add Rent</p>
                 </Link>
               </li>
+
+              <li className="nav-item">
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/index'))}  className={"nav-link " +(pathname.match('/rent/index') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>View Rent</p>
+                </Link>
+              </li>
+
               
             </ul>
           </li>

@@ -1,5 +1,6 @@
 import React,{ useEffect, useState } from 'react';
 import {useHistory} from 'react-router-dom';
+import { getCompanies } from '../../services/company';
 import { getList } from '../../services/products';
 
 
@@ -16,11 +17,14 @@ function AddRent({setAlert}) {
                 setProduct(items)
             }
           })
+        getCompanies()
+          .then(items => {
+            if (mounted) {
+                setCompany(items)
+            }
+          })  
         return () => mounted = false;
         
-        
-
-
       }, [])
    
     //Comment Added
@@ -47,7 +51,14 @@ function AddRent({setAlert}) {
                         <div className="form-group">
                         <label>Product</label>
                             <select className="form-control select2" style={{'width':'100%'}}>
-                                {prroducts.map(product => (<option>{product.Name}</option>))}
+                                {prroducts.map(product => (<option id={product.Id}>{product.Name}</option>))}
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                        <label>Company</label>
+                            <select className="form-control select2" style={{'width':'100%'}}>
+                                {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
                             </select>
                         </div>
                                                
