@@ -7,6 +7,7 @@ import EditProduct from '../Product/EditProduct';
 import ViewCompany from '../Company/ViewCompany';
 import AddCompany from '../Company/AddCompany';
 import EditCompany from '../Company/EditCompany';
+import AddRent from '../Rent/AddRent';
 
 
 
@@ -27,7 +28,10 @@ function Content() {
       <Route exact path="/AddCompany" component={AddCompany} />
       <Route exact path="/company/edit/:id" component={EditCompany} />
       <Redirect from='/AddCompany/' to="/ViewCompanies/" />
-      
+
+      <Route exact path="/rent/index" component={ViewRents} />
+      <Route exact path="/rent/add" component={AddRent} />
+
     </Switch>
   );
 }
