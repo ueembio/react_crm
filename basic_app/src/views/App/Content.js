@@ -4,6 +4,11 @@ import Dashboard from '../Dashboard/Dashboard';
 import ViewProducts from '../Product/ViewProducts';
 import AddProduct from '../Product/AddProduct';
 import EditProduct from '../Product/EditProduct';
+import ViewCompany from '../Company/ViewCompany';
+import AddCompany from '../Company/AddCompany';
+import EditCompany from '../Company/EditCompany';
+
+
 
 function Content() {
 
@@ -15,6 +20,10 @@ function Content() {
             <Route exact path="/ViewProducts" component={ViewProducts} />            
             <Route exact path="/AddProduct" component={AddProduct} /> 
             <Route exact path="/product/edit/:id" component={EditProduct} /> 
+            <Route exact path="/company/index" component={ViewCompany} /> 
+            <Route exact path="/company/add" component={AddCompany} /> 
+            <Route exact path="/company/edit/:id" component={EditCompany} /> 
+
             <Redirect from='/AddProduct/' to="/ViewProducts/" />           
       </Switch>
   );    

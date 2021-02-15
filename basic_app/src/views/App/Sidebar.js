@@ -86,6 +86,31 @@ function Sidebar() {
               </li>
             </ul>
           </li>
+
+          <li className="nav-item menu-open">
+            <Link href="#"   className={"nav-link " +(['/company/add', '/company/edit','/company/index'].contains(pathname)?"active":"")}>
+              <i className="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Company
+                <i className="right fas fa-angle-left"></i>
+              </p>
+            </Link>
+            <ul className="nav nav-treeview">
+              <li className="nav-item">
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/company/add'))}  className={"nav-link " +(pathname.match('/company/add') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>Add Company</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/viewProducts" onClick={((e) => toggle(e, '/company/index'))}  className={"nav-link " +(pathname.match('/company/index') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>View Company</p>
+                </Link>
+              </li>
+            </ul>
+          </li>
+
           
         </ul>
       </nav>

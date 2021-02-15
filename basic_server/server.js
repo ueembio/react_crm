@@ -36,10 +36,43 @@ var product = [ {
   'id':6,
   'name':'product 6',
   'pnumber':'SNA16' 
+},]
+var companies = [ {
+  'id':1,
+  'name':'company 1',
+  'number':'COMP1',
+  'address':'XYZ' 
 },
-
-]
-
+{
+  'id':2,
+  'name':'company 2',
+  'number':'COMP2',
+  'address':'XYZ' 
+},
+{
+  'id':3,
+  'name':'company 3',
+  'number':'COMP3',
+  'address':'XYZ' 
+},
+{
+  'id':4,
+  'name':'company 4',
+  'number':'COMP4',
+  'address':'XYZ' 
+},
+{
+  'id':5,
+  'name':'company 5',
+  'number':'COMP5',
+  'address':'XYZ'  
+},
+{
+  'id':6,
+  'name':'company 6',
+  'number':'COMP6',
+  'address':'XYZ' 
+},]
 
 app.use(cors());
 
@@ -78,6 +111,38 @@ app.post('/products',(req,res) => {
   res.send(product);
 });
 
+//Companies API
+app.put('/company/:id',(req,res) =>{
+  console.log('In Put command');
+  console.log(req.body.item.name);  
+  console.log(req.body.item.pnumber);
+  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
+  product[req.params.id] = p;
+  res.send(product);
+});
+
+app.get('/company',(req,res) => {
+  console.log(req.body);
+  res.send(companies);
+});
+
+app.get('/company/:id', function(req, res) {
+  res.send(companies[req.params.id]);
+});
+
+
+app.post('/company',(req,res) => {  
+  console.log('In Post command');
+  console.log(req.body.item.itemName);  
+  console.log(req.body.item.itemCode);
+  var p = {'id':product.length+1,'name':req.body.item.name,'number':req.body.item.number,'address':req.body.item.address};  
+  product.push(p);
+  res.send(companies);
+});
+
+
+
 app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
 
-
+//FOr Logout
+//sessionStorage.clear()
