@@ -163,7 +163,7 @@ app.post('/company', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO company (Name, Phone, Email, Address) VALUES ('${req.body.item.itemName}', '${req.body.item.itemNumber}', '', '${req.body.item.itemAddress}')`;
+  var sql = `INSERT INTO company (Name, Phone, Email, Address) VALUES ('${req.body.item.name}', '${req.body.item.number}', '', '${req.body.item.address}')`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
