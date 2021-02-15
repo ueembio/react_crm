@@ -111,6 +111,7 @@ function Sidebar() {
                 <p>
                   Rent Products
                 <i className="right fas fa-angle-left"></i>
+<<<<<<< HEAD
                 </p>
               </Link>
               <ul className="nav nav-treeview">
@@ -124,6 +125,29 @@ function Sidebar() {
               </ul>
             </li>
 
+=======
+              </p>
+            </Link>
+            <ul className="nav nav-treeview">
+              <li className="nav-item">
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))}  className={"nav-link " +(pathname.match('/company/add') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>Add Rent</p>
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/index'))}  className={"nav-link " +(pathname.match('/rent/index') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>View Rent</p>
+                </Link>
+              </li>
+
+              
+            </ul>
+          </li>
+          
+>>>>>>> 2de75c196f4fe73655d7051b735a07642f2999f4
           </ul>
         </nav>
       </div>
