@@ -19,8 +19,8 @@ const logger = log4js.getLogger("default");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Pakistan786",
-  database: "inventorydb"
+  password: "root",
+  database: "inventoryDB"
 });
 
 // open the MySQL connection
@@ -97,8 +97,13 @@ app.put('/company/:id',(req,res) =>{
 });
 
 app.get('/company',(req,res) => {
-  console.log(req.body);
-  res.send(companies);
+  var sql = 'SELECT * FROM company';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
 });
 
 app.get('/company/:id', function(req, res) {

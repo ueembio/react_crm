@@ -81,9 +81,6 @@ function Sidebar() {
 
             </li>
 
-
-
-
             <li className="nav-item menu-open">
             <Link href="#"   className={"nav-link " +(['/company/add', '/company/edit','/company/index'].contains(pathname)?"active":"")}>
               <i className="nav-icon fas fa-tachometer-alt"></i>
@@ -105,6 +102,25 @@ function Sidebar() {
                   <p>View Company</p>
                 </Link>
               </li>
+            </ul>
+          </li>
+
+          <li className="nav-item menu-open">
+            <Link href="#"   className={"nav-link " +(['/company/add', '/company/edit','/company/index'].contains(pathname)?"active":"")}>
+              <i className="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Rent Products
+                <i className="right fas fa-angle-left"></i>
+              </p>
+            </Link>
+            <ul className="nav nav-treeview">
+              <li className="nav-item">
+                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))}  className={"nav-link " +(pathname.match('/company/add') ? "active " : " ")}>
+                  <i className="far fa-circle nav-icon"></i>
+                  <p>Add Rent</p>
+                </Link>
+              </li>
+              
             </ul>
           </li>
           
