@@ -1,93 +1,90 @@
-import React, { useEffect,useState } from 'react';
-import {Link,useHistory} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 function Sidebar() {
 
   const [pathname, setPathname] = useState(window.location.pathname);
-  Array.prototype.contains = function(obj) {
-    return this.indexOf(obj) > -1;};
+  Array.prototype.contains = function (obj) {
+    return this.indexOf(obj) > -1;
+  };
   const history = useHistory();
 
-  useEffect(() => {        
-      console.log('Hello WOrld');
-      //setPathname(window.location.pathname);         
+  useEffect(() => {
+    console.log('Hello WOrld');
+    //setPathname(window.location.pathname);         
   }, [pathname]);
 
-  function toggle(e,data){
-    e.preventDefault();  
-    console.log(data); 
+  function toggle(e, data) {
+    e.preventDefault();
+    console.log(data);
     //console.log(window.location.pathname);
     setPathname(data);
     history.push({
       pathname: data
-    });                  
+    });
   }
 
   return (
-  
+
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
-    <Link to="/dashboard" className="brand-link">
-      <img src="/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{"opacity": ".8"}} />
-      <span className="brand-text font-weight-light">AdminLTE 3</span>
-    </Link>
+      <Link to="/dashboard" className="brand-link">
+        <img src="/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ "opacity": ".8" }} />
+        <span className="brand-text font-weight-light">Devices</span>
+      </Link>
 
-    <div className="sidebar">
-      <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div className="image">
-          <img src="/assets/dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
-        </div>
-        <div className="info">
-          <a href="#" className="d-block">Alexander Pierce</a>
-        </div>
-      </div>
+      <div className="sidebar">
 
-      <div className="form-inline">
-        <div className="input-group" data-widget="sidebar-search">
-          <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
-          <div className="input-group-append">
-            <button className="btn btn-sidebar">
-              <i className="fas fa-search fa-fw"></i>
-            </button>
+        <div className="form-inline">
+          <div className="input-group" data-widget="sidebar-search">
+            <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
+            <div className="input-group-append">
+              <button className="btn btn-sidebar">
+                <i className="fas fa-search fa-fw"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <nav className="mt-2">
-        <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li className="nav-item">
-                <Link to="/dashboard"  onClick={((e) => toggle(e, '/dashboard'))} className={"nav-link " +(pathname.match('/dashboard') ? "active " : " ")}>
+        <nav className="mt-2">
+          <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li className="nav-item">
+              <Link to="/dashboard" onClick={((e) => toggle(e, '/dashboard'))} className={"nav-link " + (pathname.match('/dashboard') ? "active " : " ")}>
                 <i className="nav-icon fas fa-th"></i>
                 <p>
-                    Dashboard
+                  Dashboard
                 </p>
-                </Link>
-          </li>
+              </Link>
+            </li>
 
-          <li className="nav-item menu-open">
-            <Link href="#"   className={"nav-link " +(['/AddProduct', '/viewProducts'].contains(pathname)?"active":"")}>
-              <i className="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Products
+            <li className="nav-item menu-open">
+              <Link href="#" className={"nav-link " + (['/AddProduct', '/viewProducts'].contains(pathname) ? "active" : "")}>
+                <i className="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Devices
                 <i className="right fas fa-angle-left"></i>
-              </p>
-            </Link>
-            <ul className="nav nav-treeview">
-              <li className="nav-item">
-                <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))}  className={"nav-link " +(pathname.match('/AddProduct') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>Add Products</p>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/viewProducts" onClick={((e) => toggle(e, '/viewProducts'))}  className={"nav-link " +(pathname.match('/viewProducts') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>View Products</p>
-                </Link>
-              </li>
-            </ul>
-          </li>
+                </p>
+              </Link>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))} className={"nav-link " + (pathname.match('/AddProduct') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Add Device</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/viewProducts" onClick={((e) => toggle(e, '/viewProducts'))} className={"nav-link " + (pathname.match('/viewProducts') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>View Devices</p>
+                  </Link>
+                </li>
+              </ul>
 
-          <li className="nav-item menu-open">
+            </li>
+
+
+
+
+            <li className="nav-item menu-open">
             <Link href="#"   className={"nav-link " +(['/company/add', '/company/edit','/company/index'].contains(pathname)?"active":"")}>
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -110,12 +107,11 @@ function Sidebar() {
               </li>
             </ul>
           </li>
-
           
-        </ul>
-      </nav>
-    </div>
-  </aside>        
+          </ul>
+        </nav>
+      </div>
+    </aside>
   );
 }
 

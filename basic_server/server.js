@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mysql = require("mysql");
+const log4js = require('log4js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 
+<<<<<<< HEAD
 var product = [ {
   'id':1,
   'name':'product 1',
@@ -73,44 +76,86 @@ var companies = [ {
   'number':'COMP6',
   'address':'XYZ' 
 },]
+=======
+log4js.configure({
+  appenders: { mylogger: { type: "file", filename: "site.log" } },
+  categories: { default: { appenders: ["mylogger"], level: "ALL" } }
+});
+const logger = log4js.getLogger("default");
+
+// Create a connection to the database
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "pakistan",
+  database: "inventorydb"
+});
+
+// open the MySQL connection
+connection.connect(error => {
+  if (error) {
+    logger.error('Database connection error.');
+    throw error;
+  }
+  console.log("Successfully connected to the database.");
+  logger.info('Successfully connected to the database.');
+});
+>>>>>>> master
 
 app.use(cors());
 
 app.use('/login', (req, res) => {
-    console.log(req);
-    res.send({
-      token: 'test123'
-    });
+  console.log(req);
+  res.send({
+    token: 'test123'
+  });
 });
 
-app.put('/products/:id',(req,res) =>{
-  console.log('In Put command');
-  console.log(req.body.item.name);  
+app.put('/products/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id)
+  console.log(req.body.item);
+  console.log(req.body.item.name);
   console.log(req.body.item.pnumber);
-  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
-  product[req.params.id] = p;
-  res.send(product);
+
+  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in product');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
 });
 
-app.get('/products',(req,res) => {
+app.get('/products', (req, res) => {
   console.log(req.body);
-  res.send(product);
+  var sql = 'SELECT * FROM product';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
 });
 
-app.get('/products/:id', function(req, res) {
-  res.send(product[req.params.id]);
+app.get('/products/:id', function (req, res) {
+  console.log('in get command');
+  console.log(req.params.id)
+
+  var sql = 'SELECT * FROM product WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
 });
 
-
-app.post('/products',(req,res) => {  
-  console.log('In Post command');
-  console.log(req.body.item.itemName);  
-  console.log(req.body.item.itemCode);
-  var p = {'id':product.length+1,'name':req.body.item.itemName,'pnumber':req.body.item.itemCode};  
-  product.push(p);
-  res.send(product);
-});
-
+<<<<<<< HEAD
 //Companies API
 app.put('/company/:id',(req,res) =>{
   console.log('In Put command');
@@ -129,8 +174,29 @@ app.get('/company',(req,res) => {
 app.get('/company/:id', function(req, res) {
   res.send(companies[req.params.id]);
 });
+=======
+>>>>>>> master
 
+app.post('/products', (req, res) => {
+  console.log('in post products');
+  console.log(req.body.item.itemName);
+  console.log(req.body.item.itemDescription);
+  console.log(req.body.item.itemSKU);
 
+  var sql = `INSERT INTO product (Name, Description, SKU, Price) VALUES ('${req.body.item.itemName}', '${req.body.item.itemDescription}', '${req.body.item.itemSKU}', '0.00')`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data inserted in product');
+      logger.info('successfully saved in database.');
+    }
+    res.status(200).json({ 'message': 'Data inserted successfully' });
+  });
+});
+
+<<<<<<< HEAD
 app.post('/company',(req,res) => {  
   console.log('In Post command');
   console.log(req.body.item.itemName);  
@@ -146,3 +212,6 @@ app.listen(8080, () => console.log('API is running on http://localhost:8080/logi
 
 //FOr Logout
 //sessionStorage.clear()
+=======
+app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
+>>>>>>> master
