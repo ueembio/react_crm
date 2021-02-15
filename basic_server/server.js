@@ -19,7 +19,7 @@ const logger = log4js.getLogger("default");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "pakistan",
+  password: "Pakistan786",
   database: "inventorydb"
 });
 
