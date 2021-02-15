@@ -19,16 +19,20 @@ function Content() {
       <Switch>
             <Route exact path="/" component={Dashboard} />            
             <Route exact path="/dashboard" component={Dashboard} />            
+            
             <Route exact path="/ViewProducts" component={ViewProducts} />            
             <Route exact path="/AddProduct" component={AddProduct} /> 
             <Route exact path="/product/edit/:id" component={EditProduct} /> 
-            <Route exact path="/company/index" component={ViewCompany} /> 
-            <Route exact path="/company/add" component={AddCompany} /> 
+            
+            <Route exact path="/ViewCompany" component={ViewCompany} /> 
+            <Route exact path="/AddCompany" component={AddCompany} /> 
             <Route exact path="/company/edit/:id" component={EditCompany} />
+
             <Route exact path="/rent/index" component={ViewRents} />  
             <Route exact path="/rent/add" component={AddRent} /> 
 
-            <Redirect from='/AddProduct/' to="/ViewProducts/" />           
+            /*<Redirect from='/AddProduct/' to="/ViewProducts/" />*/
+
       </Switch>
   );    
 }

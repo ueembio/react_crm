@@ -82,7 +82,7 @@ function Sidebar() {
             </li>
 
             <li className="nav-item menu-open">
-              <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompanies'].contains(pathname) ? "active" : "")}>
+              <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompany'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Company
@@ -91,13 +91,13 @@ function Sidebar() {
               </Link>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <Link to="/AddCompany" onClick={((e) => toggle(e, '/company/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
+                  <Link to="/AddCompany" onClick={((e) => toggle(e, '/AddCompany'))} className={"nav-link " + (pathname.match('/AddCompany') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>Add Company</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/ViewCompanies" onClick={((e) => toggle(e, '/company/index'))} className={"nav-link " + (pathname.match('/company/index') ? "active " : " ")}>
+                  <Link to="/ViewCompany" onClick={((e) => toggle(e, '/ViewCompany'))} className={"nav-link " + (pathname.match('/ViewCompany') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>View Companies</p>
                   </Link>

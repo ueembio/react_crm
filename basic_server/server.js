@@ -116,10 +116,6 @@ app.get('/company',(req,res) => {
   });
 });
 
-app.get('/company/:id', function(req, res) {
-  res.send(companies[req.params.id]);
-});
-
 //Companies API
 app.put('/company/:id', (req, res) => {
   console.log('in put command');
