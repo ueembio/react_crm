@@ -57,7 +57,7 @@ function Sidebar() {
             </li>
 
             <li className="nav-item menu-open">
-              <Link href="#" className={"nav-link " + (['/AddProduct', '/viewProducts'].contains(pathname) ? "active" : "")}>
+              <Link href="#" className={"nav-link " + (['/AddProduct', '/ViewProducts'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Devices
@@ -72,7 +72,7 @@ function Sidebar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/viewProducts" onClick={((e) => toggle(e, '/viewProducts'))} className={"nav-link " + (pathname.match('/viewProducts') ? "active " : " ")}>
+                  <Link to="/ViewProducts" onClick={((e) => toggle(e, '/ViewProducts'))} className={"nav-link " + (pathname.match('/ViewProducts') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>View Devices</p>
                   </Link>
@@ -81,33 +81,30 @@ function Sidebar() {
 
             </li>
 
-
-
-
             <li className="nav-item menu-open">
-            <Link href="#"   className={"nav-link " +(['/company/add', '/company/edit','/company/index'].contains(pathname)?"active":"")}>
-              <i className="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Company
+              <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompanies'].contains(pathname) ? "active" : "")}>
+                <i className="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Company
                 <i className="right fas fa-angle-left"></i>
-              </p>
-            </Link>
-            <ul className="nav nav-treeview">
-              <li className="nav-item">
-                <Link to="/AddProduct" onClick={((e) => toggle(e, '/company/add'))}  className={"nav-link " +(pathname.match('/company/add') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>Add Company</p>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/viewProducts" onClick={((e) => toggle(e, '/company/index'))}  className={"nav-link " +(pathname.match('/company/index') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>View Company</p>
-                </Link>
-              </li>
-            </ul>
-          </li>
-          
+                </p>
+              </Link>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to="/AddCompany" onClick={((e) => toggle(e, '/AddCompany'))} className={"nav-link " + (pathname.match('/AddCompany') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Add Company</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/ViewCompanies" onClick={((e) => toggle(e, '/ViewCompanies'))} className={"nav-link " + (pathname.match('/ViewCompanies') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>View Company</p>
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
           </ul>
         </nav>
       </div>

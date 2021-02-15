@@ -1,59 +1,54 @@
-import React,{ useEffect, useState } from 'react';
-import {Link,useLocation} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { getCompanies } from '../../services/company';
 import { Table } from 'react-bootstrap';
-function ViewCompany() {  
-    const [companies, setList] = useState([]);
-    useEffect(() => {      
-      let mounted = true;
-      getCompanies()
-        .then(items => {
-          if(mounted) {
-            setList(items)
-          }
-        })
-      return () => mounted = false;
-    }, [])
+
+function ViewCompany() {
+  const [companies, setList] = useState([]);
+  useEffect(() => {
+    let mounted = true;
+    getCompanies()
+      .then(items => {
+        console.log(items);
+        if (mounted) {
+          setList(items)
+        }
+      })
+    return () => mounted = false;
+  }, [])
 
 
-    return(    
-        <div className="container-fluid">
-        {alert && <div className="alert alert-info alert-dismissible">
-          <button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <h5><i className="icon fas fa-info"></i> Alert!</h5>
-            Form SUbmitted.
-          </div>
-          }
-        <div className="row col-md-12">
-          <h2>My Companies List</h2>
-          <Table>
-            <thead>
-              <tr>
-                <th>#ID</th>
-                <th>Name</th>                
-                <th>Address</th>                
-                <th>Number</th>                
-                <th>Action</th>
+  return (
+    <div className="container-fluid">
+      <div className="row col-md-12">
+        <h2>Companies List</h2>
+        <Table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {companies.map(company => (
+              <tr key={company.Id}>
+                <td>{company.Name}</td>
+                <td>{company.Phone}</td>
+                <td>{company.Address}</td>
+                <td>
+                  <Link className="btn btn-primary">View</Link>
+                  <Link className="btn btn-info" to={`/company/edit/${company.Id}`}>Edit</Link>
+                  <Link className="btn btn-secondary">Delete</Link>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {companies.map(company => (
-                <tr key={company.id}>
-                  <td>{company.id}</td>
-                  <td>{company.name}</td>
-                  <td>{company.address}</td>
-                  <td>{company.number}</td>
-                  <td>
-                    <Link className="btn btn-primary">View</Link>
-                    <Link className="btn btn-info" to={`/company/edit/${company.id}`}>Edit</Link>
-                    <Link className="btn btn-secondary">Delete</Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </div>  
-    )};
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    </div>
+  )
+};
 
 export default ViewCompany;

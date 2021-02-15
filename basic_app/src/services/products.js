@@ -39,8 +39,7 @@ export function addProduct(item) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ item })
-  })
-    .then(data => data.json())
+  }).then(data => data.json())
 }
 
 export function updateList(item) {

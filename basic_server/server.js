@@ -19,7 +19,7 @@ const logger = log4js.getLogger("default");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Pakistan786",
+  password: "pakistan",
   database: "inventorydb"
 });
 
@@ -87,22 +87,46 @@ app.get('/products/:id', function (req, res) {
 });
 
 //Companies API
-app.put('/company/:id',(req,res) =>{
-  console.log('In Put command');
-  console.log(req.body.item.name);  
-  console.log(req.body.item.pnumber);
-  var p = {'name':req.body.item.name,'pnumber':req.body.item.pnumber};  
-  product[req.params.id] = p;
-  res.send(product);
+app.put('/company/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id);
+  console.log(req.body.item.name);
+  console.log(req.body.item.number);
+  console.log(req.body.item.address);
+  var sql = `UPDATE company SET Name='${req.body.item.name}', Phone='${req.body.item.number}', Address='${req.body.item.address}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in company');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
 });
 
-app.get('/company',(req,res) => {
-  console.log(req.body);
-  res.send(companies);
+app.get('/company', (req, res) => {
+  //console.log(req.body);
+  var sql = 'SELECT * FROM company';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    //console.log(result);
+    res.status(200).json(result)
+  });
 });
 
-app.get('/company/:id', function(req, res) {
-  res.send(companies[req.params.id]);
+app.get('/company/:id', function (req, res) {
+  console.log('in get company');
+  console.log(req.params.id)
+  var sql = 'SELECT * FROM company WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
 });
 
 app.post('/products', (req, res) => {
@@ -124,13 +148,22 @@ app.post('/products', (req, res) => {
   });
 });
 
-app.post('/company',(req,res) => {  
-  console.log('In Post command');
-  console.log(req.body.item.itemName);  
-  console.log(req.body.item.itemCode);
-  var p = {'id':product.length+1,'name':req.body.item.name,'number':req.body.item.number,'address':req.body.item.address};  
-  product.push(p);
-  res.send(companies);
+app.post('/company', (req, res) => {
+  //console.log('company post');
+  //console.log(req.body.item);
+
+  var sql = `INSERT INTO company (Name, Phone, Email, Address) VALUES ('${req.body.item.name}', '${req.body.item.number}', '', '${req.body.item.address}')`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data inserted in company');
+      logger.info('successfully saved in database.');
+    }
+    res.status(200).json({ 'message': 'Data inserted successfully' });
+  });
+
 });
 
 
