@@ -49,7 +49,7 @@ function Sidebar() {
           <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li className="nav-item">
               <Link to="/dashboard" onClick={((e) => toggle(e, '/dashboard'))} className={"nav-link " + (pathname.match('/dashboard') ? "active " : " ")}>
-                <i className="nav-icon fas fa-th"></i>
+                <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Dashboard
                 </p>
@@ -58,7 +58,7 @@ function Sidebar() {
 
             <li className="nav-item menu-open">
               <Link href="#" className={"nav-link " + (['/AddProduct', '/ViewProducts'].contains(pathname) ? "active" : "")}>
-                <i className="nav-icon fas fa-tachometer-alt"></i>
+                <i className="nav-icon fas fa-columns"></i>
                 <p>
                   Devices
                 <i className="right fas fa-angle-left"></i>
@@ -83,7 +83,7 @@ function Sidebar() {
 
             <li className="nav-item menu-open">
               <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompany'].contains(pathname) ? "active" : "")}>
-                <i className="nav-icon fas fa-tachometer-alt"></i>
+                <i className="nav-icon fas fa-copy"></i>
                 <p>
                   Company
                 <i className="right fas fa-angle-left"></i>
@@ -107,31 +107,36 @@ function Sidebar() {
 
             <li className="nav-item menu-open">
               <Link href="#" className={"nav-link " + (['/company/add', '/company/edit', '/company/index'].contains(pathname) ? "active" : "")}>
-                <i className="nav-icon fas fa-tachometer-alt"></i>
+                <i className="nav-icon fas fa-th"></i>
                 <p>
-                  Rent Products
+                  Lease Devices
                 <i className="right fas fa-angle-left"></i>
-              </p>
-            </Link>
-            <ul className="nav nav-treeview">
-              <li className="nav-item">
-                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))}  className={"nav-link " +(pathname.match('/company/add') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>Add Rent</p>
-                </Link>
-              </li>
+                </p>
+              </Link>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>New Lease</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Close Lease</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/index'))} className={"nav-link " + (pathname.match('/rent/index') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>View Leases</p>
+                  </Link>
+                </li>
 
-              <li className="nav-item">
-                <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/index'))}  className={"nav-link " +(pathname.match('/rent/index') ? "active " : " ")}>
-                  <i className="far fa-circle nav-icon"></i>
-                  <p>View Rent</p>
-                </Link>
-              </li>
 
-              
-            </ul>
-          </li>
-          
+              </ul>
+            </li>
+
           </ul>
         </nav>
       </div>

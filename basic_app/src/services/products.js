@@ -10,6 +10,18 @@ export function getList() {
     .then(data => data.json())
 }
 
+export function getAvailableProducts() {
+  //console.log('getList()');
+  return fetch('http://localhost:8080/get_available_products',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(data => data.json())
+}
+
 export function getProduct(id) {
   //console.log(id);
   return fetch('http://localhost:8080/products/' + id, {

@@ -11,7 +11,6 @@ function AddProduct({ setAlert }) {
 
     //Comment Added
     const handleSubmit = (e) => {
-        console.log('hello');
         e.preventDefault();
         addProduct({ itemName, itemDescription, itemSKU });
         history.push({

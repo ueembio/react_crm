@@ -1,72 +1,99 @@
-import React,{ useEffect, useState } from 'react';
-import {useHistory} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { getCompanies } from '../../services/company';
-import { getList } from '../../services/products';
+import { getAvailableProducts } from '../../services/products';
+import { addRent } from '../../services/rent';
 
-
-function AddRent({setAlert}) { 
+function AddRent({ setAlert }) {
     const [company, setCompany] = useState([]);
-    const [prroducts,setProduct] = useState([]);
+    const [product, setProduct] = useState([]);
+    const [selectedCompany, setSelectedCompany] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState([]);
+    
     const history = useHistory();
 
-    useEffect(() => {        
+    useEffect(() => {
         let mounted = true;
-        getList()
-          .then(items => {
-            if (mounted) {
-                setProduct(items)
-            }
-          })
+        getAvailableProducts()
+            .then(items => {
+                if (mounted) {
+                    setProduct(items)
+                }
+            })
         getCompanies()
-          .then(items => {
-            if (mounted) {
-                setCompany(items)
-            }
-          })  
+            .then(items => {
+                if (mounted) {
+                    setCompany(items)
+                }
+            })
         return () => mounted = false;
-        
-      }, [])
-   
+
+    }, [])
+
+    const handleChangeDevice = (e) => {
+        let { name, value } = e.target;
+        console.log('handleChangeDevice');
+        console.log(name);
+        console.log(value);
+        setSelectedProduct(value)
+        this.setState({
+            [name]: value,
+        });
+    }
+
+    const handleChangeCompany = (e) => {
+        let { name, value } = e.target;
+        console.log('handleChangeCompany');
+        console.log(name);
+        console.log(value);
+        setSelectedCompany(value)
+        this.setState({
+            [name]: value,
+        });
+    }
+
     //Comment Added
     const handleSubmit = (e) => {
-        console.log('hello');
-        e.preventDefault();        
+        e.preventDefault();
+        addRent({ selectedCompany, selectedProduct });
         history.push({
-           pathname: '/ViewProducts/',
-           search: '?query=abc',
-           state:{alert:true}
-        });                  
-      };
-    
-      return (
-        <div className="container-fluid">            
+            pathname: '/ViewRents/',
+            search: '?query=abc',
+            state: { alert: true }
+        });
+    };
+
+    return (
+        <div className="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Rent Out Product</h3>
-                    </div>                
-                    <form onSubmit={handleSubmit}>
-                        <div className="card-body">
-                        <div className="form-group">
-                        <label>Product</label>
-                            <select className="form-control select2" style={{'width':'100%'}}>
-                                {prroducts.map(product => (<option id={product.Id}>{product.Name}</option>))}
-                            </select>
+                        <div class="card-header">
+                            <h3 class="card-title">New Lease</h3>
                         </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="card-body">
+                                <div className="form-group">
+                                    <label>Device</label>
+                                    <select className="form-control select2" style={{ 'width': '100%' }}
+                                        onChange={handleChangeDevice} >
+                                        {product.map(product => (<option id={product.Id}>{product.Name}</option>))}
+                                    </select>
+                                </div>
 
-                        <div className="form-group">
-                        <label>Company</label>
-                            <select className="form-control select2" style={{'width':'100%'}}>
-                                {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
-                            </select>
-                        </div>
-                                               
-                        </div>
-                        <div className="card-footer">
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+                                <div className="form-group">
+                                    <label>Company</label>
+                                    <select className="form-control select2" style={{ 'width': '100%' }}
+                                        onChange={handleChangeCompany}>
+                                        {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div className="card-footer">
+                                <button type="submit" className="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
