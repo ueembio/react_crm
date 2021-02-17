@@ -33,28 +33,43 @@ function AddRent({ setAlert }) {
     const handleChangeDevice = (e) => {
         let { name, value } = e.target;
         console.log('handleChangeDevice');
-        console.log(name);
-        console.log(value);
-        setSelectedProduct(value)
-        this.setState({
-            [name]: value,
-        });
+        //console.log(name);
+        //console.log(value);
+        
+        let index = e.target.selectedIndex;
+        let el = e.target.childNodes[index]
+        let id =  el.getAttribute('id');  
+        //console.log('Name, Code', e.target.value, option);
+
+        setSelectedProduct(id)
+        //this.setState({
+        //    [name]: value,
+        //});
     }
 
     const handleChangeCompany = (e) => {
         let { name, value } = e.target;
         console.log('handleChangeCompany');
-        console.log(name);
-        console.log(value);
-        setSelectedCompany(value)
-        this.setState({
-            [name]: value,
-        });
+        //console.log(name);
+        //console.log(value);
+        
+        let index = e.target.selectedIndex;
+        let el = e.target.childNodes[index]
+        let id =  el.getAttribute('id');  
+        //console.log('Name, Code', e.target.value, option);
+
+        setSelectedCompany(id)
+        
+        //this.setState({
+        //    [name]: value,
+        //});
     }
 
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(selectedCompany);
+        console.log(selectedProduct);
         addRent({ selectedCompany, selectedProduct });
         history.push({
             pathname: '/ViewRents/',

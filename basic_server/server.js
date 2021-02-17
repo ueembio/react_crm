@@ -192,13 +192,13 @@ app.post('/company', (req, res) => {
 
 app.post('/rents', (req, res) => {
   console.log('in post rent');
-  console.log(req.body.item);
-  console.log(req.body.item.company);
-  console.log(req.body.item.product);
+  //console.log(req.body.item);
+  //console.log(req.body.item.selectedCompany);
+  //console.log(req.body.item.selectedCompany);
 
-  var datetime = new Date();
+  //var datetime = new Date();
 
-  var sql = `INSERT INTO productsrent (CompanyId, ProductId, RentDT) VALUES ('${req.body.item.company}', '${req.body.item.product}', '${datetime}')`;
+  var sql = `INSERT INTO productsrent (CompanyId, ProductId, RentDT) VALUES ('${req.body.item.selectedCompany}', '${req.body.item.selectedProduct}', NOW())`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
