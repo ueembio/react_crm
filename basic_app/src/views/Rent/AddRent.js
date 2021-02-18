@@ -9,7 +9,7 @@ function AddRent({ setAlert }) {
     const [product, setProduct] = useState([]);
     const [selectedCompany, setSelectedCompany] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState([]);
-    
+
     const history = useHistory();
 
     useEffect(() => {
@@ -35,10 +35,10 @@ function AddRent({ setAlert }) {
         console.log('handleChangeDevice');
         //console.log(name);
         //console.log(value);
-        
+
         let index = e.target.selectedIndex;
         let el = e.target.childNodes[index]
-        let id =  el.getAttribute('id');  
+        let id = el.getAttribute('id');
         //console.log('Name, Code', e.target.value, option);
 
         setSelectedProduct(id)
@@ -52,14 +52,14 @@ function AddRent({ setAlert }) {
         console.log('handleChangeCompany');
         //console.log(name);
         //console.log(value);
-        
+
         let index = e.target.selectedIndex;
         let el = e.target.childNodes[index]
-        let id =  el.getAttribute('id');  
+        let id = el.getAttribute('id');
         //console.log('Name, Code', e.target.value, option);
 
         setSelectedCompany(id)
-        
+
         //this.setState({
         //    [name]: value,
         //});
@@ -68,8 +68,13 @@ function AddRent({ setAlert }) {
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+
         console.log(selectedCompany);
         console.log(selectedProduct);
+        if (selectedCompany.length == 0 || selectedProduct.length == 0) {
+            alert("Please select all fields")
+            return;
+        }
         addRent({ selectedCompany, selectedProduct });
         history.push({
             pathname: '/ViewRents/',
@@ -92,6 +97,7 @@ function AddRent({ setAlert }) {
                                     <label>Device</label>
                                     <select className="form-control select2" style={{ 'width': '100%' }}
                                         onChange={handleChangeDevice} >
+                                        <option value="0" >Select Device</option>
                                         {product.map(product => (<option id={product.Id}>{product.Name}</option>))}
                                     </select>
                                 </div>
@@ -100,6 +106,7 @@ function AddRent({ setAlert }) {
                                     <label>Company</label>
                                     <select className="form-control select2" style={{ 'width': '100%' }}
                                         onChange={handleChangeCompany}>
+                                        <option value="0" >Select Company</option>
                                         {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
                                     </select>
                                 </div>
