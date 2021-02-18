@@ -115,19 +115,19 @@ function Sidebar() {
               </Link>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
+                  <Link to="/NewLease" onClick={((e) => toggle(e, '/rent/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>New Lease</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/add'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
+                  <Link to="/CloseLease" onClick={((e) => toggle(e, '/rent/close'))} className={"nav-link " + (pathname.match('/company/add') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>Close Lease</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/AddProduct" onClick={((e) => toggle(e, '/rent/index'))} className={"nav-link " + (pathname.match('/rent/index') ? "active " : " ")}>
+                  <Link to="/ViewLeases" onClick={((e) => toggle(e, '/rent/index'))} className={"nav-link " + (pathname.match('/rent/index') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>View Leases</p>
                   </Link>
