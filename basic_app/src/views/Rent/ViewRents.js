@@ -42,7 +42,8 @@ function ViewRents() {
                 <td>{rent.RentDT}</td>
                 <td>{rent.ReturnDT}</td>
                 <td>
-                  <Link className="btn btn-primary">Details</Link>                  
+                  <Link className="btn btn-primary">Details</Link>
+                  <Link className="btn btn-secondary" to={`/rent/close/${rent.Id}`}>Close/Return</Link>               
                 </td>
               </tr>
             ))}

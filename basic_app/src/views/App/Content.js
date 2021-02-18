@@ -29,7 +29,8 @@ function Content() {
             <Route exact path="/company/edit/:id" component={EditCompany} />
 
             <Route exact path="/rent/index" component={ViewRents} />  
-            <Route exact path="/rent/add" component={AddRent} /> 
+            <Route exact path="/rent/add" component={AddRent} />
+            <Route exact path="/rent/close" component={ViewRents} /> 
 
             /*<Redirect from='/AddProduct/' to="/ViewProducts/" />*/
 
