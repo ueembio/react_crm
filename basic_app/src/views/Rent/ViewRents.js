@@ -27,8 +27,8 @@ function ViewRents() {
         <Table>
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>Company Name</th>
+              <th>Device</th>
+              <th>Company</th>
               <th>Rent Date</th>
               <th>Return Date</th>
               <th>Action</th>
@@ -37,14 +37,12 @@ function ViewRents() {
           <tbody>
             {rents.map(rent => (
               <tr key={rent.Id}>
-                <td>{rent.Name}</td>
-                <td>{rent.Description}</td>
-                <td>{rent.SKU}</td>
-                <td>{rent.DT}</td>
+                <td>{rent.Product}</td>
+                <td>{rent.Company}</td>
+                <td>{rent.RentDT}</td>
+                <td>{rent.ReturnDT}</td>
                 <td>
-                  <Link className="btn btn-primary">View</Link>
-                  <Link className="btn btn-info" to={`/rent/edit/${rent.Id}`}>Edit</Link>
-                  <Link className="btn btn-secondary">Delete</Link>
+                  <Link className="btn btn-primary">Details</Link>                  
                 </td>
               </tr>
             ))}

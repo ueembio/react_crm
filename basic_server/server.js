@@ -190,6 +190,19 @@ app.post('/company', (req, res) => {
 
 });
 
+app.get('/rents', (req, res) => {
+  var sql = `SELECT p.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
+    FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+    WHERE pr.RentDT IS NOT NULL
+    ORDER BY c.Name, p.Name`;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result);
+    res.status(200).json(result)
+  });
+});
+
 app.post('/rents', (req, res) => {
   console.log('in post rent');
   //console.log(req.body.item);
