@@ -9,7 +9,6 @@ function ViewCompany() {
     let mounted = true;
     getCompanies()
       .then(items => {
-        console.log(items);
         if (mounted) {
           setList(items)
         }

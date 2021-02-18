@@ -11,8 +11,8 @@ export function getRents() {
 }
 
 export function getRent(id) {
-  //console.log(id);
-  return fetch('http://localhost:8080/rents/' + id, {
+  console.log(id);
+  return fetch('http://localhost:8080/rent/' + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -21,14 +21,13 @@ export function getRent(id) {
 }
 
 export function updateRent(id, item) {
-  return fetch('http://localhost:8080/rents/' + id, {
+  return fetch('http://localhost:8080/rent/' + id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ item })
-  })
-    .then(data => data.json())
+  }).then(data => data.json())
 }
 
 

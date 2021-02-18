@@ -47,7 +47,7 @@ app.get('/products', (req, res) => {
   connection.query(sql, function (error, result) {
     if (error)
       throw err;
-    console.log(result);
+    //console.log(result);
     res.status(200).json(result)
   });
 });
@@ -61,7 +61,7 @@ app.get('/get_available_products', (req, res) => {
   connection.query(sql, function (error, result) {
     if (error)
       throw err;
-    console.log(result);
+    //console.log(result);
     res.status(200).json(result)
   });
 });
@@ -191,14 +191,14 @@ app.post('/company', (req, res) => {
 });
 
 app.get('/rents', (req, res) => {
-  var sql = `SELECT p.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
+  var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
     FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
     WHERE pr.RentDT IS NOT NULL
     ORDER BY c.Name, p.Name`;
   connection.query(sql, function (error, result) {
     if (error)
       throw err;
-    console.log(result);
+    //console.log(result);
     res.status(200).json(result)
   });
 });
@@ -224,13 +224,32 @@ app.post('/rents', (req, res) => {
   });
 });
 
+app.get('/rent/:id', function (req, res) {
+  var sql = 'SELECT * FROM productsrent WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw err;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
+});
+
 app.put('/rent/:id', (req, res) => {
   console.log('In Put command');
-  console.log(req.body.item.name);
-  console.log(req.body.item.pnumber);
-  var p = { 'name': req.body.item.name, 'pnumber': req.body.item.pnumber };
-  product[req.params.id] = p;
-  res.send(product);
+  console.log(req.params.id);
+  console.log(req.body.item.dt);
+  var sql = `UPDATE productsrent SET ReturnDT='${req.body.item.dt}' WHERE Id=${req.params.id}`;
+  console.log(sql);
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in productsrent');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
 });
 
 
