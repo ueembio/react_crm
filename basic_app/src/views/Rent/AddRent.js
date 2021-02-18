@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Toast from 'react-bootstrap/Toast'
 import { getCompanies } from '../../services/company';
 import { getAvailableProducts } from '../../services/products';
 import { addRent } from '../../services/rent';
@@ -72,7 +73,7 @@ function AddRent({ setAlert }) {
         console.log(selectedCompany);
         console.log(selectedProduct);
         if (selectedCompany.length == 0 || selectedProduct.length == 0) {
-            alert("Please select all fields")
+            alert("Please select all fields");
             return;
         }
         addRent({ selectedCompany, selectedProduct });
