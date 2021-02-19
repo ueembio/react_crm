@@ -5,6 +5,7 @@ import { Table } from 'react-bootstrap';
 import { getRents } from '../../services/rent';
 
 function ViewRents() {
+
   const [rents, setRents] = useState([]);
   useEffect(() => {
     console.log('on loading');
@@ -12,18 +13,42 @@ function ViewRents() {
     getRents()
       .then(items => {
         if (mounted) {
-            setRents(items)
+          setRents(items)
         }
       })
     return () => mounted = false;
   }, [])
 
 
+  const handleChangeStatus = (e) => {
+    console.log('handleChangeStatus');
+    let { name, value } = e.target;
+    let index = e.target.selectedIndex;
+    let element = e.target.childNodes[index]
+    let id = element.getAttribute('id');
+    console.log(value);
+
+    //getRents(id)
+    
+  }
+
   return (
     <div className="container-fluid">
 
       <div className="row col-md-12">
-        <h2>Rent List</h2>
+        <h2>Devices Lease List</h2>
+
+        <hr />
+        <div>
+          <select className="select2 form-control" style={{ 'width': '100%' }}
+            onChange={handleChangeStatus}>
+            <option value="0">Select Filter</option>
+            <option value="1">Leased</option>
+            <option value="2">Available</option>
+            <option value="3">All</option>
+          </select>
+        </div>
+
         <Table>
           <thead>
             <tr>
@@ -42,7 +67,7 @@ function ViewRents() {
                 <td>{rent.RentDT}</td>
                 <td>{rent.ReturnDT}</td>
                 <td>
-                  <Link className="btn btn-primary" to={`/rent/close/${rent.Id}`}>Close/Return</Link>               
+                  <Link className="btn btn-primary" to={`/rent/close/${rent.Id}`}>Close/Return</Link>
                 </td>
               </tr>
             ))}

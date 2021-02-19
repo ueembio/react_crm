@@ -78,7 +78,7 @@ function AddRent({ setAlert }) {
         }
         addRent({ selectedCompany, selectedProduct });
         history.push({
-            pathname: '/ViewRents/',
+            pathname: '/rent/index',
             search: '?query=abc',
             state: { alert: true }
         });

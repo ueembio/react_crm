@@ -55,9 +55,10 @@ app.get('/products', (req, res) => {
 app.get('/get_available_products', (req, res) => {
   console.log('get_available_products');
   var sql = `SELECT p.Id, p.Name 
-    FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId
-    WHERE pr.RentDT IS NULL and pr.ReturnDT IS NULL
-    ORDER BY p.Name`;
+  FROM inventorydb.product p 
+  WHERE (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr)) OR 
+    (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL)) 
+  ORDER BY p.Name`;
   connection.query(sql, function (error, result) {
     if (error)
       throw err;
@@ -124,7 +125,7 @@ app.get('/company', (req, res) => {
   connection.query(sql, function (error, result) {
     if (error)
       throw err;
-    console.log(result);
+    //console.log(result);
     res.status(200).json(result)
   });
 });
