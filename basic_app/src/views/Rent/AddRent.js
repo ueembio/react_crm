@@ -104,7 +104,7 @@ function AddRent({ setAlert }) {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Company</label>
+                                    <label>Leased To</label>
                                     <select className="form-control select2" style={{ 'width': '100%' }}
                                         onChange={handleChangeCompany}>
                                         <option value="0" >Select Company</option>

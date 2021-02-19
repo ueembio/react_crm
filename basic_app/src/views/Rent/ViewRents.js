@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getList } from '../../services/products';
 import { Table } from 'react-bootstrap';
+import { formatDate } from "../../Utils"
 import { getRents, getRentsByLeaseStatus } from '../../services/rent';
 
 function ViewRents() {
@@ -66,8 +67,8 @@ function ViewRents() {
               <tr key={rent.Id}>
                 <td>{rent.Product}</td>
                 <td>{rent.Company}</td>
-                <td>{rent.RentDT}</td>
-                <td>{rent.ReturnDT}</td>
+                <td>{formatDate(rent.RentDT)}</td>
+                <td>{formatDate(rent.ReturnDT)}</td>
                 <td>
                   <Link className="btn btn-primary" to={`/rent/close/${rent.Id}`}>Close/Return</Link>
                 </td>

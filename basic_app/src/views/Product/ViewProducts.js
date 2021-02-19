@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getList } from '../../services/products';
+import { formatDate } from "../../Utils"
 import { Table } from 'react-bootstrap';
 
 function ViewProducts() {
@@ -39,7 +40,7 @@ function ViewProducts() {
                 <td>{product.Name}</td>
                 <td>{product.Description}</td>
                 <td>{product.SKU}</td>
-                <td>{product.DT}</td>
+                <td>{formatDate(product.DT)}</td>
                 <td>
                   <Link className="btn btn-primary">View</Link>
                   <Link className="btn btn-info" to={`/product/edit/${product.Id}`}>Edit</Link>

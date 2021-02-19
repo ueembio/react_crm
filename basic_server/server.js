@@ -259,7 +259,9 @@ app.post('/rents', (req, res) => {
 });
 
 app.get('/rent/:id', function (req, res) {
-  var sql = 'SELECT * FROM productsrent WHERE Id=' + req.params.id;
+  var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
+    FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+    WHERE pr.Id=` + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
