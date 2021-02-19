@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getList } from '../../services/products';
 import { Table } from 'react-bootstrap';
-import { getRents } from '../../services/rent';
+import { getRents, getRentsByLeaseStatus } from '../../services/rent';
 
 function ViewRents() {
 
@@ -23,13 +23,15 @@ function ViewRents() {
   const handleChangeStatus = (e) => {
     console.log('handleChangeStatus');
     let { name, value } = e.target;
-    let index = e.target.selectedIndex;
-    let element = e.target.childNodes[index]
-    let id = element.getAttribute('id');
+    //let index = e.target.selectedIndex;
+    //let element = e.target.childNodes[index]
+    //let id = element.getAttribute('id');
     console.log(value);
 
-    //getRents(id)
-    
+    getRentsByLeaseStatus(value).then(items => {
+      setRents(items)
+    });
+
   }
 
   return (
@@ -54,7 +56,7 @@ function ViewRents() {
             <tr>
               <th>Device</th>
               <th>Company</th>
-              <th>Rent Date</th>
+              <th>Lease Date</th>
               <th>Return Date</th>
               <th>Action</th>
             </tr>

@@ -6,8 +6,17 @@ export function getRents() {
       headers: {
         'Content-Type': 'application/json'
       }
-    })
-    .then(data => data.json())
+    }).then(data => data.json())
+}
+
+export function getRentsByLeaseStatus(id) {
+  return fetch('http://localhost:8080/rents_by_lease_status/' + id,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(data => data.json())
 }
 
 export function getRent(id) {

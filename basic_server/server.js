@@ -46,7 +46,7 @@ app.get('/products', (req, res) => {
   var sql = 'SELECT * FROM product';
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     //console.log(result);
     res.status(200).json(result)
   });
@@ -61,7 +61,7 @@ app.get('/get_available_products', (req, res) => {
   ORDER BY p.Name`;
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     //console.log(result);
     res.status(200).json(result)
   });
@@ -74,7 +74,7 @@ app.get('/products/:id', function (req, res) {
   var sql = 'SELECT * FROM product WHERE Id=' + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     console.log(result[0]);
     res.status(200).json(result[0])
   });
@@ -124,7 +124,7 @@ app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     //console.log(result);
     res.status(200).json(result)
   });
@@ -155,7 +155,7 @@ app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     //console.log(result);
     res.status(200).json(result)
   });
@@ -167,7 +167,7 @@ app.get('/company/:id', function (req, res) {
   var sql = 'SELECT * FROM company WHERE Id=' + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     console.log(result[0]);
     res.status(200).json(result[0])
   });
@@ -198,7 +198,40 @@ app.get('/rents', (req, res) => {
     ORDER BY c.Name, p.Name`;
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.get('/rents_by_lease_status/:id', (req, res) => {
+  console.log(req.params.id);
+  var sql = ""
+  switch (parseInt(req.params.id, 10)) {
+    case 1: // leased
+      sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
+        FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+        WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL
+        ORDER BY c.Name, p.Name`;
+      break;
+    case 2: // not leased
+      sql = `SELECT p.Id, p.Name AS Product, '' AS Company, '' AS RentDT, '' AS ReturnDT
+      FROM inventorydb.product p 
+      WHERE (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr)) OR 
+        (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL))
+        ORDER BY p.Name`;
+      break;
+    case 3: // all
+      sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
+        FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+        WHERE pr.RentDT IS NOT NULL
+        ORDER BY c.Name, p.Name`;
+      break;
+  }
+
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
     //console.log(result);
     res.status(200).json(result)
   });
@@ -229,7 +262,7 @@ app.get('/rent/:id', function (req, res) {
   var sql = 'SELECT * FROM productsrent WHERE Id=' + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)
-      throw err;
+      throw error;
     console.log(result[0]);
     res.status(200).json(result[0])
   });
