@@ -195,7 +195,7 @@ app.get('/rents', (req, res) => {
   var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
     FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
     WHERE pr.RentDT IS NOT NULL
-    ORDER BY c.Name, p.Name`;
+    ORDER BY pr.RentDT DESC`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -212,7 +212,7 @@ app.get('/rents_by_lease_status/:id', (req, res) => {
       sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
         FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
         WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL
-        ORDER BY c.Name, p.Name`;
+        ORDER BY pr.RentDT DESC`;
       break;
     case 2: // not leased
       sql = `SELECT p.Id, p.Name AS Product, '' AS Company, '' AS RentDT, '' AS ReturnDT
@@ -225,7 +225,7 @@ app.get('/rents_by_lease_status/:id', (req, res) => {
       sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
         FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
         WHERE pr.RentDT IS NOT NULL
-        ORDER BY c.Name, p.Name`;
+        ORDER BY pr.RentDT DESC`;
       break;
   }
 

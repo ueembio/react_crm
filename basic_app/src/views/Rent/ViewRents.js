@@ -28,7 +28,8 @@ function ViewRents() {
     //let element = e.target.childNodes[index]
     //let id = element.getAttribute('id');
     console.log(value);
-
+    if (value == 0)
+      return;
     getRentsByLeaseStatus(value).then(items => {
       setRents(items)
     });
