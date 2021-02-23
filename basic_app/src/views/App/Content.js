@@ -10,6 +10,9 @@ import EditCompany from '../Company/EditCompany';
 import AddRent from '../Rent/AddRent';
 import ViewRents from '../Rent/ViewRents';
 import CloseRent from '../Rent/CloseRent';
+import AddUser from '../User/AddUser';
+import ViewUsers from '../User/ViewUsers';
+import EditUser from '../User/EditUser';
 
 
 function Content() {
@@ -31,6 +34,10 @@ function Content() {
             <Route exact path="/rent/index" component={ViewRents} />  
             <Route exact path="/rent/add" component={AddRent} />
             <Route exact path="/rent/close/:id" component={CloseRent} /> 
+
+            <Route exact path="/ViewUsers" component={ViewUsers} /> 
+            <Route exact path="/AddUser" component={AddUser} /> 
+            <Route exact path="/user/edit/:id" component={EditUser} />
 
             /*<Redirect from='/AddProduct/' to="/ViewProducts/" />*/
 

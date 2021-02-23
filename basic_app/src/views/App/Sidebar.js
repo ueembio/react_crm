@@ -126,8 +126,30 @@ function Sidebar() {
                     <p>View Leases</p>
                   </Link>
                 </li>
+              </ul>
+            </li>
 
-
+            <li className="nav-item menu-open">
+              <Link href="#" className={"nav-link " + (['/AddUser', '/ViewUsers'].contains(pathname) ? "active" : "")}>
+                <i className="nav-icon fas fa-edit"></i>
+                <p>
+                  User Management
+                <i className="right fas fa-angle-left"></i>
+                </p>
+              </Link>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to="/AddUser" onClick={((e) => toggle(e, '/AddUser'))} className={"nav-link " + (pathname.match('/AddUser') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Add New User</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/ViewUsers" onClick={((e) => toggle(e, '/ViewUsers'))} className={"nav-link " + (pathname.match('/ViewUsers') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>View Users</p>
+                  </Link>
+                </li>
               </ul>
             </li>
 

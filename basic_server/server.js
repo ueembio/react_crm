@@ -119,7 +119,7 @@ app.post('/products', (req, res) => {
   });
 });
 
-//Companies API
+// Companies API
 app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';
   connection.query(sql, function (error, result) {
@@ -130,7 +130,6 @@ app.get('/company', (req, res) => {
   });
 });
 
-//Companies API
 app.put('/company/:id', (req, res) => {
   console.log('in put command');
   console.log(req.params.id);
@@ -147,17 +146,6 @@ app.put('/company/:id', (req, res) => {
       logger.info('successfully updated in database.');
     }
     res.status(200).json({ 'message': 'Data updated successfully' });
-  });
-});
-
-app.get('/company', (req, res) => {
-  //console.log(req.body);
-  var sql = 'SELECT * FROM company';
-  connection.query(sql, function (error, result) {
-    if (error)
-      throw error;
-    //console.log(result);
-    res.status(200).json(result)
   });
 });
 
@@ -191,6 +179,7 @@ app.post('/company', (req, res) => {
 
 });
 
+// Lease API
 app.get('/rents', (req, res) => {
   var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
     FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
@@ -288,6 +277,65 @@ app.put('/rent/:id', (req, res) => {
   });
 });
 
+// Users API
+app.get('/users', (req, res) => {
+  var sql = 'SELECT * FROM users';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.put('/users/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id);
+  console.log(req.body.item.itemName);
+  console.log(req.body.item.itemNumber);
+  console.log(req.body.item.itemAddress);
+  var sql = `UPDATE company SET Name='${req.body.item.itemName}', Phone='${req.body.item.itemNumber}', Address='${req.body.item.itemAddress}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in company');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
+});
+
+app.get('/users/:id', function (req, res) {
+  console.log('in get user');
+  console.log(req.params.id)
+  var sql = 'SELECT * FROM users WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
+});
+
+app.post('/users', (req, res) => {
+  console.log('company post');
+  console.log(req.body.item);
+
+  var sql = `INSERT INTO users (FirstName, LastName, Username, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '', '${req.body.item.Username}')`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data inserted in users');
+      logger.info('successfully saved in database.');
+    }
+    res.status(200).json({ 'message': 'Data inserted successfully' });
+  });
+
+});
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
 
