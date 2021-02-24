@@ -13,7 +13,7 @@ function EditProduct({ setAlert }) {
     const [itemUserame, setItemUsername] = useState();
     const [itemPassword, setItemPassword] = useState();
     const [itemEmail, setItemEmail] = useState();
-    const [selectedCompany, setSelectedCompany] = useState([]);
+    const [itemCompany, setItemCompany] = useState();
     const history = useHistory();
 
     useEffect(() => {
@@ -21,17 +21,18 @@ function EditProduct({ setAlert }) {
         getCompanies()
             .then(items => {
                 setCompany(items)
-            })
+            });
 
         getUser(id)            
-            .then(items => {                
+            .then(items => {
                 setItemFirstName(items.FirstName);
                 setItemLastName(items.LastName);
                 setItemUsername(items.Username);
-                setItemPassword(items.itemPassword);
+                setItemPassword(items.Password);                
                 setItemEmail(items.Email);
-                setSelectedCompany(items.CompanyId);
-            })
+                setItemCompany(items.CompanyId);                
+            });
+
     }, []);
 
     const handleChangeCompany = (e) => {
@@ -43,14 +44,14 @@ function EditProduct({ setAlert }) {
         let index = e.target.selectedIndex;
         let el = e.target.childNodes[index]
         let id = el.getAttribute('id');
-        //console.log('Name, Code', e.target.value, option);
+        console.log('Name, Value', e.target.value, id);
 
-        setSelectedCompany(id)
+        setItemCompany(id)
     }
 
     const onSubmit = async e => {
         e.preventDefault();
-        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemEmail, selectedCompany });
+        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemEmail, itemCompany });
         history.push("/ViewUsers");
     };
 
@@ -89,7 +90,7 @@ function EditProduct({ setAlert }) {
                                 </div>
                                 <div className="form-group">
                                     <label>Company</label>
-                                    <select className="form-control select2" style={{ 'width': '100%' }} defaultValue={selectedCompany}
+                                    <select className="form-control select2" style={{ 'width': '100%' }} defaultValue={itemCompany}
                                         onChange={handleChangeCompany}>
                                         <option value="0" >Select Company</option>
                                         {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}

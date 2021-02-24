@@ -172,3 +172,7 @@
 [2021-02-24T15:23:22.197] [INFO] default - successfully updated in database.
 [2021-02-24T15:23:41.972] [INFO] default - successfully updated in database.
 [2021-02-24T15:24:38.719] [INFO] default - successfully updated in database.
+[2021-02-24T16:19:14.925] [INFO] default - Successfully connected to the database.
+[2021-02-24T17:12:32.228] [INFO] default - error in saving database.
+[2021-02-24T17:12:44.303] [INFO] default - error in saving database.
+[2021-02-24T17:13:42.967] [INFO] default - error in saving database.
