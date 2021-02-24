@@ -44,6 +44,7 @@ export function updateUser(id, item) {
 
 
 export function addUser(item) {
+  console.log(item);
   return fetch('http://localhost:8080/users', {
     method: 'POST',
     headers: {

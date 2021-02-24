@@ -19,7 +19,7 @@ const logger = log4js.getLogger("default");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "pakistan",
+  password: "123456",
   database: "inventorydb"
 });
 
@@ -323,7 +323,8 @@ app.post('/users', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO users (FirstName, LastName, Username, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '', '${req.body.item.Username}')`;
+  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
+  console.log(sql);
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
