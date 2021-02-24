@@ -43,7 +43,7 @@ function ViewUsers() {
                 <td>{user.LastName}</td>
                 <td>{user.Username}</td>
                 <td>{user.Email}</td>
-                <td>{user.CompanyId}</td>
+                <td>{user.Company}</td>
                 <td>{formatDate(user.DT)}</td>
                 <td>
                   <Link className="btn btn-primary">View</Link>

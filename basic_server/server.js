@@ -279,7 +279,8 @@ app.put('/rent/:id', (req, res) => {
 
 // Users API
 app.get('/users', (req, res) => {
-  var sql = 'SELECT * FROM users';
+  var sql = `SELECT u.Id, u.FirstName, u.LastName, u.Username, u.Email, u.Password, c.Name Company, u.DT 
+    FROM users u LEFT JOIN company c ON u.CompanyId = c.Id`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -291,16 +292,18 @@ app.get('/users', (req, res) => {
 app.put('/users/:id', (req, res) => {
   console.log('in put command');
   console.log(req.params.id);
-  console.log(req.body.item.itemName);
-  console.log(req.body.item.itemNumber);
-  console.log(req.body.item.itemAddress);
-  var sql = `UPDATE company SET Name='${req.body.item.itemName}', Phone='${req.body.item.itemNumber}', Address='${req.body.item.itemAddress}' WHERE Id=${req.params.id}`;
+  console.log(req.body.item.itemFirstName);
+  console.log(req.body.item.itemLastName);
+  console.log(req.body.item.itemPassword);
+  console.log(req.body.item.itemEmail);
+  console.log(req.body.item.selectedCompany);
+  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.selectedCompany}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
       logger.info('error in saving database.');
     } else {
-      console.log('data updated in company');
+      console.log('data updated in user');
       logger.info('successfully updated in database.');
     }
     res.status(200).json({ 'message': 'Data updated successfully' });
@@ -323,8 +326,7 @@ app.post('/users', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
-  console.log(sql);
+  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;  
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);

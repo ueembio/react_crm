@@ -38,11 +38,7 @@ function AddUser({ setAlert }) {
         let id = el.getAttribute('id');
         //console.log('Name, Code', e.target.value, option);
 
-        setSelectedCompany(id)
-
-        //this.setState({
-        //    [name]: value,
-        //});
+        setSelectedCompany(id)        
     }
 
     //Comment Added
