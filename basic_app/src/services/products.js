@@ -63,4 +63,14 @@ export function updateList(item) {
     body: JSON.stringify({ item })
   })
     .then(data => data.json())
-}    
+}
+
+export function getProductData(id) {
+  console.log(id);
+  return fetch('http://localhost:8080/product_data/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(data => data.json())
+}
