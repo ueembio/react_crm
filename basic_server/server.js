@@ -19,8 +19,8 @@ const logger = log4js.getLogger("default");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "123456",
-  database: "inventorydb"
+  password: "pakistan",
+  database: "sensor_management"
 });
 
 // open the MySQL connection
@@ -55,9 +55,9 @@ app.get('/products', (req, res) => {
 app.get('/get_available_products', (req, res) => {
   console.log('get_available_products');
   var sql = `SELECT p.Id, p.Name 
-  FROM inventorydb.product p 
-  WHERE (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr)) OR 
-    (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL)) 
+  FROM product p 
+  WHERE (p.Id NOT IN (SELECT productid FROM productsrent pr)) OR 
+    (p.Id NOT IN (SELECT productid FROM productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL)) 
   ORDER BY p.Name`;
   connection.query(sql, function (error, result) {
     if (error)
@@ -182,7 +182,7 @@ app.post('/company', (req, res) => {
 // Lease API
 app.get('/rents', (req, res) => {
   var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
-    FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+    FROM product p left join productsrent pr on p.id=pr.ProductId left join company c on pr.CompanyId=c.Id
     WHERE pr.RentDT IS NOT NULL
     ORDER BY pr.RentDT DESC`;
   connection.query(sql, function (error, result) {
@@ -199,20 +199,20 @@ app.get('/rents_by_lease_status/:id', (req, res) => {
   switch (parseInt(req.params.id, 10)) {
     case 1: // leased
       sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
-        FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+        FROM product p left join productsrent pr on p.id=pr.ProductId left join company c on pr.CompanyId=c.Id
         WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL
         ORDER BY pr.RentDT DESC`;
       break;
     case 2: // not leased
       sql = `SELECT p.Id, p.Name AS Product, '' AS Company, '' AS RentDT, '' AS ReturnDT
-      FROM inventorydb.product p 
-      WHERE (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr)) OR 
-        (p.Id NOT IN (SELECT productid FROM inventorydb.productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL))
+      FROM product p 
+      WHERE (p.Id NOT IN (SELECT productid FROM productsrent pr)) OR 
+        (p.Id NOT IN (SELECT productid FROM productsrent pr WHERE pr.rentDT IS NOT NULL AND pr.returnDT IS NULL))
         ORDER BY p.Name`;
       break;
     case 3: // all
       sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
-        FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+        FROM product p left join productsrent pr on p.id=pr.ProductId left join company c on pr.CompanyId=c.Id
         WHERE pr.RentDT IS NOT NULL
         ORDER BY pr.RentDT DESC`;
       break;
@@ -249,7 +249,7 @@ app.post('/rents', (req, res) => {
 
 app.get('/rent/:id', function (req, res) {
   var sql = `SELECT pr.Id, p.Name AS Product, c.Name AS Company, pr.RentDT, pr.ReturnDT
-    FROM inventorydb.product p left join inventorydb.productsrent pr on p.id=pr.ProductId left join inventorydb.company c on pr.CompanyId=c.Id
+    FROM product p left join productsrent pr on p.id=pr.ProductId left join company c on pr.CompanyId=c.Id
     WHERE pr.Id=` + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)
