@@ -42,9 +42,9 @@ function ViewProducts() {
                 <td>{product.SKU}</td>
                 <td>{formatDate(product.DT)}</td>
                 <td>
-                  <Link className="btn btn-primary" to={`/product/edit/${product.Id}`}>Edit</Link>
+                  <Link className="btn btn-sm btn-primary" to={`/product/edit/${product.Id}`}>Edit</Link>
                   {/*<Link className="btn btn-secondary">Delete</Link>*/}
-                  <Link className="btn btn-info" to={`/product/data/${product.Id}`}>Data</Link>
+                  <Link className="btn btn-sm btn-secondary" to={`/product/data/${product.Id}`}>Data</Link>
                 </td>
               </tr>
             ))}

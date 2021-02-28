@@ -119,6 +119,22 @@ app.post('/products', (req, res) => {
   });
 });
 
+app.get('/product_data/:id', function (req, res) {
+  console.log('in get command');
+  console.log(req.params.id)
+
+  var sql = `SELECT p.Name,dd.dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial
+    FROM product p LEFT JOIN device_data dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
+    WHERE p.id = ${req.params.id}
+    ORDER BY dd.dt DESC;`
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    console.log(result);
+    res.status(200).json(result)
+  });
+});
+
 // Companies API
 app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';
@@ -326,7 +342,7 @@ app.post('/users', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;  
+  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
