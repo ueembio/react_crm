@@ -40,13 +40,17 @@ const columns = [
     }
 ];
 
+
 function Data({ setAlert }) {
-    const { id } = useParams();
-    const [products, setList] = useState([]);
+
     var date = new Date();
     date.setDate(date.getDate() - 15);
+
+    const { id } = useParams();
+    const [products, setList] = useState([]);
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
+    const [showing, setShowing] = useState(false);
 
     useEffect(() => {
         getProductData(id)
@@ -54,7 +58,7 @@ function Data({ setAlert }) {
                 setList(items);
             });
 
-        createChart();
+        //createChart();
 
     }, []);
 
@@ -76,7 +80,7 @@ function Data({ setAlert }) {
         for (let i = 0; i < products.length; i++) {
             temperature = products[i].temperature;
             dt = products[i].dt;
-            data.push({ date: dt, name: temperature, value: temperature });
+            data.push({ date: dt, name: "name" + i, value: temperature });
         }
 
         chart.data = data;
@@ -93,6 +97,8 @@ function Data({ setAlert }) {
         valueAxis.title.fontWeight = "bold";
 
         let series = chart.series.push(new am4charts.LineSeries());
+        //let bullet = series.bullets.push(new am4charts.CircleBullet())
+
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
         series.smoothing = "bezier";
@@ -109,46 +115,54 @@ function Data({ setAlert }) {
     }
 
     function handleSelect(e) {
-        console.log(e);
-        // {
-        //   selection: {
-        //     startDate: [native Date Object],
-        //     endDate: [native Date Object],
-        //   }
-        // }
+        createChart();
+        if (showing)
+            setShowing(false);
+        else
+            setShowing(true);
     };
 
     return (
         <div className="container-fluid">
+
             <div class="row">
-                
-                <div className="row col-md-12">
+
+                <div className="row col-md-12" >
                     <form>
-                        <div className="form-group">
+                        <div>
                             <label>Start</label>
                             <DatePicker className="form-control" selected={startDate}
                                 onChange={date => setStartDate(date)}
                                 showTimeSelect />
                         </div>
-                        <div className="form-group">
+                        <div>
                             <label>End</label>
                             <DatePicker className="form-control" selected={endDate}
                                 onChange={date => setEndDate(date)}
                                 showTimeSelect />
                         </div>
 
-                        <button type="submit" className="btn btn-primary">Update</button>
+                        <div>
+                            <button type="submit" className="btn btn-primary">Update</button>
+                            <button type="button" className="btn btn-success" onClick={handleSelect}>Plot Graph</button>
+                        </div>
+
+
                     </form>
                 </div>
 
 
-                <div id="chartdiv" style={{ width: "100%", height: "350px" }}></div>
+                <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
 
-                <div className="row col-md-12">                
+
+                <div className="row col-md-12" style={{ overflowY: "scroll" }}>
                     <DataTable
                         title='Sensor Data'
                         columns={columns}
                         data={products}
+                        responsive
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5]}
                         pagination>
                     </DataTable>
                 </div>

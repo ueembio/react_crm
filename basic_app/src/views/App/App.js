@@ -21,7 +21,7 @@ function App() {
   return (
     <BrowserRouter>
         <Header></Header>
-        <Sidebar ></Sidebar>
+        <Sidebar></Sidebar>
         <div className="content-wrapper">
           <Breadcrumb></Breadcrumb>
           <Content></Content>
