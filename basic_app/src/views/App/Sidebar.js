@@ -10,7 +10,6 @@ function Sidebar() {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('Hello WOrld');
     //setPathname(window.location.pathname);         
   }, [pathname]);
 
@@ -28,8 +27,13 @@ function Sidebar() {
 
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       <Link to="/dashboard" className="brand-link">
-        <img src="/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ "opacity": ".8" }} />
-        <span className="brand-text font-weight-light">Devices</span>
+        {/*
+        <img src="/assets/dist/img/AdminLTELogo.png"
+          alt="AdminLTE Logo"
+          className="brand-image img-circle elevation-3"
+          style={{ "opacity": ".8" }} />
+        */}
+        <span className="brand-text font-weight-light">Sensor Management</span>
       </Link>
 
       <div className="sidebar">
@@ -56,7 +60,7 @@ function Sidebar() {
               </Link>
             </li>
 
-            <li className="nav-item menu-open">
+            <li className="nav-item menu-close">
               <Link href="#" className={"nav-link " + (['/AddProduct', '/ViewProducts'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-columns"></i>
                 <p>
@@ -81,7 +85,7 @@ function Sidebar() {
 
             </li>
 
-            <li className="nav-item menu-open">
+            <li className="nav-item menu-close">
               <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompany'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-copy"></i>
                 <p>
@@ -105,7 +109,7 @@ function Sidebar() {
               </ul>
             </li>
 
-            <li className="nav-item menu-open">
+            <li className="nav-item menu-close">
               <Link href="#" className={"nav-link " + (['/company/add', '/company/edit', '/company/index'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-th"></i>
                 <p>
@@ -129,7 +133,7 @@ function Sidebar() {
               </ul>
             </li>
 
-            <li className="nav-item menu-open">
+            <li className="nav-item menu-close">
               <Link href="#" className={"nav-link " + (['/AddUser', '/ViewUsers'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-edit"></i>
                 <p>

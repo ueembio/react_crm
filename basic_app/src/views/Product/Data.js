@@ -12,6 +12,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import "react-datepicker/dist/react-datepicker.css";
 
 
+am4core.options.autoDispose = true;
 am4core.useTheme(am4themes_animated);
 
 const columns = [
@@ -58,16 +59,24 @@ function Data({ setAlert }) {
     }, []);
 
     function createChart() {
-        
+
         let chart = am4core.create("chartdiv", am4charts.XYChart);
 
         chart.paddingRight = 20;
 
         let data = [];
-        let visits = 10;
+        var temperature;
+        var dt;
+        /*
         for (let i = 1; i < 366; i++) {
             visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
             data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
+        }
+        */
+        for (let i = 0; i < products.length; i++) {
+            temperature = products[i].temperature;
+            dt = products[i].dt;
+            data.push({ date: dt, name: temperature, value: temperature });
         }
 
         chart.data = data;
@@ -83,7 +92,7 @@ function Data({ setAlert }) {
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
 
-        series.tooltipText = "{valueY.value}";
+        series.tooltipText = "{valueY.value} °C";
         chart.cursor = new am4charts.XYCursor();
 
         let scrollbarX = new am4charts.XYChartScrollbar();
@@ -107,7 +116,7 @@ function Data({ setAlert }) {
         <div className="container-fluid">
             <div class="row">
                 <div className="row col-md-12">
-                    <form >
+                    <form>
                         <div className="form-group">
                             <label>Start</label>
                             <DatePicker className="form-control" selected={startDate}
@@ -126,7 +135,7 @@ function Data({ setAlert }) {
                 </div>
 
                 <div className="row col-md-12">
-                    <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                    <div id="chartdiv" style={{ width: "100%", height: "250px" }}></div>
                 </div>
 
                 <div className="row col-md-12">

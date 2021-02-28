@@ -66,7 +66,6 @@ export function updateList(item) {
 }
 
 export function getProductData(id) {
-  console.log(id);
   return fetch('http://localhost:8080/product_data/' + id, {
     method: 'GET',
     headers: {
