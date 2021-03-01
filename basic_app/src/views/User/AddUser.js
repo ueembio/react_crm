@@ -54,11 +54,11 @@ function AddUser({ setAlert }) {
 
     return (
         <div className="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Add User</h3>
+            <div className="row">
+                <div className="col-md-12">
+                    <div className="card card-primary">
+                        <div className="card-header">
+                            <h3 className="card-title">Add User</h3>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="card-body">

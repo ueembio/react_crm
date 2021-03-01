@@ -50,7 +50,7 @@ function Data({ setAlert }) {
     const [products, setList] = useState([]);
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
-    const [showing, setShowing] = useState(false);
+    const [showing, setShowing] = useState(true);
 
     useEffect(() => {
         getProductData(id)
@@ -58,7 +58,7 @@ function Data({ setAlert }) {
                 setList(items);
             });
 
-        //createChart();
+        createChart();
 
     }, []);
 
@@ -125,9 +125,9 @@ function Data({ setAlert }) {
     return (
         <div className="container-fluid">
 
-            <div class="row">
+            <div className="row col-md-12">
 
-                <div className="row col-md-12" >
+                <div className="row col-md-12">
                     <form>
                         <div>
                             <label>Start</label>
@@ -144,18 +144,18 @@ function Data({ setAlert }) {
 
                         <div>
                             <button type="submit" className="btn btn-primary">Update</button>
-                            <button type="button" className="btn btn-success" onClick={handleSelect}>Plot Graph</button>
+                            <button type="button" className="btn btn-success" onClick={handleSelect}>Toggle Graph</button>
                         </div>
 
 
                     </form>
                 </div>
 
+                <div className="row col-md-12">
+                    <div id="chartdiv" style={{ width: "100%", height: "350px",  display: (showing ? 'block' : 'none') }}></div>
+                </div>
 
-                <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
-
-
-                <div className="row col-md-12" style={{ overflowY: "scroll" }}>
+                <div className="row col-md-12">
                     <DataTable
                         title='Sensor Data'
                         columns={columns}
