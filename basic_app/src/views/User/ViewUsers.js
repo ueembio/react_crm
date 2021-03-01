@@ -48,7 +48,7 @@ function ViewUsers() {
                 <td>
                   <Link className="btn btn-primary">View</Link>
                   <Link className="btn btn-info" to={`/user/edit/${user.Id}`}>Edit</Link>
-                  <Link className="btn btn-secondary">Delete</Link>
+                  {/*<Link className="btn btn-secondary">Delete</Link>*/}
                 </td>
               </tr>
             ))}

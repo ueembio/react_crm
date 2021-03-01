@@ -101,7 +101,7 @@ function Data({ setAlert }) {
 
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
-        series.smoothing = "bezier";
+        //series.smoothing = "bezier";
         series.strokeWidth = "2";
 
         series.tooltipText = "{valueY.value} °C";
@@ -123,7 +123,7 @@ function Data({ setAlert }) {
     };
 
     return (
-        <section className="content" style={{ height: "1000hv",  overflowY: "scroll" }}>
+        <section className="content">
 
             <div className="container-fluid">
 
