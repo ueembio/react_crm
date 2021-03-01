@@ -123,12 +123,8 @@ function Data({ setAlert }) {
     };
 
     return (
-        <section className="content">
-
             <div className="container-fluid">
-
                 <div className="row">
-
                     <div className="col-md-12">
                         <form>
                             <div>
@@ -169,7 +165,6 @@ function Data({ setAlert }) {
                     </div>
                 </div>
             </div >
-        </section>
     )
 };
 

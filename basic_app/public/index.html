@@ -23,12 +23,11 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="%PUBLIC_URL%/assets/dist/css/adminlte.css">
     <link rel="stylesheet" href="%PUBLIC_URL%/assets/plugins/select2/css/select2.css">
-    
+    <link rel="stylesheet" href="%PUBLIC_URL%/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   </head>
-  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <body className="hold-transition sidebar-mini">
-      <div class="wrapper">
+    <body  className="hold-transition sidebar-mini">
+      <div id="showall" class="wrapper">
         <div id="root"></div>
       </div>
     </body>
@@ -37,10 +36,12 @@
     <script src="%PUBLIC_URL%/assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="%PUBLIC_URL%/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="%PUBLIC_URL%/assets/dist/js/adminlte.min.js"></script>
+   
     <!-- Select2 -->
     <script src="%PUBLIC_URL%/assets/plugins/select2/js/select2.full.min.js"></script>
+    <script  src="%PUBLIC_URL%/assets/plugins/overlayScrollbars/js/OverlayScrollbars.min.js"></script>
+     <!-- AdminLTE App -->
+     <script src="%PUBLIC_URL%/assets/dist/js/adminlte.min.js"></script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -54,6 +55,12 @@
 
     <script>
       $('.select2').select2()
+      document.addEventListener("DOMContentLoaded", function() {
+	//The first argument are the elements to which the plugin shall be initialized
+	//The second argument has to be at least a empty object or a object with your desired options
+	OverlayScrollbars(document.querySelectorAll("body"), { });
+});
+
     </script>
 
 </html>

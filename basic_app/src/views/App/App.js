@@ -22,7 +22,7 @@ function App() {
     <BrowserRouter>
         <Header></Header>
         <Sidebar></Sidebar>
-        <div className="content-wrapper">
+        <div className="content-wrapper px-4 py-2">
           <Breadcrumb></Breadcrumb>
           <Content></Content>
         </div>
