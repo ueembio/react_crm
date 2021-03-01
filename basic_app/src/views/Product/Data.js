@@ -109,7 +109,7 @@ function Data({ setAlert }) {
 
         let scrollbarX = new am4charts.XYChartScrollbar();
         scrollbarX.series.push(series);
-        //chart.scrollbarX = scrollbarX;
+        chart.scrollbarX = scrollbarX;
 
         //this.chart = chart;
     }
@@ -123,51 +123,53 @@ function Data({ setAlert }) {
     };
 
     return (
-        <div className="container-fluid">
+        <section className="content" style={{ height: "1000hv",  overflowY: "scroll" }}>
 
-            <div className="row col-md-12">
+            <div className="container-fluid">
 
-                <div className="row col-md-12">
-                    <form>
-                        <div>
-                            <label>Start</label>
-                            <DatePicker className="form-control" selected={startDate}
-                                onChange={date => setStartDate(date)}
-                                showTimeSelect />
-                        </div>
-                        <div>
-                            <label>End</label>
-                            <DatePicker className="form-control" selected={endDate}
-                                onChange={date => setEndDate(date)}
-                                showTimeSelect />
-                        </div>
+                <div className="row">
 
-                        <div>
-                            <button type="submit" className="btn btn-primary">Update</button>
-                            <button type="button" className="btn btn-success" onClick={handleSelect}>Toggle Graph</button>
-                        </div>
+                    <div className="col-md-12">
+                        <form>
+                            <div>
+                                <label>Start</label>
+                                <DatePicker className="form-control" selected={startDate}
+                                    onChange={date => setStartDate(date)}
+                                    showTimeSelect />
+                            </div>
+                            <div>
+                                <label>End</label>
+                                <DatePicker className="form-control" selected={endDate}
+                                    onChange={date => setEndDate(date)}
+                                    showTimeSelect />
+                            </div>
+
+                            <div>
+                                <button type="submit" className="btn btn-primary">Update</button>
+                                <button type="button" className="btn btn-success" onClick={handleSelect}>Toggle Graph</button>
+                            </div>
 
 
-                    </form>
+                        </form>
+                    </div>
+
+                    <div className="col-md-12">
+                        <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
+                    </div>
+
+                    <div className="col-md-12">
+                        <DataTable
+                            title='Sensor Data'
+                            columns={columns}
+                            data={products}
+                            paginationPerPage={5}
+                            paginationRowsPerPageOptions={[5]}
+                            pagination>
+                        </DataTable>
+                    </div>
                 </div>
-
-                <div className="row col-md-12">
-                    <div id="chartdiv" style={{ width: "100%", height: "350px",  display: (showing ? 'block' : 'none') }}></div>
-                </div>
-
-                <div className="row col-md-12">
-                    <DataTable
-                        title='Sensor Data'
-                        columns={columns}
-                        data={products}
-                        responsive
-                        paginationPerPage={5}
-                        paginationRowsPerPageOptions={[5]}
-                        pagination>
-                    </DataTable>
-                </div>
-            </div>
-        </div >
+            </div >
+        </section>
     )
 };
 
