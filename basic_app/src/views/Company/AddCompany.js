@@ -19,6 +19,10 @@ function AddCompany({ setAlert }) {
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!name) {
+            alert('please enter name');
+            return;
+        }
         addCompany({ name, number, address });
         history.push({
             pathname: '/ViewCompany/',

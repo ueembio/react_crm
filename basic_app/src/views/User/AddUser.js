@@ -6,17 +6,17 @@ import ViewUsers from './ViewUsers';
 
 function AddUser({ setAlert }) {
     const [company, setCompany] = useState([]);
-    const [itemFirstName, setItemFirstName] = useState();
-    const [itemLastName, setItemLastName] = useState();
-    const [itemUserame, setItemUsername] = useState();
-    const [itemPassword, setItemPassword] = useState();
-    const [itemEmail, setItemEmail] = useState();    
-    const [selectedCompany, setSelectedCompany] = useState([]);
+    const [itemFirstName, setItemFirstName] = useState("");
+    const [itemLastName, setItemLastName] = useState("");
+    const [itemUserame, setItemUsername] = useState("");
+    const [itemPassword, setItemPassword] = useState("");
+    const [itemEmail, setItemEmail] = useState("");
+    const [selectedCompany, setSelectedCompany] = useState(0);
     const [itemCreatedOn, setItemCreatedOn] = useState();
     const history = useHistory();
 
     useEffect(() => {
-        let mounted = true;    
+        let mounted = true;
         getCompanies()
             .then(items => {
                 if (mounted) {
@@ -38,12 +38,17 @@ function AddUser({ setAlert }) {
         let id = el.getAttribute('id');
         //console.log('Name, Code', e.target.value, option);
 
-        setSelectedCompany(id)        
+        setSelectedCompany(id)
     }
 
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        //console.log(selectedCompany);
+        if (!itemFirstName || !itemLastName || !itemUserame || !itemPassword || selectedCompany == 0) {
+            alert('please provide all information.');
+            return;
+        }
         addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemEmail, selectedCompany, itemCreatedOn });
         history.push({
             pathname: '/ViewUsers/',
@@ -89,7 +94,7 @@ function AddUser({ setAlert }) {
                                         <option value="0" >Select Company</option>
                                         {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
                                     </select>
-                                </div>                                
+                                </div>
                             </div>
                             <div className="card-footer">
                                 <button type="submit" className="btn btn-primary">Submit</button>

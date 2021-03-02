@@ -4,14 +4,18 @@ import { addProduct } from '../../services/products';
 import ViewProducts from './ViewProducts';
 
 function AddProduct({ setAlert }) {
-    const [itemName, setItemName] = useState();
-    const [itemDescription, setItemDescription] = useState();
-    const [itemSKU, setItemSKU] = useState();
+    const [itemName, setItemName] = useState("");
+    const [itemDescription, setItemDescription] = useState("");
+    const [itemSKU, setItemSKU] = useState("");
     const history = useHistory();
 
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!itemName) {
+            alert('please enter name');
+            return;
+        }
         addProduct({ itemName, itemDescription, itemSKU });
         history.push({
             pathname: '/ViewProducts/',
