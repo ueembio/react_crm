@@ -122,7 +122,7 @@ app.post('/products', (req, res) => {
 app.get('/product_data/:id', function (req, res) {
   console.log('in get command');
   console.log(req.params.id)
-
+  
   var sql = `SELECT p.Name,dd.dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial
     FROM product p LEFT JOIN device_data dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE p.id = ${req.params.id}
@@ -130,7 +130,26 @@ app.get('/product_data/:id', function (req, res) {
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
-    console.log(result);
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.get('/product_data/:id/:startDate/:endDate', function (req, res) {
+  console.log('in get command');
+  console.log(req.params.id)
+  console.log(req.params.startDate)
+  console.log(req.params.endDate)
+
+  var sql = `SELECT p.Name,dd.dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial
+    FROM product p LEFT JOIN device_data dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
+    WHERE p.id = ${req.params.id} AND dd.dt >= '${req.params.startDate}' AND dd.dt <= '${req.params.endDate}'
+    ORDER BY dd.dt DESC;`
+  console.log(sql);
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
     res.status(200).json(result)
   });
 });
