@@ -312,8 +312,8 @@ app.put('/users/:id', (req, res) => {
   console.log(req.body.item.itemLastName);
   console.log(req.body.item.itemPassword);
   console.log(req.body.item.itemEmail);
-  console.log(req.body.item.selectedCompany);
-  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.selectedCompany}' WHERE Id=${req.params.id}`;
+  console.log(req.body.item.itemCompany);
+  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.itemCompany}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);

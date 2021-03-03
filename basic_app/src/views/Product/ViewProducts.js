@@ -30,7 +30,7 @@ function ViewProducts() {
               <th>Device Name</th>
               <th>Description</th>
               <th>Hardware Serial No.</th>
-              <th>Saved On</th>
+              <th>Created On</th>
               <th>Action</th>
             </tr>
           </thead>

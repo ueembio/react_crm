@@ -44,6 +44,15 @@ function AddUser({ setAlert }) {
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (e.nativeEvent.submitter.name == "cancel") {
+            history.push({
+                pathname: '/ViewUsers/',
+                search: '',
+                state: { alert: true }
+            });
+            return;
+        }
+
         //console.log(selectedCompany);
         if (!itemFirstName || !itemLastName || !itemUserame || !itemPassword || selectedCompany == 0) {
             alert('please provide all information.');
@@ -52,7 +61,7 @@ function AddUser({ setAlert }) {
         addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemEmail, selectedCompany, itemCreatedOn });
         history.push({
             pathname: '/ViewUsers/',
-            search: '?query=abc',
+            search: '',
             state: { alert: true }
         });
     };
@@ -97,7 +106,8 @@ function AddUser({ setAlert }) {
                                 </div>
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="cancel" className="btn btn-info">Cancel</button>
                             </div>
                         </form>
                     </div>

@@ -8,12 +8,12 @@ import ViewProducts from './ViewUsers';
 function EditProduct({ setAlert }) {
     const { id } = useParams();
     const [company, setCompany] = useState([]);
-    const [itemFirstName, setItemFirstName] = useState();
-    const [itemLastName, setItemLastName] = useState();
-    const [itemUserame, setItemUsername] = useState();
-    const [itemPassword, setItemPassword] = useState();
+    const [itemFirstName, setItemFirstName] = useState('');
+    const [itemLastName, setItemLastName] = useState('');
+    const [itemUserame, setItemUsername] = useState('');
+    const [itemPassword, setItemPassword] = useState('');
     const [itemEmail, setItemEmail] = useState();
-    const [itemCompany, setItemCompany] = useState();
+    const [itemCompany, setItemCompany] = useState(0);
     const history = useHistory();
 
     useEffect(() => {
@@ -25,6 +25,7 @@ function EditProduct({ setAlert }) {
 
         getUser(id)            
             .then(items => {
+                //console.log(items);
                 setItemFirstName(items.FirstName);
                 setItemLastName(items.LastName);
                 setItemUsername(items.Username);
@@ -51,6 +52,19 @@ function EditProduct({ setAlert }) {
 
     const onSubmit = async e => {
         e.preventDefault();
+        if (e.nativeEvent.submitter.name == "cancel") {
+            history.push({
+                pathname: '/ViewUsers/',
+                search: '',
+                state: { alert: true }
+            });
+            return;
+        }
+
+        if (!itemFirstName || !itemLastName || !itemUserame || !itemPassword || itemCompany == 0) {
+            alert('please provide all information.');
+            return;
+        }
         updateUser(id, { itemFirstName, itemLastName, itemPassword, itemEmail, itemCompany });
         history.push("/ViewUsers");
     };
@@ -78,15 +92,18 @@ function EditProduct({ setAlert }) {
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputUsername">Username</label>
-                                    <input type="text" className="form-control" id="exampleInputUsername" readOnly placeholder="Username" name="username" defaultValue={itemUserame} />
+                                    <input type="text" className="form-control" id="exampleInputUsername" readOnly placeholder="Username" 
+                                        name="username" defaultValue={itemUserame} />
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputPassword">Password</label>
-                                    <input type="text" className="form-control" id="exampleInputPassword" placeholder="Password" type="password" onChange={event => setItemPassword(event.target.value)} defaultValue={itemPassword} />
+                                    <input type="text" className="form-control" id="exampleInputPassword" placeholder="Password" type="password" 
+                                        onChange={event => setItemPassword(event.target.value)} defaultValue={itemPassword} />
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputEmail">Email</label>
-                                    <input type="text" className="form-control" id="exampleInputEmail" placeholder="Email" onChange={event => setItemEmail(event.target.value)} defaultValue={itemEmail} />
+                                    <input type="text" className="form-control" id="exampleInputEmail" placeholder="Email" 
+                                        onChange={event => setItemEmail(event.target.value)} defaultValue={itemEmail} />
                                 </div>
                                 <div className="form-group">
                                     <label>Company</label>
@@ -98,7 +115,8 @@ function EditProduct({ setAlert }) {
                                 </div>
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="btn btn-primary">Update</button>
+                                <button type="submit" name="submit" className="btn btn-primary">Update</button>
+                                <button type="submit" name="cancel" className="btn btn-info">Cancel</button>
                             </div>
                         </form>
                     </div>

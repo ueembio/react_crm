@@ -12,6 +12,16 @@ function AddProduct({ setAlert }) {
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        //console.log(e.nativeEvent.submitter.name);
+        if (e.nativeEvent.submitter.name == "cancel") {
+            history.push({
+                pathname: '/ViewProducts/',
+                search: '',
+                state: { alert: true }
+            });
+            return;
+        }
+
         if (!itemName) {
             alert('please enter name');
             return;
@@ -48,7 +58,8 @@ function AddProduct({ setAlert }) {
                                 </div>
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="cancel" className="btn btn-info">Cancel</button>
                             </div>
                         </form>
                     </div>

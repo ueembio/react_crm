@@ -37,7 +37,7 @@ function ViewCompany() {
                 <td>{company.Phone}</td>
                 <td>{company.Address}</td>
                 <td>
-                  <Link className="btn btn-primary">View</Link>
+                  {/*<Link className="btn btn-primary">View</Link>*/}
                   <Link className="btn btn-info" to={`/company/edit/${company.Id}`}>Edit</Link>
                   {/*<Link className="btn btn-secondary">Delete</Link>*/}
                 </td>

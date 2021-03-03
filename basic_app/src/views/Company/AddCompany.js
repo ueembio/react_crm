@@ -19,6 +19,15 @@ function AddCompany({ setAlert }) {
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (e.nativeEvent.submitter.name == "cancel") {
+            history.push({
+                pathname: '/ViewCompany/',
+                search: '',
+                state: { alert: true }
+            });
+            return;
+        }
+
         if (!name) {
             alert('please enter name');
             return;
@@ -26,7 +35,7 @@ function AddCompany({ setAlert }) {
         addCompany({ name, number, address });
         history.push({
             pathname: '/ViewCompany/',
-            search: '?query=abc',
+            search: '',
             state: { alert: true }
         });
     };
@@ -68,7 +77,8 @@ function AddCompany({ setAlert }) {
 
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" name="cancel" className="btn btn-info">Cancel</button>
                             </div>
                         </form>
                     </div>
