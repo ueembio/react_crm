@@ -1,6 +1,5 @@
 export function getRents() {
-  //console.log('getList()');
-  return fetch('http://localhost:8080/rents',
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/rents`,
     {
       method: 'GET',
       headers: {
@@ -10,7 +9,7 @@ export function getRents() {
 }
 
 export function getRentsByLeaseStatus(id) {
-  return fetch('http://localhost:8080/rents_by_lease_status/' + id,
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/rents_by_lease_status/` + id,
     {
       method: 'GET',
       headers: {
@@ -21,7 +20,7 @@ export function getRentsByLeaseStatus(id) {
 
 export function getRent(id) {
   console.log(id);
-  return fetch('http://localhost:8080/rent/' + id, {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/rent/` + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -30,7 +29,7 @@ export function getRent(id) {
 }
 
 export function updateRent(id, item) {
-  return fetch('http://localhost:8080/rent/' + id, {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/rent/` + id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -41,7 +40,7 @@ export function updateRent(id, item) {
 
 
 export function addRent(item) {
-  return fetch('http://localhost:8080/rents', {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/rents`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -52,7 +51,7 @@ export function addRent(item) {
 }
 
 export function updateList(item) {
-  return fetch('http://localhost:8080/products', {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/products`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
