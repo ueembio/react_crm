@@ -1,5 +1,5 @@
 export function getCompanies() {
-  return fetch('http://localhost:8080/company',
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/company`,
     {
       method: 'GET',
       headers: {
@@ -10,7 +10,7 @@ export function getCompanies() {
 
 export function getCompany(id) {
   console.log(id);
-  return fetch('http://localhost:8080/company/' + id, {
+  return fetch(`${process.env.API_BASE_URL}/company/` + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ export function getCompany(id) {
 }
 
 export function updateCompany(id, item) {
-  return fetch('http://localhost:8080/company/' + id, {
+  return fetch(`${process.env.API_BASE_URL}/company/` + id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export function updateCompany(id, item) {
 
 
 export function addCompany(item) {
-  return fetch('http://localhost:8080/company', {
+  return fetch(`${process.env.API_BASE_URL}/company`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ export function addCompany(item) {
 }
 
 export function updateList(item) {
-  return fetch('http://localhost:8080/company', {
+  return fetch(`${process.env.API_BASE_URL}/company`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

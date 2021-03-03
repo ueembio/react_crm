@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.6.2",
     "bootstrap": "^4.6.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "npx": "^10.2.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
