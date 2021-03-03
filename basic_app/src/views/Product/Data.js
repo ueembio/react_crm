@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
 import { formatDateTime } from "../../Utils"
-import { getProductData } from '../../services/products';
+import { getProduct, getProductData } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
 
@@ -48,18 +48,25 @@ function Data({ setAlert }) {
 
     const { id } = useParams();
     const [products, setList] = useState([]);
+    const [title, setTitle] = useState('');
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
     const [showing, setShowing] = useState(true);
 
     useEffect(() => {
-        getProductData(id)
+        getProduct(id)
             .then(items => {
-                setList(items);
+                
+                if (items) {
+                    setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
+                }
+                
+                getProductData(id)
+                    .then(items => {
+                        setList(items);
+                        createChart();
+                    });
             });
-
-        createChart();
-
     }, []);
 
     function createChart() {
@@ -107,11 +114,27 @@ function Data({ setAlert }) {
         series.tooltipText = "{valueY.value} °C";
         chart.cursor = new am4charts.XYCursor();
 
-        let scrollbarX = new am4charts.XYChartScrollbar();
-        scrollbarX.series.push(series);
-        chart.scrollbarX = scrollbarX;
+        //let scrollbarX = new am4charts.XYChartScrollbar();
+        //scrollbarX.series.push(series);
+        //chart.scrollbarX = scrollbarX;
 
         //this.chart = chart;
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        getProduct(id)
+            .then(items => {
+                if (items) {
+                    setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
+                }
+                getProductData(id)
+                    .then(items => {
+                        setList(items);
+                        createChart();
+                    });
+            });
     }
 
     function handleSelect(e) {
@@ -123,48 +146,48 @@ function Data({ setAlert }) {
     };
 
     return (
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-12">
-                        <form>
-                            <div>
-                                <label>Start</label>
-                                <DatePicker className="form-control" selected={startDate}
-                                    onChange={date => setStartDate(date)}
-                                    showTimeSelect />
-                            </div>
-                            <div>
-                                <label>End</label>
-                                <DatePicker className="form-control" selected={endDate}
-                                    onChange={date => setEndDate(date)}
-                                    showTimeSelect />
-                            </div>
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-md-12">
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label>Start</label>
+                            <DatePicker className="form-control" selected={startDate}
+                                onChange={date => setStartDate(date)}
+                                showTimeSelect />
+                        </div>
+                        <div>
+                            <label>End</label>
+                            <DatePicker className="form-control" selected={endDate}
+                                onChange={date => setEndDate(date)}
+                                showTimeSelect />
+                        </div>
 
-                            <div>
-                                <button type="submit" className="btn btn-primary">Update</button>
-                                <button type="button" className="btn btn-success" onClick={handleSelect}>Toggle Graph</button>
-                            </div>
+                        <div>
+                            <button type="submit" className="btn btn-primary">Update</button>
+                            {/*<button type="button" className="btn btn-success" onClick={handleSelect}>Toggle Graph</button>*/}
+                        </div>
 
 
-                        </form>
-                    </div>
-
-                    <div className="col-md-12">
-                        <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
-                    </div>
-
-                    <div className="col-md-12">
-                        <DataTable
-                            title='Sensor Data'
-                            columns={columns}
-                            data={products}
-                            paginationPerPage={5}
-                            paginationRowsPerPageOptions={[5]}
-                            pagination>
-                        </DataTable>
-                    </div>
+                    </form>
                 </div>
-            </div >
+
+                <div className="col-md-12">
+                    <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
+                </div>
+
+                <div className="col-md-12">
+                    <DataTable
+                        title={title}
+                        columns={columns}
+                        data={products}
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5]}
+                        pagination>
+                    </DataTable>
+                </div>
+            </div>
+        </div >
     )
 };
 

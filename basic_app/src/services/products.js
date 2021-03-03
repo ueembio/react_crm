@@ -23,7 +23,6 @@ export function getAvailableProducts() {
 }
 
 export function getProduct(id) {
-  //console.log(id);
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/products/` + id, {
     method: 'GET',
     headers: {
