@@ -56,38 +56,38 @@ function Data({ setAlert }) {
     useEffect(() => {
         getProduct(id)
             .then(items => {
-                
+
                 if (items) {
                     setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
                 }
-                
+
                 getProductData(id)
                     .then(items => {
                         setList(items);
-                        createChart();
+                        createLineChart();
                     });
             });
     }, []);
 
-    function createChart() {
+    function createLineChart() {
 
         let chart = am4core.create("chartdiv", am4charts.XYChart);
 
+        let title = chart.titles.create();
+        title.text = "Sensor temperature readings over the time";
+        title.fontSize = 25;
+        title.marginBottom = 30;
         chart.paddingRight = 20;
 
         let data = [];
         var temperature;
         var dt;
-        /*
-        for (let i = 1; i < 366; i++) {
-            visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
-        }
-        */
+
         for (let i = 0; i < products.length; i++) {
             temperature = products[i].temperature;
             dt = products[i].dt;
-            data.push({ date: dt, name: "name" + i, value: temperature });
+            //console.log(formatDateTime(dt));
+            data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
 
         chart.data = data;
@@ -96,6 +96,8 @@ function Data({ setAlert }) {
         dateAxis.renderer.grid.template.location = 0;
         dateAxis.title.text = "Date";
         dateAxis.title.fontWeight = "bold";
+        dateAxis.dateFormatter = new am4core.DateFormatter();
+        dateAxis.dateFormatter.dateFormat = "MM-dd HH:mm";
 
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis.tooltip.disabled = true;
@@ -103,15 +105,36 @@ function Data({ setAlert }) {
         valueAxis.title.text = "Temperature";
         valueAxis.title.fontWeight = "bold";
 
-        let series = chart.series.push(new am4charts.LineSeries());
-        //let bullet = series.bullets.push(new am4charts.CircleBullet())
-
+        let series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
-        //series.smoothing = "bezier";
         series.strokeWidth = "2";
+        //series.tooltipText = "{valueY.value} °C";
 
-        series.tooltipText = "{valueY.value} °C";
+        chart.dateFormatter.dateFormat = { month: "long", day: "numeric" };
+        dateAxis.dateFormats.setKey("day", { day: "numeric" });
+        dateAxis.dateFormats.setKey("hour", { hour: "numeric" });
+        dateAxis.periodChangeDateFormats.setKey("day", { month: "long" });
+        dateAxis.tooltipDateFormat = { month: "long", day: "numeric" };
+
+        let bullet = series.bullets.push(new am4charts.CircleBullet())
+        bullet.circle.fill = am4core.color("green");
+        bullet.circle.fillOpacity = 0.5;
+        bullet.circle.stroke = am4core.color("green");
+        bullet.circle.strokeOpacity = 0.5;
+        bullet.circle.strokeWidth = 1;
+        bullet.circle.radius = 2;
+        bullet.tooltipText = "{valueY.value} °C";
+
+        /*
+        let lineSeries = chart.series.push(new am4charts.LineSeries());
+        let bullet = series.bullets.push(new am4charts.CircleBullet())
+        lineSeries.dataFields.dateX = "date";
+        lineSeries.dataFields.valueY = "value";
+        lineSeries.strokeWidth = "2";
+        lineSeries.tooltipText = "{valueY.value} °C";
+        */
+
         chart.cursor = new am4charts.XYCursor();
 
         //let scrollbarX = new am4charts.XYChartScrollbar();
@@ -132,13 +155,13 @@ function Data({ setAlert }) {
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         setList(items);
-                        createChart();
+                        createLineChart();
                     });
             });
     }
 
     function handleSelect(e) {
-        createChart();
+        createLineChart();
         if (showing)
             setShowing(false);
         else
@@ -173,10 +196,6 @@ function Data({ setAlert }) {
                 </div>
 
                 <div className="col-md-12">
-                    <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
-                </div>
-
-                <div className="col-md-12">
                     <DataTable
                         title={title}
                         columns={columns}
@@ -186,6 +205,12 @@ function Data({ setAlert }) {
                         pagination>
                     </DataTable>
                 </div>
+
+                <div className="col-md-12">
+                    <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
+                </div>
+
+
             </div>
         </div >
     )
