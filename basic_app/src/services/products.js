@@ -72,3 +72,13 @@ export function getProductData(id) {
     }
   }).then(data => data.json())
 }
+
+export function getProductDataByDate(id, startDate, endDate) {
+  console.log('getProductDataByDate');
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/product_data/` + id + `/${startDate}/${endDate}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(data => data.json())
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
 import { formatDateTime } from "../../Utils"
-import { getProduct, getProductData } from '../../services/products';
+import { getProduct, getProductData, getProductDataByDate } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
 
@@ -129,7 +129,7 @@ function Data({ setAlert }) {
                 if (items) {
                     setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
                 }
-                getProductData(id)
+                getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         setList(items);
                         createChart();
