@@ -36,7 +36,7 @@ connection.connect(error => {
 app.use(cors());
 
 app.use('/login', (req, res) => {
-  //console.log(req.body.username);
+  console.log(req.body.username);
   //console.log(req.body.password);
   if (req.body.username && req.body.password) {
 

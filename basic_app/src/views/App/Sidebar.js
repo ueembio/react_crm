@@ -23,6 +23,16 @@ function Sidebar() {
     });
   }
 
+  function logout(e, data) {
+    e.preventDefault();
+    console.log(data);
+    sessionStorage.clear();
+    //console.log(window.location.pathname);
+    setPathname(data);
+    //history.push('login');
+    window.location.reload();
+  }
+
   return (
 
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -158,8 +168,8 @@ function Sidebar() {
             </li>
 
             <li className="nav-item">
-              <Link to="/logout" onClick={((e) => toggle(e, '/logout'))} className={"nav-link " + (pathname.match('/logout') ? "active " : " ")}>
-                <i className="nav-icon fas fa-alt"></i>
+              <Link to="/login" onClick={((e) => logout(e, '/login'))} className={"nav-link " + (pathname.match('/login') ? "active " : " ")}>
+                <i className="nav-icon fa fa-share"></i>
                 <p>
                   Logout
                 </p>

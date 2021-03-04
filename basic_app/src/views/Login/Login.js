@@ -2,7 +2,7 @@ import React from 'react';
 import './Login.css';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 async function loginUser(credentials) {
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
@@ -22,7 +22,7 @@ export default function Login({ setToken }) {
     e.preventDefault();
     const token = await loginUser({ username, password });
     setToken(token);
-    //this.props.history.push("/dashboard");
+    window.location.reload();
   }
 
   return (
