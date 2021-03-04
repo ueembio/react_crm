@@ -1,5 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import Login from '../Login/Login';
+import Logout from '../Logout/Logout';
 import Dashboard from '../Dashboard/Dashboard';
 import ViewProducts from '../Product/ViewProducts';
 import AddProduct from '../Product/AddProduct';
@@ -22,7 +24,10 @@ function Content() {
    
       <Switch>
             <Route exact path="/" component={Dashboard} />            
-            <Route exact path="/dashboard" component={Dashboard} />            
+            <Route exact path="/dashboard" component={Dashboard} />
+
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Logout} />            
             
             <Route exact path="/ViewProducts" component={ViewProducts} />            
             <Route exact path="/AddProduct" component={AddProduct} /> 

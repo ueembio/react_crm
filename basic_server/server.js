@@ -36,10 +36,33 @@ connection.connect(error => {
 app.use(cors());
 
 app.use('/login', (req, res) => {
-  console.log(req);
-  res.send({
-    token: 'test123'
-  });
+  //console.log(req.body.username);
+  //console.log(req.body.password);
+  if (req.body.username && req.body.password) {
+
+    var sql = `SELECT Id, FirstName, LastName, IsAdmin 
+      FROM users
+      WHERE Username='${req.body.username}' AND Password='${req.body.password}'`;
+    connection.query(sql, function (error, result) {
+      if (error)
+        throw error;
+
+      if (result.length > 0) {
+        res.send({
+          token: 'test123',
+          isAdmin: result[0]['IsAdmin']
+        });
+      }
+      else {
+        res.send({ token: '', isAdmin: '0' });
+      }
+
+    });
+
+  } else {
+    res.send({ token: '', isAdmin: '0' });
+  }
+
 });
 
 app.get('/products', (req, res) => {
@@ -122,7 +145,7 @@ app.post('/products', (req, res) => {
 app.get('/product_data/:id', function (req, res) {
   console.log('in get command');
   console.log(req.params.id)
-  
+
   var sql = `SELECT p.Name,dd.dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial
     FROM product p LEFT JOIN device_data dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE p.id = ${req.params.id}

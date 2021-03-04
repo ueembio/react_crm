@@ -157,6 +157,15 @@ function Sidebar() {
               </ul>
             </li>
 
+            <li className="nav-item">
+              <Link to="/logout" onClick={((e) => toggle(e, '/logout'))} className={"nav-link " + (pathname.match('/logout') ? "active " : " ")}>
+                <i className="nav-icon fas fa-alt"></i>
+                <p>
+                  Logout
+                </p>
+              </Link>
+            </li>
+
           </ul>
         </nav>
       </div>

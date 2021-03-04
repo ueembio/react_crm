@@ -10,23 +10,23 @@ import Header from './Header';
 import Breadcrumb from './Breadcrumb';
 
 
-
 function App() {
+
   const { token, setToken } = useToken();
-  
-  if(token) {
+  console.log('App()::' + token);
+  if (!token) {
     return <Login setToken={setToken} />
   }
-
+  
   return (
     <BrowserRouter>
-        <Header></Header>
-        <Sidebar></Sidebar>
-        <div className="content-wrapper px-4 py-2">
-          <Breadcrumb></Breadcrumb>
-          <Content></Content>
-        </div>
-        <Footer></Footer>
+      <Header></Header>
+      <Sidebar></Sidebar>
+      <div className="content-wrapper px-4 py-2">
+        <Breadcrumb></Breadcrumb>
+        <Content></Content>
+      </div>
+      <Footer></Footer>
     </BrowserRouter>
   );
 }
