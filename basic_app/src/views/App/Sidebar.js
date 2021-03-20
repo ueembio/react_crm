@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { getIsAdmin } from '../../Utils'
 
 function Sidebar() {
 
@@ -79,7 +80,7 @@ function Sidebar() {
                 </p>
               </Link>
               <ul className="nav nav-treeview">
-                <li className="nav-item">
+                <li className="nav-item" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
                   <Link to="/AddProduct" onClick={((e) => toggle(e, '/AddProduct'))} className={"nav-link " + (pathname.match('/AddProduct') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>Add Device</p>
@@ -92,10 +93,9 @@ function Sidebar() {
                   </Link>
                 </li>
               </ul>
-
             </li>
 
-            <li className="nav-item menu-close">
+            <li className="nav-item menu-close" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
               <Link href="#" className={"nav-link " + (['/AddCompany', '/ViewCompany'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-copy"></i>
                 <p>
@@ -119,7 +119,7 @@ function Sidebar() {
               </ul>
             </li>
 
-            <li className="nav-item menu-close">
+            <li className="nav-item menu-close" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
               <Link href="#" className={"nav-link " + (['/company/add', '/company/edit', '/company/index'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-th"></i>
                 <p>
@@ -143,7 +143,7 @@ function Sidebar() {
               </ul>
             </li>
 
-            <li className="nav-item menu-close">
+            <li className="nav-item menu-close" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
               <Link href="#" className={"nav-link " + (['/AddUser', '/ViewUsers'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-edit"></i>
                 <p>

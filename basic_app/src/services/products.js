@@ -1,13 +1,29 @@
+import { getIsAdmin, getLoggedInUserId } from '../Utils'
+
 export function getList() {
   //console.log('getList()');
-  return fetch(`${process.env.REACT_APP_API_BASE_URL}/products`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(data => data.json())
+  var isAdmin = getIsAdmin();
+  if (isAdmin == 1) {
+    console.log('(isAdmin === 1)');
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/products`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json())
+  }
+  else {
+    var id = getLoggedInUserId();
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/products_by_user/` + id,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json())
+  }
+
 }
 
 export function getAvailableProducts() {
@@ -75,6 +91,8 @@ export function getProductData(id) {
 
 export function getProductDataByDate(id, startDate, endDate) {
   console.log('getProductDataByDate');
+  console.log(startDate);
+  console.log(endDate);
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/product_data/` + id + `/${startDate}/${endDate}`, {
     method: 'GET',
     headers: {

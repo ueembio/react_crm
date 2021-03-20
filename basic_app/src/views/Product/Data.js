@@ -41,7 +41,7 @@ const columns = [
 function Data({ setAlert }) {
 
     var date = new Date();
-    date.setDate(date.getDate() - 15);
+    date.setDate(date.getDate() - 7);
 
     const { id } = useParams();
     const [products, setList] = useState([]);
@@ -60,7 +60,7 @@ function Data({ setAlert }) {
                     setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
                 }
 
-                getProductData(id)
+                getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         console.log('getProductData returned');
                         setList(items);
@@ -102,6 +102,8 @@ function Data({ setAlert }) {
         var temperature;
         var dt;
 
+        chartData = [];
+        chartTimeseriesData = [];
         for (let i = 0; i < products.length; i++) {
             temperature = products[i].temperature;
             dt = products[i].dt;
@@ -189,11 +191,11 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
     var c = document.getElementById('mychart');
     var ctx = c.getContext('2d');
 
-    divstatus.innerHTML = "Total Records: " + chartData.length;
+    //divstatus.innerHTML = "Total Records: " + chartData.length;
 
     if (chartData.length === 0) {
-        console.log('(chartData.length === 0');
-        getProductData(id)
+        console.log('chartData.length === 0');
+        getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
             .then(items => {
                 console.log(items.length);
                 for (let i = 0; i < items.length; i++) {
