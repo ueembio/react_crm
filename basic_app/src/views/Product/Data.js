@@ -4,16 +4,13 @@ import { formatDateTime } from "../../Utils"
 import { getProduct, getProductData, getProductDataByDate } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
-
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import { Line, Bar } from 'react-chartjs-2';
+import Chart from 'chart.js';
+import moment from 'moment'
+import $ from 'jquery';
 
 import "react-datepicker/dist/react-datepicker.css";
 
-
-am4core.options.autoDispose = true;
-am4core.useTheme(am4themes_animated);
 
 const columns = [
     {
@@ -52,6 +49,8 @@ function Data({ setAlert }) {
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
     const [showing, setShowing] = useState(true);
+    var chartData = []
+    var chartTimeseriesData = []
 
     useEffect(() => {
         getProduct(id)
@@ -63,86 +62,13 @@ function Data({ setAlert }) {
 
                 getProductData(id)
                     .then(items => {
+                        console.log('getProductData returned');
                         setList(items);
-                        createLineChart();
+                        loadChartData();
+                        handleLoad(chartData, chartTimeseriesData, id, startDate, endDate);
                     });
             });
     }, []);
-
-    function createLineChart() {
-
-        let chart = am4core.create("chartdiv", am4charts.XYChart);
-
-        let title = chart.titles.create();
-        title.text = "Sensor temperature readings over the time";
-        title.fontSize = 25;
-        title.marginBottom = 30;
-        chart.paddingRight = 20;
-
-        let data = [];
-        var temperature;
-        var dt;
-
-        for (let i = 0; i < products.length; i++) {
-            temperature = products[i].temperature;
-            dt = products[i].dt;
-            //console.log(formatDateTime(dt));
-            data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
-        }
-
-        chart.data = data;
-
-        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.grid.template.location = 0;
-        dateAxis.title.text = "Date";
-        dateAxis.title.fontWeight = "bold";
-        dateAxis.dateFormatter = new am4core.DateFormatter();
-        dateAxis.dateFormatter.dateFormat = "MM-dd HH:mm";
-
-        let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.tooltip.disabled = true;
-        //valueAxis.renderer.minWidth = 35;
-        valueAxis.title.text = "Temperature";
-        valueAxis.title.fontWeight = "bold";
-
-        let series = chart.series.push(new am4charts.ColumnSeries());
-        series.dataFields.dateX = "date";
-        series.dataFields.valueY = "value";
-        series.strokeWidth = "2";
-        //series.tooltipText = "{valueY.value} °C";
-
-        chart.dateFormatter.dateFormat = { month: "long", day: "numeric" };
-        dateAxis.dateFormats.setKey("day", { day: "numeric" });
-        dateAxis.dateFormats.setKey("hour", { hour: "numeric" });
-        dateAxis.periodChangeDateFormats.setKey("day", { month: "long" });
-        dateAxis.tooltipDateFormat = { month: "long", day: "numeric" };
-
-        let bullet = series.bullets.push(new am4charts.CircleBullet())
-        bullet.circle.fill = am4core.color("green");
-        bullet.circle.fillOpacity = 0.5;
-        bullet.circle.stroke = am4core.color("green");
-        bullet.circle.strokeOpacity = 0.5;
-        bullet.circle.strokeWidth = 1;
-        bullet.circle.radius = 2;
-        bullet.tooltipText = "{valueY.value} °C";
-
-        /*
-        let lineSeries = chart.series.push(new am4charts.LineSeries());
-        let bullet = series.bullets.push(new am4charts.CircleBullet())
-        lineSeries.dataFields.dateX = "date";
-        lineSeries.dataFields.valueY = "value";
-        lineSeries.strokeWidth = "2";
-        lineSeries.tooltipText = "{valueY.value} °C";
-        */
-
-        chart.cursor = new am4charts.XYCursor();
-
-        //let scrollbarX = new am4charts.XYChartScrollbar();
-        //scrollbarX.series.push(series);
-        //chart.scrollbarX = scrollbarX;
-
-        //this.chart = chart;
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -155,18 +81,39 @@ function Data({ setAlert }) {
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         setList(items);
-                        createLineChart();
+                        loadChartData();
+                        handleLoad(chartData, chartTimeseriesData, id, startDate, endDate);
                     });
             });
     }
 
     function handleSelect(e) {
-        createLineChart();
+        loadChartData();
         if (showing)
             setShowing(false);
         else
             setShowing(true);
     };
+
+    function loadChartData() {
+
+        console.log('loadChartData');
+        console.log(products.length);
+        var temperature;
+        var dt;
+
+        for (let i = 0; i < products.length; i++) {
+            temperature = products[i].temperature;
+            dt = products[i].dt;
+            //console.log(formatDateTime(dt));
+            //console.log(temperature);
+            //chartData.push(temperature);
+            chartData.push({ t: formatDateTime(dt), y: temperature });
+            chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
+            //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
+        }
+        //console.log(chartData);
+    }
 
     return (
         <div className="container-fluid">
@@ -207,7 +154,11 @@ function Data({ setAlert }) {
                 </div>
 
                 <div className="col-md-12">
-                    <div id="chartdiv" style={{ width: "100%", height: "350px", display: (showing ? 'block' : 'none') }}></div>
+                    <canvas id="mychart"></canvas>
+                </div>
+                <div className="col-md-12">
+                    <div id="status">
+                    </div>
                 </div>
 
 
@@ -217,3 +168,137 @@ function Data({ setAlert }) {
 };
 
 export default Data;
+
+var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+window.chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+};
+
+var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDate) {
+
+    console.log('handleLoad');
+
+    var divstatus = document.getElementById('status');
+
+    var c = document.getElementById('mychart');
+    var ctx = c.getContext('2d');
+
+    divstatus.innerHTML = "Total Records: " + chartData.length;
+
+    if (chartData.length === 0) {
+        console.log('(chartData.length === 0');
+        getProductData(id)
+            .then(items => {
+                console.log(items.length);
+                for (let i = 0; i < items.length; i++) {
+                    var temperature = items[i].temperature;
+                    var dt = items[i].dt;
+                    chartData.push({ t: formatDateTime(dt), y: temperature });
+                    chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
+                }
+                if (chart) {
+                    chart.update();
+                }
+            });
+    }
+
+    var config = {
+        data: {
+            datasets: [{
+                label: 'Temperature °C',
+                borderColor: "#55bae7",
+                backgroundColor: "#55bae7",
+                pointBackgroundColor: "#55bae7",
+                pointBorderColor: "#55bae7",
+                pointHoverBackgroundColor: "#55bae7",
+                pointHoverBorderColor: "#55bae7",
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                data: chartTimeseriesData,
+                type: 'line',
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Temperature sensor data over the time'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            day: '(D-MMM-YY) H:m'
+                        }
+                    },
+                    distribution: 'series',
+                    offset: true,
+                    ticks: {
+                        major: {
+                            enabled: true,
+                            fontStyle: 'bold'
+                        },
+                        source: 'data',
+                        autoSkip: true,
+                        autoSkipPadding: 75,
+                        maxRotation: 0,
+                        sampleSize: 100
+                    }/*,
+                    afterBuildTicks: function (scale, ticks) {
+                        var majorUnit = scale._majorUnit;
+                        console.log(ticks);
+                        var firstTick = ticks[0];
+                        var i, ilen, val, tick, currMajor, lastMajor;
+
+                        val = moment(ticks[0].value);
+                        if ((majorUnit === 'minute' && val.second() === 0)
+                            || (majorUnit === 'hour' && val.minute() === 0)
+                            || (majorUnit === 'day' && val.hour() === 9)
+                            || (majorUnit === 'month' && val.date() <= 3 && val.isoWeekday() === 1)
+                            || (majorUnit === 'year' && val.month() === 0)) {
+                            firstTick.major = true;
+                        } else {
+                            firstTick.major = false;
+                        }
+                        lastMajor = val.get(majorUnit);
+
+                        for (i = 1, ilen = ticks.length; i < ilen; i++) {
+                            tick = ticks[i];
+                            val = moment(tick.value);
+                            currMajor = val.get(majorUnit);
+                            tick.major = currMajor !== lastMajor;
+                            lastMajor = currMajor;
+                        }
+                        return ticks;
+                    }*/
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Temperature °C'
+                    }
+                }]
+            },
+            animation: {
+
+            }
+        }
+    };
+    var chart = new Chart(ctx, config);
+
+}
+
+
