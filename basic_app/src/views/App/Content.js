@@ -6,6 +6,7 @@ import ViewProducts from '../Product/ViewProducts';
 import AddProduct from '../Product/AddProduct';
 import EditProduct from '../Product/EditProduct';
 import Data from '../Product/Data';
+import SetRule from '../Product/SetRule'
 import ViewCompany from '../Company/ViewCompany';
 import AddCompany from '../Company/AddCompany';
 import EditCompany from '../Company/EditCompany';
@@ -30,7 +31,8 @@ function Content() {
             <Route exact path="/ViewProducts" component={ViewProducts} />            
             <Route exact path="/AddProduct" component={AddProduct} /> 
             <Route exact path="/product/edit/:id" component={EditProduct} />
-            <Route exact path="/product/data/:id" component={Data} /> 
+            <Route exact path="/product/data/:id" component={Data} />
+            <Route exact path="/SetRule/:id" component={SetRule} /> 
             
             <Route exact path="/ViewCompany" component={ViewCompany} /> 
             <Route exact path="/AddCompany" component={AddCompany} /> 

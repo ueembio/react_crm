@@ -58,6 +58,15 @@ export function updateProduct(id, item) {
     .then(data => data.json())
 }
 
+export function updateProductSetRule(id, item) {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/update_product_set_rule/` + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ item })
+  }).then(data => data.json())
+}
 
 export function addProduct(item) {
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/products`, {
