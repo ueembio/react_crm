@@ -111,7 +111,7 @@ function Data({ setAlert }) {
             //console.log(temperature);
             //chartData.push(temperature);
             chartData.push({ t: formatDateTime(dt), y: temperature });
-            chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
+            //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
         //console.log(chartData);
@@ -155,7 +155,7 @@ function Data({ setAlert }) {
                     </DataTable>
                 </div>
 
-                <div className="col-md-12">
+                <div id="divmychart" className="col-md-12">
                     <canvas id="mychart"></canvas>
                 </div>
                 <div className="col-md-12">
@@ -188,6 +188,9 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
 
     var divstatus = document.getElementById('status');
 
+    document.getElementById("divmychart").innerHTML = "";
+    document.getElementById("divmychart").innerHTML = '<canvas id="mychart"></canvas>';
+
     var c = document.getElementById('mychart');
     var ctx = c.getContext('2d');
 
@@ -198,14 +201,16 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
         getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
             .then(items => {
                 console.log(items.length);
+                chartData = []
+                chartTimeseriesData = []
                 for (let i = 0; i < items.length; i++) {
                     var temperature = items[i].temperature;
                     var dt = items[i].dt;
                     chartData.push({ t: formatDateTime(dt), y: temperature });
-                    chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
+                    //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
                 }
-                if (chart) {
-                    chart.update();
+                if (window.chart) {
+                    window.chart.update();
                 }
             });
     }
@@ -222,7 +227,7 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                 pointHoverBorderColor: "#55bae7",
                 pointRadius: 0,
                 pointHoverRadius: 0,
-                data: chartTimeseriesData,
+                data: chartData,
                 type: 'line',
                 fill: false,
             }]
@@ -242,7 +247,7 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                     type: 'time',
                     time: {
                         displayFormats: {
-                            day: '(D-MMM-YY) H:m'
+                            month: 'DD MMM-YY'
                         }
                     },
                     distribution: 'series',
@@ -293,14 +298,16 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                         labelString: 'Temperature °C'
                     }
                 }]
-            },
-            animation: {
-
             }
         }
     };
-    var chart = new Chart(ctx, config);
-
+    if (window.chart) {
+        window.chart.destroy();
+        window.chart = null;
+        console.log('destroy old');
+    }
+    window.chart = new Chart(ctx, config);
+    window.chart.update();
 }
 
 

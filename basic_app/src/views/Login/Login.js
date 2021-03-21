@@ -22,7 +22,8 @@ export default function Login({ setToken }) {
     e.preventDefault();
     const token = await loginUser({ username, password });
     setToken(token);
-    window.location.reload();
+    console.log('handleSubmit');
+    window.location.replace('/Dashboard');
   }
 
   return (

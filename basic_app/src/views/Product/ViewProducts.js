@@ -43,7 +43,7 @@ function ViewProducts() {
                 <td>{formatDate(product.DT)}</td>
                 <td>
                   <Link className="btn btn-sm btn-primary" to={`/product/edit/${product.Id}`} style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>Edit</Link>
-                  {/*<Link className="btn btn-secondary">Delete</Link>*/}
+                  <Link className="btn btn-secondary" to={`/product/edit/${product.Id}`}>Alert Rule</Link>
                   <Link className="btn btn-secondary" to={`/product/data/${product.Id}`}>Data</Link>
                 </td>
               </tr>
