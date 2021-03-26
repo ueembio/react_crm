@@ -386,7 +386,7 @@ app.put('/rent/:id', (req, res) => {
 
 // Users API
 app.get('/users', (req, res) => {
-  var sql = `SELECT u.Id, u.FirstName, u.LastName, u.Username, u.Email, u.Password, c.Name Company, u.DT 
+  var sql = `SELECT u.Id, u.FirstName, u.LastName, u.Username, u.Phone, u.Email, u.Password, c.Name Company, u.DT 
     FROM users u LEFT JOIN company c ON u.CompanyId = c.Id`;
   connection.query(sql, function (error, result) {
     if (error)
@@ -402,9 +402,10 @@ app.put('/users/:id', (req, res) => {
   console.log(req.body.item.itemFirstName);
   console.log(req.body.item.itemLastName);
   console.log(req.body.item.itemPassword);
+  console.log(req.body.item.itemPhone);
   console.log(req.body.item.itemEmail);
   console.log(req.body.item.itemCompany);
-  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.itemCompany}' WHERE Id=${req.params.id}`;
+  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Phone='${req.body.item.itemPhone}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.itemCompany}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -433,7 +434,7 @@ app.post('/users', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
+  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Phone, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemPhone}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -449,7 +450,55 @@ app.post('/users', (req, res) => {
 
 function pollDatabaseForAlerts() {
   console.log('pollDatabaseForAlerts');
-  sendMessage('+14804852044', 'test temperature sensor')
+  //sendMessage('+14804852044', 'test temperature sensor')
+
+  var sql = `SELECT pr.Id, p.Id ProductId, p.Name AS Product, p.MinThreshold, p.MaxThreshold, p.MaxThresholdIntervalInSeconds, p.ThresholdStartDT, DATE_FORMAT(dd.dt,'%Y-%m-%d %H:%i') AS dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial, c.Name AS Company, pr.RentDT, pr.ReturnDT, u.Phone, u.Email
+    FROM product p left join productsrent pr on p.id=pr.ProductId 
+      left join company c on pr.CompanyId=c.Id 
+        left join users u on pr.CompanyId=u.CompanyId
+        LEFT JOIN device_state dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
+    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL`
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+
+    for (var i = 0; i < result.length; i++) {
+      //console.log(result[i]);
+      //console.log(result[i].temperature);
+      //console.log(result[i].dt);
+      //console.log(result[i].Phone);
+      try {
+        var temperature = parseFloat(result[i].temperature);
+        var minThreshold = parseFloat(result[i].MinThreshold);
+        var maxThreshold = parseFloat(result[i].MaxThreshold);
+        var isAlert = false;
+
+        if (temperature < minThreshold) {
+          var message = `temperature of sensor id ${result[i].Product} dropped below threshold ${minThreshold}`;
+          sendMessage(result[i].Phone, message);
+          isAlert = true;
+        }
+        else if (temperature > maxThreshold) {
+          var message = `temperature of sensor id ${result[i].Product} crossed threshold ${maxThreshold}`;
+          sendMessage(result[i].Phone, message);
+          isAlert = true;
+        }
+
+        if (isAlert) {
+          var sql2 = `UPDATE product SET ThresholdStartDT=now() WHERE id=${result[i].ProductId}`;
+        } else {
+          var sql2 = `UPDATE product SET ThresholdStartDT=null WHERE id=${result[i].ProductId}`;
+        }
+
+      }
+      catch (error) {
+
+      }
+    }
+
+  });
+
 }
 
 function sendMessage(phone, notification_message) {
@@ -459,8 +508,8 @@ function sendMessage(phone, notification_message) {
     .then(message => console.log(message.sid));
   */
 
-    console.log(twilioFromPhone);
-    console.log(phone);
+  console.log(twilioFromPhone);
+  console.log(phone);
 
   return twilioClient.messages.create({
     body: notification_message,

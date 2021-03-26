@@ -12,6 +12,7 @@ function EditProduct({ setAlert }) {
     const [itemLastName, setItemLastName] = useState('');
     const [itemUserame, setItemUsername] = useState('');
     const [itemPassword, setItemPassword] = useState('');
+    const [itemPhone, setItemPhone] = useState('');
     const [itemEmail, setItemEmail] = useState();
     const [itemCompany, setItemCompany] = useState(0);
     const history = useHistory();
@@ -29,7 +30,8 @@ function EditProduct({ setAlert }) {
                 setItemFirstName(items.FirstName);
                 setItemLastName(items.LastName);
                 setItemUsername(items.Username);
-                setItemPassword(items.Password);                
+                setItemPassword(items.Password);
+                setItemPhone(items.Phone);
                 setItemEmail(items.Email);
                 setItemCompany(items.CompanyId);                
             });
@@ -65,7 +67,7 @@ function EditProduct({ setAlert }) {
             alert('please provide all information.');
             return;
         }
-        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemEmail, itemCompany });
+        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemPhone, itemEmail, itemCompany });
         history.push("/ViewUsers");
     };
 
@@ -99,6 +101,11 @@ function EditProduct({ setAlert }) {
                                     <label for="exampleInputPassword">Password</label>
                                     <input type="text" className="form-control" id="exampleInputPassword" placeholder="Password" type="password" 
                                         onChange={event => setItemPassword(event.target.value)} defaultValue={itemPassword} />
+                                </div>
+                                <div className="form-group">
+                                    <label for="exampleInputPhone">Phone</label>
+                                    <input type="text" className="form-control" id="exampleInputPhone" placeholder="Phone" 
+                                        onChange={event => setItemPhone(event.target.value)} defaultValue={itemPhone} />
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputEmail">Email</label>

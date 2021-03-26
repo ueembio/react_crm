@@ -30,6 +30,7 @@ function ViewUsers() {
               <th>First Name</th>
               <th>Last Name</th>
               <th>Username</th>
+              <th>Phone</th>
               <th>Email</th>
               <th>Company</th>
               <th>Created On</th>
@@ -42,6 +43,7 @@ function ViewUsers() {
                 <td>{user.FirstName}</td>
                 <td>{user.LastName}</td>
                 <td>{user.Username}</td>
+                <td>{user.Phone}</td>
                 <td>{user.Email}</td>
                 <td>{user.Company}</td>
                 <td>{formatDate(user.DT)}</td>

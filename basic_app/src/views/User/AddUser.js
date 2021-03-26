@@ -10,6 +10,7 @@ function AddUser({ setAlert }) {
     const [itemLastName, setItemLastName] = useState("");
     const [itemUserame, setItemUsername] = useState("");
     const [itemPassword, setItemPassword] = useState("");
+    const [itemPhone, setItemPhone] = useState("");
     const [itemEmail, setItemEmail] = useState("");
     const [selectedCompany, setSelectedCompany] = useState(0);
     const [itemCreatedOn, setItemCreatedOn] = useState();
@@ -58,7 +59,7 @@ function AddUser({ setAlert }) {
             alert('please provide all information.');
             return;
         }
-        addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemEmail, selectedCompany, itemCreatedOn });
+        addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemPhone, itemEmail, selectedCompany, itemCreatedOn });
         history.push({
             pathname: '/ViewUsers/',
             search: '',
@@ -90,7 +91,11 @@ function AddUser({ setAlert }) {
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputEmail">Password</label>
-                                    <input type="text" className="form-control" id="exampleInputEmail" placeholder="Password" type="password" onChange={event => setItemPassword(event.target.value)} value={itemPassword} />
+                                    <input type="text" className="form-control" id="exampleInputPassword" placeholder="Password" type="password" onChange={event => setItemPassword(event.target.value)} value={itemPassword} />
+                                </div>
+                                <div className="form-group">
+                                    <label for="exampleInputPhone">Phone</label>
+                                    <input type="text" className="form-control" id="exampleInputPhone" placeholder="Phone" onChange={event => setItemPhone(event.target.value)} value={itemPhone} />
                                 </div>
                                 <div className="form-group">
                                     <label for="exampleInputEmail">Email</label>
