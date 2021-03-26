@@ -4,10 +4,17 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mysql = require("mysql");
 const log4js = require('log4js');
+require('dotenv').config()
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
+
+const POLLING_INTERVAL_IN_MINUTES = parseFloat(process.env.POLLING_INTERVAL_IN_MINUTES);
+const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioFromPhone = process.env.TWILIO_FROM_PHONE;
+const twilioClient = require('twilio')(twilioAccountSid, twilioAuthToken);
 
 log4js.configure({
   appenders: { mylogger: { type: "file", filename: "site.log" } },
@@ -32,6 +39,10 @@ connection.connect(error => {
   console.log("Successfully connected to the database.");
   logger.info('Successfully connected to the database.');
 });
+
+
+setInterval(pollDatabaseForAlerts, POLLING_INTERVAL_IN_MINUTES * 60 * 1000);
+
 
 app.use(cors());
 
@@ -128,10 +139,11 @@ app.put('/update_product_set_rule/:id', (req, res) => {
   console.log('in put command');
   console.log(req.params.id)
   console.log(req.body.item);
-  console.log(req.body.item.itemThreshold);
+  console.log(req.body.item.itemMinThreshold);
+  console.log(req.body.item.itemMaxThreshold);
   console.log(req.body.item.itemThresholdInterval);
-  
-  var sql = `UPDATE product SET Threshold='${req.body.item.itemThreshold}', MaxThresholdIntervalInSeconds='${req.body.item.itemThresholdInterval}' WHERE Id=${req.params.id}`;
+
+  var sql = `UPDATE product SET MinThreshold='${req.body.item.itemMinThreshold}', MaxThreshold='${req.body.item.itemMaxThreshold}', MaxThresholdIntervalInSeconds='${req.body.item.itemThresholdInterval}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -434,6 +446,31 @@ app.post('/users', (req, res) => {
   });
 
 });
+
+function pollDatabaseForAlerts() {
+  console.log('pollDatabaseForAlerts');
+  sendMessage('+14804852044', 'test temperature sensor')
+}
+
+function sendMessage(phone, notification_message) {
+  /*
+  client.messages
+    .create({body: 'Hi there!', from: '+15017122661', to: '+15558675310'})
+    .then(message => console.log(message.sid));
+  */
+
+    console.log(twilioFromPhone);
+    console.log(phone);
+
+  return twilioClient.messages.create({
+    body: notification_message,
+    from: twilioFromPhone,
+    to: phone
+  }).then(message => {
+    console.log('twilio message then')
+    console.log(message)
+  });
+}
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080/login'));
 
