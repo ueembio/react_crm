@@ -1,4 +1,4 @@
 
-basic_server/server.js
-basic_server/server.js
+node_modules/
+basic_app/node_modules/
 basic_app/.eslintcache
