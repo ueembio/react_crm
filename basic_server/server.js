@@ -449,7 +449,7 @@ app.post('/users', (req, res) => {
 });
 
 function pollDatabaseForAlerts() {
-  console.log('pollDatabaseForAlerts');
+  console.log('*** pollDatabaseForAlerts ***');
   //sendMessage('+14804852044', 'test temperature sensor')
 
   var sql = `SELECT pr.Id, p.Id ProductId, p.Name AS Product, p.MinThreshold, p.MaxThreshold, p.MaxThresholdIntervalInSeconds, p.ThresholdStartDT, DATE_FORMAT(dd.dt,'%Y-%m-%d %H:%i') AS dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial, c.Name AS Company, pr.RentDT, pr.ReturnDT, u.Phone, u.Email
@@ -464,24 +464,40 @@ function pollDatabaseForAlerts() {
     //console.log(result);
 
     for (var i = 0; i < result.length; i++) {
+
       //console.log(result[i]);
       //console.log(result[i].temperature);
       //console.log(result[i].dt);
       //console.log(result[i].Phone);
+      //console.log(result[i].ThresholdStartDT);
+      //console.log(result[i].MaxThresholdIntervalInSeconds);
+
       try {
         var temperature = parseFloat(result[i].temperature);
         var minThreshold = parseFloat(result[i].MinThreshold);
         var maxThreshold = parseFloat(result[i].MaxThreshold);
+        var thresholdStartDT = result[i].ThresholdStartDT;
+        var maxThresholdIntervalInSeconds = result[i].MaxThresholdIntervalInSeconds;
+        var secondsElapsedSinceFirstViolation = 0;
+
+        if (thresholdStartDT != null) {
+          console.log('thresholdStartDT != null');
+          var difference = Date.now().getTime() - thresholdStartDT.getTime();
+          console.log(difference);
+          secondsElapsedSinceFirstViolation = difference / 1000;
+          secondsElapsedSinceFirstViolation = Math.abs(secondsElapsedSinceFirstViolation);
+          console.log('secondsElapsedSinceFirstViolation');
+          console.log(secondsElapsedSinceFirstViolation);
+        }
+
         var isAlert = false;
 
         if (temperature < minThreshold) {
           var message = `temperature of sensor id ${result[i].Product} dropped below threshold ${minThreshold}`;
-          sendMessage(result[i].Phone, message);
           isAlert = true;
         }
         else if (temperature > maxThreshold) {
           var message = `temperature of sensor id ${result[i].Product} crossed threshold ${maxThreshold}`;
-          sendMessage(result[i].Phone, message);
           isAlert = true;
         }
 
@@ -490,10 +506,26 @@ function pollDatabaseForAlerts() {
         } else {
           var sql2 = `UPDATE product SET ThresholdStartDT=null WHERE id=${result[i].ProductId}`;
         }
+        console.log(sql2);
+        connection.query(sql2, (error, result) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('data updated');
+          }
+        });
+
+        if (isAlert && maxThresholdIntervalInSeconds == 0) {
+          sendMessage(result[i].phone, message)
+        }
+        else if (isAlert && (secondsElapsedSinceFirstViolation >= maxThresholdIntervalInSeconds)) {
+          sendMessage(result[i].phone, message)
+        }
 
       }
       catch (error) {
-
+        console.log(error);
+        logger.log(error);
       }
     }
 
