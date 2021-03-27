@@ -143,7 +143,7 @@ function Sidebar() {
               </ul>
             </li>
 
-            <li className="nav-item menu-close" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
+            <li className="nav-item menu-close">
               <Link href="#" className={"nav-link " + (['/AddUser', '/ViewUsers'].contains(pathname) ? "active" : "")}>
                 <i className="nav-icon fas fa-edit"></i>
                 <p>
@@ -152,7 +152,7 @@ function Sidebar() {
                 </p>
               </Link>
               <ul className="nav nav-treeview">
-                <li className="nav-item">
+                <li className="nav-item" style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>
                   <Link to="/AddUser" onClick={((e) => toggle(e, '/AddUser'))} className={"nav-link " + (pathname.match('/AddUser') ? "active " : " ")}>
                     <i className="far fa-circle nav-icon"></i>
                     <p>Add New User</p>

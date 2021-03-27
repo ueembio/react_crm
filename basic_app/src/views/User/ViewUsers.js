@@ -3,14 +3,21 @@ import { Link, useLocation } from 'react-router-dom';
 import { getList } from '../../services/users';
 import { formatDate } from "../../Utils"
 import { Table } from 'react-bootstrap';
+import { getIsAdmin } from '../../Utils'
 
 function ViewUsers() {
   const [users, setList] = useState([]);
   useEffect(() => {
     console.log('on loading');
     let mounted = true;
-    getList()
+    let isAdmin = getIsAdmin();
+    getList(isAdmin)
       .then(items => {
+        if (!isAdmin)
+        {
+          items = [ items ]
+        }
+        console.log(items);
         if (mounted) {
           setList(items)
         }

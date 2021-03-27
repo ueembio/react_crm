@@ -1,7 +1,7 @@
 
 export const getIsAdmin = () => {
     const isAdmin = sessionStorage.getItem('isAdmin');
-    return isAdmin;
+    return (isAdmin === '1') ? true : false;
 };
 
 export const getLoggedInUserId = () => {

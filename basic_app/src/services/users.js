@@ -1,13 +1,23 @@
-export function getList() {
-  //console.log('getList()');
-  return fetch(`${process.env.REACT_APP_API_BASE_URL}/users`,
-    {
+import { getLoggedInUserId } from '../Utils'
+
+export function getList(isAdmin) {
+  if (isAdmin) {
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-    })
-    .then(data => data.json())
+    }).then(data => data.json())
+  }
+  else {
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/users/` + getLoggedInUserId(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(data => data.json())
+  }
+
 }
 
 export function getListByCompany(id) {
