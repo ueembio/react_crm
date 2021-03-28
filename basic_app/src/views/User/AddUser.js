@@ -14,10 +14,12 @@ function AddUser({ setAlert }) {
     const [itemEmail, setItemEmail] = useState("");
     const [selectedCompany, setSelectedCompany] = useState(0);
     const [itemCreatedOn, setItemCreatedOn] = useState();
+    const [itemTemperatureUnit, setItemTemperatureUnit] = useState("");
     const history = useHistory();
 
     useEffect(() => {
         let mounted = true;
+        setItemTemperatureUnit("C");
         getCompanies()
             .then(items => {
                 if (mounted) {
@@ -42,6 +44,13 @@ function AddUser({ setAlert }) {
         setSelectedCompany(id)
     }
 
+    const handleChangeTemperatureUnit = (e) => {
+        console.log('handleChangeTemperatureUnit');
+        let { name, value } = e.target;
+        console.log(value);
+        setItemTemperatureUnit(value);
+    }
+
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -59,7 +68,7 @@ function AddUser({ setAlert }) {
             alert('please provide all information.');
             return;
         }
-        addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemPhone, itemEmail, selectedCompany, itemCreatedOn });
+        addUser({ itemFirstName, itemLastName, itemUserame, itemPassword, itemPhone, itemEmail, selectedCompany, itemCreatedOn, itemTemperatureUnit });
         history.push({
             pathname: '/ViewUsers/',
             search: '',
@@ -107,6 +116,14 @@ function AddUser({ setAlert }) {
                                         onChange={handleChangeCompany}>
                                         <option value="0" >Select Company</option>
                                         {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Temperature Unit</label>
+                                    <select className="form-control select2" style={{ 'width': '100%' }}
+                                        onChange={handleChangeTemperatureUnit}>
+                                        <option value="C">Celsius</option>
+                                        <option value="F">Fahrenheit</option>
                                     </select>
                                 </div>
                             </div>

@@ -14,8 +14,11 @@ function EditProduct({ setAlert }) {
     const [itemPassword, setItemPassword] = useState('');
     const [itemPhone, setItemPhone] = useState('');
     const [itemEmail, setItemEmail] = useState();
-    const [itemCompany, setItemCompany] = useState(0);
+    const [itemCompany, setItemCompany] = useState('');
+    const [itemTemperatureUnit, setItemTemperatureUnit] = useState('');
+    var selectedCompanyId = "0";
     const history = useHistory();
+
 
     useEffect(() => {
 
@@ -33,7 +36,12 @@ function EditProduct({ setAlert }) {
                 setItemPassword(items.Password);
                 setItemPhone(items.Phone);
                 setItemEmail(items.Email);
-                setItemCompany(items.CompanyId);                
+                setItemCompany(items.CompanyId);
+                setItemTemperatureUnit(items.TemperatureUnit);
+                selectedCompanyId = items.CompanyId;
+                console.log(items.CompanyId);
+                console.log(itemCompany);
+                console.log(selectedCompanyId);
             });
 
     }, []);
@@ -52,6 +60,13 @@ function EditProduct({ setAlert }) {
         setItemCompany(id)
     }
 
+    const handleChangeTemperatureUnit = (e) => {
+        console.log('handleChangeTemperatureUnit');
+        let { name, value } = e.target;
+        console.log(value);
+        setItemTemperatureUnit(value);
+    }
+
     const onSubmit = async e => {
         e.preventDefault();
         if (e.nativeEvent.submitter.name == "cancel") {
@@ -67,7 +82,7 @@ function EditProduct({ setAlert }) {
             alert('please provide all information.');
             return;
         }
-        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemPhone, itemEmail, itemCompany });
+        updateUser(id, { itemFirstName, itemLastName, itemPassword, itemPhone, itemEmail, itemCompany, itemTemperatureUnit });
         history.push("/ViewUsers");
     };
 
@@ -114,10 +129,20 @@ function EditProduct({ setAlert }) {
                                 </div>
                                 <div className="form-group">
                                     <label>Company</label>
-                                    <select className="form-control select2" style={{ 'width': '100%' }} defaultValue={itemCompany}
+                                    <select className="form-control select2" style={{ 'width': '100%' }} 
+                                        value={selectedCompanyId}
                                         onChange={handleChangeCompany}>
                                         <option value="0" >Select Company</option>
-                                        {company.map(cmp => (<option id={cmp.Id}>{cmp.Name}</option>))}
+                                        {company.map(cmp => (<option value={cmp.Id}>{cmp.Name}</option>))}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Temperature Unit</label>
+                                    <select className="form-control select2" style={{ 'width': '100%' }} 
+                                        value={itemTemperatureUnit}
+                                        onChange={handleChangeTemperatureUnit}>
+                                        <option value="C">Celsius</option>
+                                        <option value="F">Fahrenheit</option>
                                     </select>
                                 </div>
                             </div>

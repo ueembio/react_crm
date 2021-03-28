@@ -405,7 +405,8 @@ app.put('/users/:id', (req, res) => {
   console.log(req.body.item.itemPhone);
   console.log(req.body.item.itemEmail);
   console.log(req.body.item.itemCompany);
-  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Phone='${req.body.item.itemPhone}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.itemCompany}' WHERE Id=${req.params.id}`;
+  console.log(req.body.item.itemTemperatureUnit);
+  var sql = `UPDATE users SET FirstName='${req.body.item.itemFirstName}', LastName='${req.body.item.itemLastName}', Password='${req.body.item.itemPassword}', Phone='${req.body.item.itemPhone}', Email='${req.body.item.itemEmail}', CompanyId='${req.body.item.itemCompany}', TemperatureUnit='${req.body.item.itemTemperatureUnit}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -434,7 +435,7 @@ app.post('/users', (req, res) => {
   console.log('company post');
   console.log(req.body.item);
 
-  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Phone, Email, CompanyId, DT) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemPhone}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW())`;
+  var sql = `INSERT INTO users (FirstName, LastName, Username, Password, Phone, Email, CompanyId, DT, TemperatureUnit) VALUES ('${req.body.item.itemFirstName}', '${req.body.item.itemLastName}', '${req.body.item.itemUserame}', '${req.body.item.itemPassword}', '${req.body.item.itemPhone}', '${req.body.item.itemEmail}', '${req.body.item.selectedCompany}', NOW(), '${req.body.item.itemTemperatureUnit}')`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
