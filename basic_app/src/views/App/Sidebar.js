@@ -27,6 +27,7 @@ function Sidebar() {
   function logout(e, data) {
     e.preventDefault();
     console.log(data);
+    localStorage.clear();
     sessionStorage.clear();
     //console.log(window.location.pathname);
     setPathname(data);

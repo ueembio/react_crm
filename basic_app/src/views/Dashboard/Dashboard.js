@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTemperatureUnit } from '../../Utils'
 
 export default function Dashboard() {
   return (
@@ -8,7 +9,7 @@ export default function Dashboard() {
           <div className="col-lg-3 col-6">
             <div className="small-box bg-danger">
               <div className="inner">
-                <h3>25°C</h3>
+                <h3>25°{getTemperatureUnit()}</h3>
                 <p>Highest Temperature</p>
               </div>
               <div className="icon">
@@ -21,7 +22,7 @@ export default function Dashboard() {
 
             <div className="small-box bg-success">
               <div className="inner">
-                <h3>3°C</h3>
+                <h3>3°{getTemperatureUnit()}</h3>
                 <p>Lowest Temperature</p>
               </div>
               <div className="icon">

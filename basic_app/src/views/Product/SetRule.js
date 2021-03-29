@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
 import { getProduct, updateProductSetRule } from '../../services/products';
 import ViewProducts from './ViewProducts';
-
+import { convertCToF, convertFToC, getTemperatureUnit } from '../../Utils'
 
 function SetRule({ setAlert }) {
     const { id } = useParams();
@@ -10,17 +10,23 @@ function SetRule({ setAlert }) {
     const [itemName, setItemName] = useState();
     const [itemDescription, setItemDescription] = useState();
     const [itemSKU, setItemSKU] = useState();
-    const [itemMinThreshold, setItemMinThreshold] = useState();
-    const [itemMaxThreshold, setItemMaxThreshold] = useState();
-    const [itemThresholdInterval, setItemThresholdInterval] = useState();    
+    var [itemMinThreshold, setItemMinThreshold] = useState();
+    var [itemMaxThreshold, setItemMaxThreshold] = useState();
+    const [itemThresholdInterval, setItemThresholdInterval] = useState();
     useEffect(() => {
         getProduct(id)
             .then(items => {
                 setItemName(items.Name);
                 setItemDescription(items.Description);
                 setItemSKU(items.SKU);
-                setItemMinThreshold(items.MinThreshold);
-                setItemMaxThreshold(items.MaxThreshold);
+                if (getTemperatureUnit() === 'F') {
+                    setItemMinThreshold(convertCToF(items.MinThreshold));
+                    setItemMaxThreshold(convertCToF(items.MaxThreshold));
+                }
+                else {
+                    setItemMinThreshold(items.MinThreshold);
+                    setItemMaxThreshold(items.MaxThreshold);
+                }
                 setItemThresholdInterval(items.MaxThresholdIntervalInSeconds);
             })
     }, []);
@@ -44,7 +50,14 @@ function SetRule({ setAlert }) {
             alert('please set maximum threshold value');
             return;
         }
+
+
+        if (getTemperatureUnit() === 'F') {
+            itemMinThreshold = convertFToC(itemMinThreshold);
+            itemMaxThreshold = convertFToC(itemMaxThreshold);
+        }
         updateProductSetRule(id, { itemMinThreshold, itemMaxThreshold, itemThresholdInterval });
+
         history.push("/ViewProducts");
     };
 
@@ -75,13 +88,13 @@ function SetRule({ setAlert }) {
                                         onChange={event => setItemSKU(event.target.value)} />
                                 </div>
                                 <div className="form-group">
-                                    <label for="exampleInputSKU">Min Temperature Threshold (°C)</label>
-                                    <input type="number" className="form-control" id="exampleInputMinThreshold" placeholder="Min Temperature Threshold (°C)" name="threshold" defaultValue={itemMinThreshold}
+                                    <label for="exampleInputSKU">Min Temperature Threshold (°{getTemperatureUnit()})</label>
+                                    <input type="number" step="any" className="form-control" id="exampleInputMinThreshold" placeholder="Min Temperature Threshold" name="threshold" defaultValue={itemMinThreshold}
                                         onChange={event => setItemMinThreshold(event.target.value)} />
                                 </div>
                                 <div className="form-group">
-                                    <label for="exampleInputSKU">Max Temperature Threshold (°C)</label>
-                                    <input type="number" className="form-control" id="exampleInputMaxThreshold" placeholder="Max Temperature Threshold (°C)" name="threshold" defaultValue={itemMaxThreshold}
+                                    <label for="exampleInputSKU">Max Temperature Threshold (°{getTemperatureUnit()})</label>
+                                    <input type="number" step="any" className="form-control" id="exampleInputMaxThreshold" placeholder="Max Temperature Threshold" name="threshold" defaultValue={itemMaxThreshold}
                                         onChange={event => setItemMaxThreshold(event.target.value)} />
                                 </div>
                                 <div className="form-group">

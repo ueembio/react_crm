@@ -1,8 +1,22 @@
-
 export const getIsAdmin = () => {
     const isAdmin = sessionStorage.getItem('isAdmin');
     return (isAdmin === '1') ? true : false;
 };
+
+export const getTemperatureUnit = () => {
+    const temperatureUnit = sessionStorage.getItem('temperatureUnit');
+    return temperatureUnit;
+};
+
+export const convertCToF = (celsius) => {
+    var fahrenheit = Math.round(celsius * 9 / 5 + 32);
+    return fahrenheit
+}
+
+export const convertFToC = (fahrenheit) => {
+    var celsius = Math.round((fahrenheit - 32) * (5 / 9));
+    return celsius
+}
 
 export const getLoggedInUserId = () => {
     const id = sessionStorage.getItem('id');

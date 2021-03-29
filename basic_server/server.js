@@ -51,7 +51,7 @@ app.use('/login', (req, res) => {
   //console.log(req.body.password);
   if (req.body.username && req.body.password) {
 
-    var sql = `SELECT Id, FirstName, LastName, IsAdmin 
+    var sql = `SELECT Id, FirstName, LastName, TemperatureUnit, IsAdmin 
       FROM users
       WHERE Username='${req.body.username}' AND Password='${req.body.password}'`;
     connection.query(sql, function (error, result) {
@@ -62,6 +62,7 @@ app.use('/login', (req, res) => {
         res.send({
           id: result[0]['Id'],
           token: 'test123',
+          temperatureUnit: result[0]['TemperatureUnit'],
           isAdmin: result[0]['IsAdmin']
         });
       }
@@ -483,7 +484,7 @@ function pollDatabaseForAlerts() {
 
         if (thresholdStartDT != null) {
           console.log('thresholdStartDT != null');
-          var difference = Date.now().getTime() - thresholdStartDT.getTime();
+          var difference = (new Date()).getTime() - thresholdStartDT.getTime();
           console.log(difference);
           secondsElapsedSinceFirstViolation = difference / 1000;
           secondsElapsedSinceFirstViolation = Math.abs(secondsElapsedSinceFirstViolation);
@@ -541,6 +542,9 @@ function sendMessage(phone, notification_message) {
     .then(message => console.log(message.sid));
   */
 
+  if (!phone) {
+    return;
+  }
   console.log(twilioFromPhone);
   console.log(phone);
 

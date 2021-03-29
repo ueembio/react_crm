@@ -12,10 +12,11 @@ export default function useToken() {
   const [token, setToken] = useState(getToken());
   
   const saveToken = userToken => {
-    //alert(userToken.token);
+    //alert(userToken.temperatureUnit);
     //alert(userToken.isAdmin);
     sessionStorage.setItem('id', userToken.id);
     sessionStorage.setItem('token', userToken.token);
+    sessionStorage.setItem('temperatureUnit', userToken.temperatureUnit);
     sessionStorage.setItem('isAdmin', userToken.isAdmin);
     setToken(userToken.token);
   };
