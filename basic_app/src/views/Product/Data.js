@@ -54,8 +54,9 @@ function Data({ setAlert }) {
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
     const [showing, setShowing] = useState(true);
-    var chartData = []
-    var chartTimeseriesData = []
+    var chartData = [];
+    var chartDataAverage = [];
+    var chartTimeseriesData = [];
 
     useEffect(() => {
         getProduct(id)
@@ -64,13 +65,13 @@ function Data({ setAlert }) {
                 if (items) {
                     setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
                 }
-                
+
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         console.log('getProductData returned');
                         setList(items);
                         loadChartData();
-                        handleLoad(chartData, chartTimeseriesData, id, startDate, endDate);
+                        handleLoad(chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate);
                     });
             });
     }, []);
@@ -87,7 +88,7 @@ function Data({ setAlert }) {
                     .then(items => {
                         setList(items);
                         loadChartData();
-                        handleLoad(chartData, chartTimeseriesData, id, startDate, endDate);
+                        handleLoad(chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate);
                     });
             });
     }
@@ -106,8 +107,10 @@ function Data({ setAlert }) {
         console.log(products.length);
         var temperature;
         var dt;
+        var sum = 0.00;
 
         chartData = [];
+        chartDataAverage = [];
         chartTimeseriesData = [];
         for (let i = 0; i < products.length; i++) {
             temperature = products[i].temperature;
@@ -115,6 +118,7 @@ function Data({ setAlert }) {
                 //console.log('=== F');
                 temperature = convertCToF(temperature);
             }
+            sum = sum + parseFloat(temperature);
             dt = products[i].dt;
             //console.log(formatDateTime(dt));
             //console.log(temperature);
@@ -123,7 +127,12 @@ function Data({ setAlert }) {
             //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
-        //console.log(chartData);
+
+        sum = sum / products.length;
+        for (let i = 0; i < products.length; i++) {
+            chartDataAverage.push(sum);
+        }
+
     }
 
     return (
@@ -191,7 +200,7 @@ window.chartColors = {
     grey: 'rgb(201, 203, 207)'
 };
 
-var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDate) {
+var handleLoad = function (chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate) {
 
     console.log('handleLoad');
 
@@ -210,7 +219,9 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
         getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
             .then(items => {
                 console.log(items.length);
+                var sum = 0.00;
                 chartData = []
+                chartDataAverage = []
                 chartTimeseriesData = []
                 for (let i = 0; i < items.length; i++) {
                     var temperature = items[i].temperature;
@@ -218,9 +229,14 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                         console.log('=== F');
                         temperature = convertCToF(items[i].temperature);
                     }
+                    sum = sum + parseFloat(temperature);
                     var dt = items[i].dt;
                     chartData.push({ t: formatDateTime(dt), y: temperature });
                     //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
+                }
+                sum = sum / items.length;
+                for (let i = 0; i < items.length; i++) {
+                    chartDataAverage.push(sum);
                 }
                 if (window.chart) {
                     window.chart.update();
@@ -243,6 +259,13 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                 data: chartData,
                 type: 'line',
                 fill: false,
+            },
+            {
+                label: 'Average',
+                data: chartDataAverage,
+                type: 'line',
+                borderColor: "#55bae7",
+                backgroundColor: "#55bae7",
             }]
         },
         options: {
