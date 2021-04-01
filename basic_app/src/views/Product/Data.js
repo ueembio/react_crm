@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
-import { formatDateTime } from "../../Utils"
+import { formatDateTime, getTemperatureUnit, convertCToF } from "../../Utils"
 import { getProduct, getProductData, getProductDataByDate } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
@@ -24,10 +24,15 @@ const columns = [
         sortable: true
     },
     {
-        name: 'Temperature (°C)',
+        name: 'Temperature (°' + getTemperatureUnit() + ')',
         selector: 'temperature',
         sortable: true,
         right: true,
+        cell: row => {
+            if (getTemperatureUnit() === 'F')
+                return <div>{convertCToF(row.temperature)}</div>
+            return <div>{row.temperature}</div>
+        }
     },
     {
         name: 'Data Received On',
@@ -106,6 +111,10 @@ function Data({ setAlert }) {
         chartTimeseriesData = [];
         for (let i = 0; i < products.length; i++) {
             temperature = products[i].temperature;
+            if (getTemperatureUnit() === 'F') {
+                //console.log('=== F');
+                temperature = convertCToF(temperature);
+            }
             dt = products[i].dt;
             //console.log(formatDateTime(dt));
             //console.log(temperature);
@@ -205,6 +214,10 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                 chartTimeseriesData = []
                 for (let i = 0; i < items.length; i++) {
                     var temperature = items[i].temperature;
+                    if (getTemperatureUnit() === 'F') {
+                        console.log('=== F');
+                        temperature = convertCToF(items[i].temperature);
+                    }
                     var dt = items[i].dt;
                     chartData.push({ t: formatDateTime(dt), y: temperature });
                     //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
@@ -218,7 +231,7 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
     var config = {
         data: {
             datasets: [{
-                label: 'Temperature °C',
+                label: 'Temperature °' + getTemperatureUnit(),
                 borderColor: "#55bae7",
                 backgroundColor: "#55bae7",
                 pointBackgroundColor: "#55bae7",
@@ -295,7 +308,7 @@ var handleLoad = function (chartData, chartTimeseriesData, id, startDate, endDat
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Temperature °C'
+                        labelString: 'Temperature °' + getTemperatureUnit() + ''
                     }
                 }]
             }

@@ -83,6 +83,8 @@ function EditProduct({ setAlert }) {
             return;
         }
         updateUser(id, { itemFirstName, itemLastName, itemPassword, itemPhone, itemEmail, itemCompany, itemTemperatureUnit });
+        //alert(itemTemperatureUnit);
+        sessionStorage.setItem('temperatureUnit', itemTemperatureUnit);
         history.push("/ViewUsers");
     };
 
