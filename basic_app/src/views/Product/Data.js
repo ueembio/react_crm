@@ -64,7 +64,7 @@ function Data({ setAlert }) {
                 if (items) {
                     setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
                 }
-
+                
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         console.log('getProductData returned');
