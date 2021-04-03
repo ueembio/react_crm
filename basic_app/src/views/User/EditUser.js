@@ -78,7 +78,7 @@ function EditProduct({ setAlert }) {
             return;
         }
 
-        if (!itemFirstName || !itemLastName || !itemUserame || !itemPassword || itemCompany == 0) {
+        if (!itemFirstName || !itemLastName || !itemUserame || !itemPassword) {
             alert('please provide all information.');
             return;
         }
