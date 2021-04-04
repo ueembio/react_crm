@@ -56,7 +56,7 @@ function Data({ setAlert }) {
     const [showing, setShowing] = useState(true);
     var chartData = [];
     var chartDataAverage = [];
-    
+
     useEffect(() => {
         getProduct(id)
             .then(items => {
@@ -131,9 +131,9 @@ function Data({ setAlert }) {
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
 
-        sum = sum / products.length;
+        var average = sum / products.length;
         for (let i = 0; i < items.length; i++) {
-            chartDataAverage.push(sum);
+            chartDataAverage.push({ t: formatDateTime(items[i].dt), y: average });
         }
     }
 
@@ -267,8 +267,11 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
                 label: 'Average',
                 data: chartDataAverage,
                 type: 'line',
-                borderColor: "#55bae7",
-                backgroundColor: "#55bae7",
+                fill: false,
+                borderColor: "#00FF00",
+                backgroundColor: "#00FF00",
+                pointRadius: 0,
+                pointHoverRadius: 0,
             }]
         },
         options: {
