@@ -49,12 +49,12 @@ function CloseRent({ setAlert }) {
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Close Lease (Return Device)</h3>
+                            <h3 class="card-title">Close Lease (Return Sensor)</h3>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label>Device Name</label>
+                                    <label>Sensor Name</label>
                                     <input type="text" readOnly="true" className="form-control" value={rent.Product} />
                                 </div>
 

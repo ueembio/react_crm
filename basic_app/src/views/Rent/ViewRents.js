@@ -40,7 +40,7 @@ function ViewRents() {
     <div className="container-fluid">
 
       <div className="row col-md-12">
-        <h2>Devices Lease List</h2>
+        <h2>Sensors Lease List</h2>
 
         <hr />
         <div>
@@ -56,7 +56,7 @@ function ViewRents() {
         <Table>
           <thead>
             <tr>
-              <th>Device</th>
+              <th>Sensor</th>
               <th>Company</th>
               <th>Lease Date</th>
               <th>Return Date</th>

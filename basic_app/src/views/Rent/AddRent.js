@@ -95,10 +95,10 @@ function AddRent({ setAlert }) {
                         <form onSubmit={handleSubmit}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label>Device</label>
+                                    <label>Sensor</label>
                                     <select className="form-control select2" style={{ 'width': '100%' }}
                                         onChange={handleChangeDevice} >
-                                        <option value="0" >Select Device</option>
+                                        <option value="0" >Select Sensor</option>
                                         {product.map(product => (<option id={product.Id}>{product.Name}</option>))}
                                     </select>
                                 </div>

@@ -23,11 +23,11 @@ function ViewProducts() {
     <div className="container-fluid">
 
       <div className="row col-md-12">
-        <h2>Device List</h2>
+        <h2>Sensor List</h2>
         <Table>
           <thead>
             <tr>
-              <th>Device Name</th>
+              <th>Sensor Name</th>
               <th>Description</th>
               <th>Hardware Serial No.</th>
               <th>Created On</th>

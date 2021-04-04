@@ -61,7 +61,7 @@ function Data({ setAlert }) {
         getProduct(id)
             .then(items => {
                 console.log('getProduct returned');
-                setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
+                setTitle('Sensor Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
 
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
@@ -83,7 +83,7 @@ function Data({ setAlert }) {
 
         getProduct(id)
             .then(items => {
-                setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
+                setTitle('Sensor Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
 
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {

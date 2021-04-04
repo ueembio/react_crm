@@ -72,7 +72,7 @@ function SetRule({ setAlert }) {
                         <form onSubmit={e => onSubmit(e)}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label for="exampleInputName">Device Name</label>
+                                    <label for="exampleInputName">Sensor Name</label>
                                     <input type="text" className="form-control" id="exampleInputId" type="hidden" value={id} />
                                     <input type="text" className="form-control" id="exampleInputName" placeholder="Enter Name" name="name" defaultValue={itemName} readOnly="true"
                                         onChange={event => setItemName(event.target.value)} />
