@@ -46,7 +46,7 @@ const columns = [
 function Data({ setAlert }) {
 
     var date = new Date();
-    date.setDate(date.getDate() - 7);
+    date.setDate(date.getDate() - 90);
 
     const { id } = useParams();
     const [products, setList] = useState([]);
@@ -56,24 +56,26 @@ function Data({ setAlert }) {
     const [showing, setShowing] = useState(true);
     var chartData = [];
     var chartDataAverage = [];
-    var chartTimeseriesData = [];
-
+    
     useEffect(() => {
         getProduct(id)
             .then(items => {
-
-                if (items) {
-                    setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
-                }
+                console.log('getProduct returned');
+                setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
 
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
-                        console.log('getProductData returned');
+                        console.log('getProductDataByDate returned');
                         setList(items);
-                        loadChartData();
-                        handleLoad(chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate);
+                        loadChartData(items);
+                        if (chartData.length > 0) {
+                            handleLoad(chartData, chartDataAverage, id, startDate, endDate, title);
+                        } else {
+                            console.log('did not call handleLoad');
+                        }
                     });
             });
+
     }, []);
 
     const handleSubmit = (e) => {
@@ -81,14 +83,17 @@ function Data({ setAlert }) {
 
         getProduct(id)
             .then(items => {
-                if (items) {
-                    setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
-                }
+                setTitle('Device Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
+
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         setList(items);
-                        loadChartData();
-                        handleLoad(chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate);
+                        loadChartData(items);
+                        if (chartData.length > 0) {
+                            handleLoad(chartData, chartDataAverage, id, startDate, endDate, title);
+                        } else {
+                            console.log('did not call handleLoad');
+                        }
                     });
             });
     }
@@ -101,38 +106,35 @@ function Data({ setAlert }) {
             setShowing(true);
     };
 
-    function loadChartData() {
+    function loadChartData(items) {
 
-        console.log('loadChartData');
-        console.log(products.length);
+        //console.log('loadChartData');
+        //console.log(items.length);
         var temperature;
         var dt;
         var sum = 0.00;
 
         chartData = [];
         chartDataAverage = [];
-        chartTimeseriesData = [];
-        for (let i = 0; i < products.length; i++) {
-            temperature = products[i].temperature;
+        for (let i = 0; i < items.length; i++) {
+            temperature = items[i].temperature;
             if (getTemperatureUnit() === 'F') {
                 //console.log('=== F');
                 temperature = convertCToF(temperature);
             }
             sum = sum + parseFloat(temperature);
-            dt = products[i].dt;
+            dt = items[i].dt;
             //console.log(formatDateTime(dt));
             //console.log(temperature);
             //chartData.push(temperature);
             chartData.push({ t: formatDateTime(dt), y: temperature });
-            //chartTimeseriesData.push({ t: formatDateTime(dt), y: temperature });
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
 
         sum = sum / products.length;
-        for (let i = 0; i < products.length; i++) {
+        for (let i = 0; i < items.length; i++) {
             chartDataAverage.push(sum);
         }
-
     }
 
     return (
@@ -162,6 +164,15 @@ function Data({ setAlert }) {
                     </form>
                 </div>
 
+                <div id="divmychart" className="col-md-12">
+                    <canvas id="mychart"></canvas>
+                </div>
+                <div className="col-md-12">
+                    <div id="status">
+                    </div>
+                </div>
+
+
                 <div className="col-md-12">
                     <DataTable
                         title={title}
@@ -172,15 +183,6 @@ function Data({ setAlert }) {
                         pagination>
                     </DataTable>
                 </div>
-
-                <div id="divmychart" className="col-md-12">
-                    <canvas id="mychart"></canvas>
-                </div>
-                <div className="col-md-12">
-                    <div id="status">
-                    </div>
-                </div>
-
 
             </div>
         </div >
@@ -200,7 +202,7 @@ window.chartColors = {
     grey: 'rgb(201, 203, 207)'
 };
 
-var handleLoad = function (chartData, chartDataAverage, chartTimeseriesData, id, startDate, endDate) {
+var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, title) {
 
     console.log('handleLoad');
 
@@ -213,7 +215,7 @@ var handleLoad = function (chartData, chartDataAverage, chartTimeseriesData, id,
     var ctx = c.getContext('2d');
 
     //divstatus.innerHTML = "Total Records: " + chartData.length;
-
+    /*
     if (chartData.length === 0) {
         console.log('chartData.length === 0');
         getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
@@ -243,6 +245,7 @@ var handleLoad = function (chartData, chartDataAverage, chartTimeseriesData, id,
                 }
             });
     }
+    */
 
     var config = {
         data: {
@@ -272,7 +275,7 @@ var handleLoad = function (chartData, chartDataAverage, chartTimeseriesData, id,
             responsive: true,
             title: {
                 display: true,
-                text: 'Temperature sensor data over the time'
+                text: title
             },
             tooltips: {
                 mode: 'index',

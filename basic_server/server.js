@@ -451,7 +451,7 @@ app.post('/users', (req, res) => {
 });
 
 function pollDatabaseForAlerts() {
-  console.log('*** pollDatabaseForAlerts ***');
+  //console.log('*** pollDatabaseForAlerts ***');
   //sendMessage('+14804852044', 'test temperature sensor')
 
   var sql = `SELECT pr.Id, p.Id ProductId, p.Name AS Product, p.MinThreshold, p.MaxThreshold, p.MaxThresholdIntervalInSeconds, p.ThresholdStartDT, DATE_FORMAT(dd.dt,'%Y-%m-%d %H:%i') AS dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial, c.Name AS Company, pr.RentDT, pr.ReturnDT, u.Phone, u.Email
@@ -508,12 +508,12 @@ function pollDatabaseForAlerts() {
         } else {
           var sql2 = `UPDATE product SET ThresholdStartDT=null WHERE id=${result[i].ProductId}`;
         }
-        console.log(sql2);
+        //console.log(sql2);
         connection.query(sql2, (error, result) => {
           if (error) {
             console.log(error);
           } else {
-            console.log('data updated');
+            //console.log('data updated');
           }
         });
 
