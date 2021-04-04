@@ -131,7 +131,7 @@ function Data({ setAlert }) {
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
 
-        var average = sum / products.length;
+        var average = (sum / products.length).toFixed(2);;
         for (let i = 0; i < items.length; i++) {
             chartDataAverage.push({ t: formatDateTime(items[i].dt), y: average });
         }
@@ -214,7 +214,8 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
     var c = document.getElementById('mychart');
     var ctx = c.getContext('2d');
 
-    //divstatus.innerHTML = "Total Records: " + chartData.length;
+    divstatus.innerHTML = "Total Records: " + chartData.length;
+    
     /*
     if (chartData.length === 0) {
         console.log('chartData.length === 0');
@@ -262,7 +263,7 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
                 data: chartData,
                 type: 'line',
                 fill: false,
-            },
+            }/*,
             {
                 label: 'Average',
                 data: chartDataAverage,
@@ -272,7 +273,7 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
                 backgroundColor: "#00FF00",
                 pointRadius: 0,
                 pointHoverRadius: 0,
-            }]
+            }*/]
         },
         options: {
             responsive: true,
@@ -343,11 +344,13 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
             }
         }
     };
+    
     if (window.chart) {
         window.chart.destroy();
         window.chart = null;
         console.log('destroy old');
     }
+    
     window.chart = new Chart(ctx, config);
     window.chart.update();
 }
