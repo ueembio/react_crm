@@ -7,6 +7,7 @@ import AddProduct from '../Product/AddProduct';
 import EditProduct from '../Product/EditProduct';
 import Data from '../Product/Data';
 import SetRule from '../Product/SetRule'
+import SetLocation from '../Product/SetLocation'
 import ViewCompany from '../Company/ViewCompany';
 import AddCompany from '../Company/AddCompany';
 import EditCompany from '../Company/EditCompany';
@@ -35,7 +36,8 @@ function Content() {
             <Route exact path="/product/edit/:id" component={EditProduct} />
             <Route exact path="/product/data/:id" component={Data} />
             <Route exact path="/SetRule/:id" component={SetRule} /> 
-            
+            <Route exact path="/SetLocation/:id" component={SetLocation} /> 
+
             <Route exact path="/ViewLocations" component={ViewLocations} />            
             <Route exact path="/AddLocation" component={AddLocation} /> 
             <Route exact path="/EditLocation/:id" component={EditLocation} />
