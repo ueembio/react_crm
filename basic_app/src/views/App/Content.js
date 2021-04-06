@@ -16,7 +16,8 @@ import CloseRent from '../Rent/CloseRent';
 import AddUser from '../User/AddUser';
 import ViewUsers from '../User/ViewUsers';
 import EditUser from '../User/EditUser';
-
+import AddLocation from '../Location/AddLocation';
+import ViewLocations from '../Location/ViewLocations';
 
 function Content() {
 
@@ -33,6 +34,9 @@ function Content() {
             <Route exact path="/product/edit/:id" component={EditProduct} />
             <Route exact path="/product/data/:id" component={Data} />
             <Route exact path="/SetRule/:id" component={SetRule} /> 
+            
+            <Route exact path="/ViewLocations" component={ViewLocations} />            
+            <Route exact path="/AddLocation" component={AddLocation} /> 
             
             <Route exact path="/ViewCompany" component={ViewCompany} /> 
             <Route exact path="/AddCompany" component={AddCompany} /> 

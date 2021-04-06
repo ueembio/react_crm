@@ -93,6 +93,18 @@ function Sidebar() {
                     <p>View Sensors</p>
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="/AddLocation" onClick={((e) => toggle(e, '/AddLocation'))} className={"nav-link " + (pathname.match('/AddLocation') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>Add Location</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/ViewLocations" onClick={((e) => toggle(e, '/ViewLocations'))} className={"nav-link " + (pathname.match('/ViewLocations') ? "active " : " ")}>
+                    <i className="far fa-circle nav-icon"></i>
+                    <p>View Locations</p>
+                  </Link>
+                </li>
               </ul>
             </li>
 

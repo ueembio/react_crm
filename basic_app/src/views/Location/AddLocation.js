@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
-import { addProduct } from '../../services/products';
-import ViewProducts from './ViewProducts';
+import { addLocation } from '../../services/locations';
+import { getLoggedInUserId } from '../../Utils';
 
-function AddProduct({ setAlert }) {
+function AddLocation({ setAlert }) {
     const [itemName, setItemName] = useState("");
-    const [itemDescription, setItemDescription] = useState("");
-    const [itemSKU, setItemSKU] = useState("");
+    const [itemUserId, setItemUserId] = useState("");
     const history = useHistory();
 
+    useEffect(() => {
+        setItemUserId(getLoggedInUserId());
+        console.log(itemUserId);
+    }, []);
+    
     //Comment Added
     const handleSubmit = (e) => {
         e.preventDefault();
         //console.log(e.nativeEvent.submitter.name);
         if (e.nativeEvent.submitter.name == "cancel") {
             history.push({
-                pathname: '/ViewProducts/',
+                pathname: '/ViewLocations/',
                 search: '',
                 state: { alert: true }
             });
@@ -23,13 +27,13 @@ function AddProduct({ setAlert }) {
         }
 
         if (!itemName) {
-            alert('please enter name');
+            alert('please enter location name');
             return;
         }
-        addProduct({ itemName, itemDescription, itemSKU });
+        addLocation({ itemName, itemUserId });
         history.push({
-            pathname: '/ViewProducts/',
-            search: '?query=abc',
+            pathname: '/ViewLocations/',
+            search: '',
             state: { alert: true }
         });
     };
@@ -40,21 +44,13 @@ function AddProduct({ setAlert }) {
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Add Sensor</h3>
+                            <h3 class="card-title">Add Location</h3>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="card-body">
                                 <div className="form-group">
-                                    <label for="exampleInputName">Sensor Name</label>
+                                    <label for="exampleInputName">Name</label>
                                     <input type="text" className="form-control" id="exampleInputName" placeholder="Enter Name" onChange={event => setItemName(event.target.value)} value={itemName} />
-                                </div>
-                                <div className="form-group">
-                                    <label for="exampleInputCode">Description</label>
-                                    <input type="text" className="form-control" id="exampleInputCode" placeholder="Description" onChange={event => setItemDescription(event.target.value)} value={itemDescription} />
-                                </div>
-                                <div className="form-group">
-                                    <label for="exampleInputSKU">Hardware Serial No.</label>
-                                    <input type="text" className="form-control" id="exampleInputSKU" placeholder="Hardware Serial Number" onChange={event => setItemSKU(event.target.value)} value={itemSKU} />
                                 </div>
                             </div>
                             <div className="card-footer">
@@ -69,4 +65,4 @@ function AddProduct({ setAlert }) {
     )
 };
 
-export default AddProduct;
+export default AddLocation;
