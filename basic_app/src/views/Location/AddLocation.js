@@ -10,7 +10,7 @@ function AddLocation({ setAlert }) {
 
     useEffect(() => {
         setItemUserId(getLoggedInUserId());
-        console.log(itemUserId);
+        //console.log(itemUserId);
     }, []);
     
     //Comment Added

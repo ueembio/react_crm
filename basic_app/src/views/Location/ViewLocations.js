@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { getList } from '../../services/products';
+import { getLocations } from '../../services/locations';
 import { formatDate, getIsAdmin } from "../../Utils"
 import { Table } from 'react-bootstrap';
+import { getLoggedInUserId } from '../../Utils';
 
 function ViewLocations() {
-  const [products, setList] = useState([]);
+  const [locations, setLocations] = useState([]);
   useEffect(() => {
     console.log('on loading');
     let mounted = true;
-    getList()
+    getLocations(getLoggedInUserId())
       .then(items => {
         if (mounted) {
-          setList(items)
+          setLocations(items)
         }
       })
     return () => mounted = false;
@@ -23,28 +24,20 @@ function ViewLocations() {
     <div className="container-fluid">
 
       <div className="row col-md-12">
-        <h2>Sensor List</h2>
+        <h2>Locations List</h2>
         <Table>
           <thead>
             <tr>
-              <th>Sensor Name</th>
-              <th>Description</th>
-              <th>Hardware Serial No.</th>
-              <th>Created On</th>
+              <th>Location Name</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
-              <tr key={product.Id}>
-                <td>{product.Name}</td>
-                <td>{product.Description}</td>
-                <td>{product.SKU}</td>
-                <td>{formatDate(product.DT)}</td>
+            {locations.map(location => (
+              <tr key={location.Id}>
+                <td>{location.Name}</td>
                 <td>
-                  <Link className="btn btn-sm btn-primary" to={`/product/edit/${product.Id}`} style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>Edit</Link>
-                  <Link className="btn btn-secondary" to={`/SetRule/${product.Id}`}>Alert Rule</Link>
-                  <Link className="btn btn-secondary" to={`/product/data/${product.Id}`}>Data</Link>
+                  <Link className="btn btn-sm btn-primary" to={`/location/edit/${location.Id}`}>Edit</Link>
                 </td>
               </tr>
             ))}
