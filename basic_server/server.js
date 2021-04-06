@@ -78,6 +78,7 @@ app.use('/login', (req, res) => {
 
 });
 
+// Products API
 app.get('/products', (req, res) => {
   var sql = 'SELECT * FROM product';
   connection.query(sql, function (error, result) {
@@ -448,6 +449,81 @@ app.post('/users', (req, res) => {
     res.status(200).json({ 'message': 'Data inserted successfully' });
   });
 
+});
+
+// Locations API
+app.get('/locations', (req, res) => {
+  var sql = 'SELECT * FROM product_location';
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
+app.get('/location/:id', function (req, res) {
+  console.log(req.params.id)
+
+  var sql = 'SELECT * FROM product_location WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    console.log(result[0]);
+    res.status(200).json(result[0])
+  });
+});
+
+app.put('/location/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id)
+  console.log(req.body.item);
+  console.log(req.body.item.itemName);
+  console.log(req.body.item.itemNameUserId);
+
+  var sql = `UPDATE product_location SET Name='${req.body.item.itemName}' WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in location');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
+});
+
+app.post('/location', (req, res) => {
+  console.log('in post location');
+  console.log(req.body.item.itemName);
+  console.log(req.body.item.itemUserId);
+
+  var sql = `INSERT INTO product_location (Name, UserId) VALUES ('${req.body.item.itemName}', '${req.body.item.itemUserId}')`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data inserted in location');
+      logger.info('successfully saved in database.');
+    }
+    res.status(200).json({ 'message': 'Data inserted successfully' });
+  });
+});
+
+app.get('/locations_by_user/:id', function (req, res) {
+  console.log('locations_by_user');
+  console.log(req.params.id)
+
+  var sql = `SELECT Id, Name
+    FROM product_location  
+    WHERE UserId=` + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    res.status(200).json(result)
+  });
 });
 
 function pollDatabaseForAlerts() {
