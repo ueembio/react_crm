@@ -18,6 +18,7 @@ import ViewUsers from '../User/ViewUsers';
 import EditUser from '../User/EditUser';
 import AddLocation from '../Location/AddLocation';
 import ViewLocations from '../Location/ViewLocations';
+import EditLocation from '../Location/EditLocation';
 
 function Content() {
 
@@ -37,7 +38,8 @@ function Content() {
             
             <Route exact path="/ViewLocations" component={ViewLocations} />            
             <Route exact path="/AddLocation" component={AddLocation} /> 
-            
+            <Route exact path="/EditLocation/:id" component={EditLocation} />
+
             <Route exact path="/ViewCompany" component={ViewCompany} /> 
             <Route exact path="/AddCompany" component={AddCompany} /> 
             <Route exact path="/company/edit/:id" component={EditCompany} />

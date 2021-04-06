@@ -479,8 +479,7 @@ app.put('/location/:id', (req, res) => {
   console.log(req.params.id)
   console.log(req.body.item);
   console.log(req.body.item.itemName);
-  console.log(req.body.item.itemNameUserId);
-
+  
   var sql = `UPDATE product_location SET Name='${req.body.item.itemName}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {

@@ -11,7 +11,7 @@ export function getLocations(userId) {
 }
 
 export function getLocation(id) {
-    return fetch(`${process.env.REACT_APP_API_BASE_URL}/locations/` + id, {
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/location/` + id, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

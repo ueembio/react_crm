@@ -37,7 +37,7 @@ function ViewLocations() {
               <tr key={location.Id}>
                 <td>{location.Name}</td>
                 <td>
-                  <Link className="btn btn-sm btn-primary" to={`/location/edit/${location.Id}`}>Edit</Link>
+                  <Link className="btn btn-sm btn-primary" to={`/EditLocation/${location.Id}`}>Edit</Link>
                 </td>
               </tr>
             ))}
