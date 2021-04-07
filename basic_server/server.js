@@ -158,6 +158,25 @@ app.put('/update_product_set_rule/:id', (req, res) => {
   });
 });
 
+app.put('/update_product_set_location/:id', (req, res) => {
+  console.log('in put command');
+  console.log(req.params.id)
+  console.log(req.body.item);
+  console.log(req.body.item.selectedLocation);
+  
+  var sql = `UPDATE product SET ProductLocationId=${req.body.item.selectedLocation} WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in product');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
+});
+
 app.post('/products', (req, res) => {
   console.log('in post products');
   console.log(req.body.item.itemName);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
-import { getProduct, updateProductSetRule } from '../../services/products';
-import ViewProducts from './ViewProducts';
-import { convertCToF, convertFToC, getTemperatureUnit } from '../../Utils'
+import { getProduct, updateProductSetLocation } from '../../services/products';
+import { getLocations } from '../../services/locations'
+import { getLoggedInUserId } from '../../Utils'
 
 function SetLocation({ setAlert }) {
     const { id } = useParams();
@@ -10,26 +10,48 @@ function SetLocation({ setAlert }) {
     const [itemName, setItemName] = useState();
     const [itemDescription, setItemDescription] = useState();
     const [itemSKU, setItemSKU] = useState();
-    var [itemMinThreshold, setItemMinThreshold] = useState();
-    var [itemMaxThreshold, setItemMaxThreshold] = useState();
-    const [itemThresholdInterval, setItemThresholdInterval] = useState();
+    const [locations, setLocations] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState([]);
+
     useEffect(() => {
+        let mounted = true;
         getProduct(id)
             .then(items => {
-                setItemName(items.Name);
-                setItemDescription(items.Description);
-                setItemSKU(items.SKU);
-                if (getTemperatureUnit() === 'F') {
-                    setItemMinThreshold(convertCToF(items.MinThreshold));
-                    setItemMaxThreshold(convertCToF(items.MaxThreshold));
+                console.log(items);
+                if (mounted) {
+                    setItemName(items.Name);
+                    setItemDescription(items.Description);
+                    setItemSKU(items.SKU);
+                    setSelectedLocation(items.ProductLocationId);
                 }
-                else {
-                    setItemMinThreshold(items.MinThreshold);
-                    setItemMaxThreshold(items.MaxThreshold);
+            });
+
+        let loggedInUserId = getLoggedInUserId();
+        getLocations(loggedInUserId)
+            .then(items => {
+                if (mounted) {
+                    setLocations(items)
                 }
-                setItemThresholdInterval(items.MaxThresholdIntervalInSeconds);
-            })
+            });
+
     }, []);
+
+    const handleChangeLocation = (e) => {
+        let { name, value } = e.target;
+        console.log('handleChangeLocation');
+        //console.log(name);
+        //console.log(value);
+
+        let index = e.target.selectedIndex;
+        let el = e.target.childNodes[index]
+        let id = el.getAttribute('id');
+        //console.log('Name, Code', e.target.value, option);
+
+        setSelectedLocation(id)
+        //this.setState({
+        //    [name]: value,
+        //});
+    }
 
     const onSubmit = async e => {
         e.preventDefault();
@@ -42,21 +64,12 @@ function SetLocation({ setAlert }) {
             return;
         }
 
-        if (!itemMinThreshold) {
-            alert('please set minimum threshold value');
+        if (selectedLocation.length == 0) {
+            alert("Please select location");
             return;
         }
-        if (!itemMaxThreshold) {
-            alert('please set maximum threshold value');
-            return;
-        }
-
-
-        if (getTemperatureUnit() === 'F') {
-            itemMinThreshold = convertFToC(itemMinThreshold);
-            itemMaxThreshold = convertFToC(itemMaxThreshold);
-        }
-        updateProductSetRule(id, { itemMinThreshold, itemMaxThreshold, itemThresholdInterval });
+        console.log(selectedLocation);
+        updateProductSetLocation(id, { selectedLocation });
 
         history.push("/ViewProducts");
     };
@@ -67,7 +80,7 @@ function SetLocation({ setAlert }) {
                 <div className="col-md-12">
                     <div className="card card-primary">
                         <div className="card-header">
-                            <h3 class="card-title">Set Rule for Alert</h3>
+                            <h3 class="card-title">Set Sensor Location</h3>
                         </div>
                         <form onSubmit={e => onSubmit(e)}>
                             <div className="card-body">
@@ -88,19 +101,13 @@ function SetLocation({ setAlert }) {
                                         onChange={event => setItemSKU(event.target.value)} />
                                 </div>
                                 <div className="form-group">
-                                    <label for="exampleInputSKU">Min Temperature Threshold (°{getTemperatureUnit()})</label>
-                                    <input type="number" step="any" className="form-control" id="exampleInputMinThreshold" placeholder="Min Temperature Threshold" name="threshold" defaultValue={itemMinThreshold}
-                                        onChange={event => setItemMinThreshold(event.target.value)} />
-                                </div>
-                                <div className="form-group">
-                                    <label for="exampleInputSKU">Max Temperature Threshold (°{getTemperatureUnit()})</label>
-                                    <input type="number" step="any" className="form-control" id="exampleInputMaxThreshold" placeholder="Max Temperature Threshold" name="threshold" defaultValue={itemMaxThreshold}
-                                        onChange={event => setItemMaxThreshold(event.target.value)} />
-                                </div>
-                                <div className="form-group">
-                                    <label for="exampleInputSKU">Max Threshold Interval (seconds)</label>
-                                    <input type="number" className="form-control" id="exampleInputThresholdInterval" placeholder="Max Threshold Interval (seconds)" name="thresholdinterval" defaultValue={itemThresholdInterval}
-                                        onChange={event => setItemThresholdInterval(event.target.value)} />
+                                    <label for="exampleInputSKU">Location</label>
+                                    <select className="form-control select2" style={{ 'width': '100%' }}
+                                        value={selectedLocation}
+                                        onChange={handleChangeLocation} >
+                                        <option value="0" >Select Location</option>
+                                        {locations.map(loc => (<option value={loc.Id}>{loc.Name}</option>))}
+                                    </select>
                                 </div>
                             </div>
                             <div className="card-footer">
