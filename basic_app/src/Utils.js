@@ -23,6 +23,11 @@ export const getLoggedInUserId = () => {
     return id;
 };
 
+export const getLoggedInUserFullName = () => {
+    const userfullname = sessionStorage.getItem('userfullname');
+    return userfullname;
+};
+
 export const dateToFormattedString = (date) => {
     var now = date.toLocaleString();
     return now;

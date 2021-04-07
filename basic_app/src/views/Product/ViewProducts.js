@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { getList } from '../../services/products';
+import { getList, getListByLocation } from '../../services/products';
 import { getLocations } from '../../services/locations';
 import { formatDate, getIsAdmin, getLoggedInUserId } from "../../Utils"
 import { Table } from 'react-bootstrap';
@@ -9,8 +9,7 @@ function ViewProducts() {
 
   const [products, setList] = useState([]);
   const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState([]);
-
+  
   useEffect(() => {
     console.log('on loading');
     let mounted = true;
@@ -39,12 +38,17 @@ function ViewProducts() {
     //let element = e.target.childNodes[index]
     //let id = element.getAttribute('id');
     console.log(value);
-    setSelectedLocation(value);
-    if (value == 0)
-      return;
-    getList().then(items => {
-      setList(items)
-    });
+    if (value === '0') {
+      console.log('all locations');
+      getList().then(items => {
+        setList(items)
+      });
+    }
+    else {
+      getListByLocation(getLoggedInUserId(), value).then(items => {
+        setList(items)
+      });
+    }
   }
 
   return (

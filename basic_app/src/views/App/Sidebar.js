@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { getIsAdmin } from '../../Utils'
+import { getIsAdmin, getLoggedInUserFullName } from '../../Utils'
 
 function Sidebar() {
 
@@ -49,6 +49,13 @@ function Sidebar() {
       </Link>
 
       <div className="sidebar">
+
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          
+          <div class="info">
+            <a href="#" class="d-block">{ getLoggedInUserFullName() }</a>
+          </div>
+        </div>
 
         <div className="form-inline">
           <div className="input-group" data-widget="sidebar-search">

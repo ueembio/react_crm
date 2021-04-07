@@ -46,7 +46,7 @@ const columns = [
 function Data({ setAlert }) {
 
     var date = new Date();
-    date.setDate(date.getDate() - 90);
+    date.setDate(date.getDate() - 7);
 
     const { id } = useParams();
     const [products, setList] = useState([]);

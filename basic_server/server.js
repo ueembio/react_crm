@@ -63,7 +63,8 @@ app.use('/login', (req, res) => {
           id: result[0]['Id'],
           token: 'test123',
           temperatureUnit: result[0]['TemperatureUnit'],
-          isAdmin: result[0]['IsAdmin']
+          isAdmin: result[0]['IsAdmin'],
+          userFullName: result[0]['FirstName'] + ' ' + result[0]['LastName']
         });
       }
       else {
@@ -240,6 +241,24 @@ app.get('/products_by_user/:id', function (req, res) {
       LEFT JOIN company c ON c.Id=pr.CompanyId
       LEFT JOIN users u ON u.CompanyId=pr.CompanyId
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    res.status(200).json(result)
+  });
+});
+
+app.get('/products_by_user_by_location/:userId/:locationId', function (req, res) {
+  console.log('products_by_user_by_location');
+  console.log(req.params.userId)
+  console.log(req.params.locationId)
+
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT 
+    FROM product p LEFT JOIN productsrent pr ON p.Id=pr.ProductId
+      LEFT JOIN company c ON c.Id=pr.CompanyId
+      LEFT JOIN users u ON u.CompanyId=pr.CompanyId
+    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.userId +
+    ` AND p.ProductLocationId=` + req.params.locationId;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;

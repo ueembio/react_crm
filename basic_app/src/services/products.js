@@ -26,6 +26,16 @@ export function getList() {
 
 }
 
+export function getListByLocation(userId, locationId) {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/products_by_user_by_location/` + userId + '/' + locationId,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(data => data.json())
+}
+
 export function getAvailableProducts() {
   //console.log('getList()');
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/get_available_products`,

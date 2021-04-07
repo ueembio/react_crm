@@ -18,6 +18,7 @@ export default function useToken() {
     sessionStorage.setItem('token', userToken.token);
     sessionStorage.setItem('temperatureUnit', userToken.temperatureUnit);
     sessionStorage.setItem('isAdmin', userToken.isAdmin);
+    sessionStorage.setItem('userfullname', userToken.userFullName);
     setToken(userToken.token);
   };
 
