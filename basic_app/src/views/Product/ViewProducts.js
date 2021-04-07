@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getList } from '../../services/products';
-import { formatDate, getIsAdmin } from "../../Utils"
+import { getLocations } from '../../services/locations';
+import { formatDate, getIsAdmin, getLoggedInUserId } from "../../Utils"
 import { Table } from 'react-bootstrap';
 
 function ViewProducts() {
+
   const [products, setList] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+
   useEffect(() => {
     console.log('on loading');
     let mounted = true;
@@ -15,15 +20,48 @@ function ViewProducts() {
           setList(items)
         }
       })
+
+    let loggedInUserId = getLoggedInUserId();
+    getLocations(loggedInUserId)
+      .then(items => {
+        if (mounted) {
+          setLocations(items)
+        }
+      });
+
     return () => mounted = false;
   }, [])
 
+  const handleChangeLocation = (e) => {
+    console.log('handleChangeLocation');
+    let { name, value } = e.target;
+    //let index = e.target.selectedIndex;
+    //let element = e.target.childNodes[index]
+    //let id = element.getAttribute('id');
+    console.log(value);
+    setSelectedLocation(value);
+    if (value == 0)
+      return;
+    getList().then(items => {
+      setList(items)
+    });
+  }
 
   return (
     <div className="container-fluid">
 
       <div className="row col-md-12">
         <h2>Sensor List</h2>
+
+        <hr />
+        <div>
+          <select className="select2 form-control" style={{ 'width': '100%' }}
+            onChange={handleChangeLocation}>
+            <option value="0">All Locations</option>
+            {locations.map(loc => (<option value={loc.Id}>{loc.Name}</option>))}
+          </select>
+        </div>
+
         <Table>
           <thead>
             <tr>
