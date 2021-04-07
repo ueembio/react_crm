@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect, useHistory, useParams } from 'react-router-dom';
 import { getUser, updateUser } from '../../services/users';
 import { getCompanies } from '../../services/company';
+import { getIsAdmin } from '../../Utils';
 import ViewProducts from './ViewUsers';
 
 
@@ -50,14 +51,14 @@ function EditProduct({ setAlert }) {
         let { name, value } = e.target;
         console.log('handleChangeCompany');
         //console.log(name);
-        //console.log(value);
+        console.log(value);
 
-        let index = e.target.selectedIndex;
-        let el = e.target.childNodes[index]
-        let id = el.getAttribute('id');
-        console.log('Name, Value', e.target.value, id);
+        //let index = e.target.selectedIndex;
+        //let el = e.target.childNodes[index]
+        //let id = el.getAttribute('id');
+        //console.log('Name, Value', e.target.value, id);
 
-        setItemCompany(id)
+        setItemCompany(value)
     }
 
     const handleChangeTemperatureUnit = (e) => {
@@ -129,10 +130,10 @@ function EditProduct({ setAlert }) {
                                     <input type="text" className="form-control" id="exampleInputEmail" placeholder="Email" 
                                         onChange={event => setItemEmail(event.target.value)} defaultValue={itemEmail} />
                                 </div>
-                                <div className="form-group">
+                                <div className="form-group" style={{ 'display': getIsAdmin() ? 'block' : 'none' }}>
                                     <label>Company</label>
                                     <select className="form-control select2" style={{ 'width': '100%' }} 
-                                        value={selectedCompanyId}
+                                        value={itemCompany}
                                         onChange={handleChangeCompany}>
                                         <option value="0" >Select Company</option>
                                         {company.map(cmp => (<option value={cmp.Id}>{cmp.Name}</option>))}

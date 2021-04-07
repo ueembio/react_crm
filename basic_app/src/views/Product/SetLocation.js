@@ -40,14 +40,14 @@ function SetLocation({ setAlert }) {
         let { name, value } = e.target;
         console.log('handleChangeLocation');
         //console.log(name);
-        //console.log(value);
+        console.log(value);
 
-        let index = e.target.selectedIndex;
-        let el = e.target.childNodes[index]
-        let id = el.getAttribute('id');
+        //let index = e.target.selectedIndex;
+        //let el = e.target.childNodes[index]
+        //let id = el.getAttribute('id');
         //console.log('Name, Code', e.target.value, option);
 
-        setSelectedLocation(id)
+        setSelectedLocation(value)
         //this.setState({
         //    [name]: value,
         //});
@@ -64,11 +64,11 @@ function SetLocation({ setAlert }) {
             return;
         }
 
-        if (selectedLocation.length == 0) {
+        console.log(selectedLocation);
+        if (selectedLocation === 0) {
             alert("Please select location");
             return;
         }
-        console.log(selectedLocation);
         updateProductSetLocation(id, { selectedLocation });
 
         history.push("/ViewProducts");

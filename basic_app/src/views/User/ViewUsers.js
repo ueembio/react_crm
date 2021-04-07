@@ -39,7 +39,7 @@ function ViewUsers() {
               <th>Username</th>
               <th>Phone</th>
               <th>Email</th>
-              <th>Company</th>
+              <th style={{ 'display': getIsAdmin() ? '' : 'none' }}>Company</th>
               <th>Created On</th>
               <th>Action</th>
             </tr>
@@ -52,7 +52,7 @@ function ViewUsers() {
                 <td>{user.Username}</td>
                 <td>{user.Phone}</td>
                 <td>{user.Email}</td>
-                <td>{user.Company}</td>
+                <td style={{ 'display': getIsAdmin() ? 'block' : 'none' }}>{user.Company}</td>
                 <td>{formatDate(user.DT)}</td>
                 <td>
                   {/*<Link className="btn btn-primary">View</Link>*/}
