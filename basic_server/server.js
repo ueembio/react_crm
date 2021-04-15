@@ -41,7 +41,7 @@ connection.connect(error => {
 });
 
 
-setInterval(pollDatabaseForAlerts, POLLING_INTERVAL_IN_MINUTES * 60 * 1000);
+//setInterval(pollDatabaseForAlerts, POLLING_INTERVAL_IN_MINUTES * 60 * 1000);
 
 
 app.use(cors());
@@ -164,7 +164,7 @@ app.put('/update_product_set_location/:id', (req, res) => {
   console.log(req.params.id)
   console.log(req.body.item);
   console.log(req.body.item.selectedLocation);
-  
+
   var sql = `UPDATE product SET ProductLocationId=${req.body.item.selectedLocation} WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
@@ -219,7 +219,7 @@ app.get('/product_data/:id/:startDate/:endDate', function (req, res) {
   console.log(req.params.startDate)
   console.log(req.params.endDate)
 
-  var sql = `SELECT p.Name,dd.dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial
+  var sql = `SELECT p.Name,dd.dt, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '') as hardware_serial
     FROM product p LEFT JOIN device_data dd ON p.sku = REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE p.id = ${req.params.id} AND dd.dt >= '${req.params.startDate}' AND dd.dt <= '${req.params.endDate}'
     ORDER BY dd.dt DESC;`
@@ -262,6 +262,24 @@ app.get('/products_by_user_by_location/:userId/:locationId', function (req, res)
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
+    res.status(200).json(result)
+  });
+});
+
+app.get('/product_alerts/:id/:startDate/:endDate', function (req, res) {
+  console.log('in get command');
+  console.log(req.params.id)
+  console.log(req.params.startDate)
+  console.log(req.params.endDate)
+
+  var sql = `SELECT * FROM alert
+    WHERE ProductId = ${req.params.id} AND DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
+    ORDER BY DT DESC;`
+  console.log(sql);
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
     res.status(200).json(result)
   });
 });
@@ -517,7 +535,7 @@ app.put('/location/:id', (req, res) => {
   console.log(req.params.id)
   console.log(req.body.item);
   console.log(req.body.item.itemName);
-  
+
   var sql = `UPDATE product_location SET Name='${req.body.item.itemName}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
@@ -567,7 +585,7 @@ function pollDatabaseForAlerts() {
   //console.log('*** pollDatabaseForAlerts ***');
   //sendMessage('+14804852044', 'test temperature sensor')
 
-  var sql = `SELECT pr.Id, p.Id ProductId, p.Name AS Product, p.MinThreshold, p.MaxThreshold, p.MaxThresholdIntervalInSeconds, p.ThresholdStartDT, DATE_FORMAT(dd.dt,'%Y-%m-%d %H:%i') AS dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial, c.Name AS Company, pr.RentDT, pr.ReturnDT, u.Phone, u.Email
+  var sql = `SELECT pr.Id, p.Id ProductId, p.Name AS Product, p.MinThreshold, p.MaxThreshold, p.MaxThresholdIntervalInSeconds, p.ThresholdStartDT, DATE_FORMAT(dd.dt,'%Y-%m-%d %H:%i') AS dt, JSON_EXTRACT(data, "$.payload_fields.TempC_SHT") as temperature, REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')  as hardware_serial, c.Name AS Company, pr.RentDT, pr.ReturnDT, u.Id AS UserId, u.Phone, u.Email
     FROM product p left join productsrent pr on p.id=pr.ProductId 
       left join company c on pr.CompanyId=c.Id 
         left join users u on pr.CompanyId=u.CompanyId
@@ -588,6 +606,8 @@ function pollDatabaseForAlerts() {
       //console.log(result[i].MaxThresholdIntervalInSeconds);
 
       try {
+        var userId = result[i].UserId;
+        var productId = result[i].ProductId;
         var temperature = parseFloat(result[i].temperature);
         var minThreshold = parseFloat(result[i].MinThreshold);
         var maxThreshold = parseFloat(result[i].MaxThreshold);
@@ -631,9 +651,26 @@ function pollDatabaseForAlerts() {
         });
 
         if (isAlert && maxThresholdIntervalInSeconds == 0) {
+          var sqlAlert = `INSERT INTO alert (Message, ProductId, UserId) VALUES('${message}', ${userId}, ${productId})`;
+          connection.query(sqlAlert, (error, result) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('data inserted in alert');
+            }
+          });
           sendMessage(result[i].phone, message)
         }
         else if (isAlert && (secondsElapsedSinceFirstViolation >= maxThresholdIntervalInSeconds)) {
+          message = message + `. Threshold violated ${secondsElapsedSinceFirstViolation} seconds before.`;
+          var sqlAlert = `INSERT INTO alert (Message, ProductId, UserId) VALUES('${message}', ${userId}, ${productId})`;
+          connection.query(sqlAlert, (error, result) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('data inserted in alert');
+            }
+          });
           sendMessage(result[i].phone, message)
         }
 

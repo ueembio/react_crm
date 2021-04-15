@@ -129,3 +129,15 @@ export function getProductDataByDate(id, startDate, endDate) {
     }
   }).then(data => data.json())
 }
+
+export function getProductAlertsByDate(id, startDate, endDate) {
+  console.log('getProductAlertsByDate');
+  console.log(startDate);
+  console.log(endDate);
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/product_alerts/` + id + `/${startDate}/${endDate}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(data => data.json())
+}

@@ -87,6 +87,7 @@ function ViewProducts() {
                   <Link className="btn btn-sm btn-primary" to={`/product/edit/${product.Id}`} style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>Edit</Link>
                   <Link className="btn btn-secondary" to={`/SetRule/${product.Id}`}>Alert Rule</Link>
                   <Link className="btn btn-secondary" to={`/product/data/${product.Id}`}>Data</Link>
+                  <Link className="btn btn-secondary" to={`/Alerts/${product.Id}`}>Alerts</Link>
                   <Link className="btn btn-secondary" to={`/SetLocation/${product.Id}`}>Location</Link>
                 </td>
               </tr>

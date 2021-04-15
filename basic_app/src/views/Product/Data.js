@@ -84,7 +84,7 @@ function Data({ setAlert }) {
         getProduct(id)
             .then(items => {
                 setTitle('Sensor Name: ' + items.Name + ', Hardware Serial #: ' + items.SKU);
-
+                setEndDate(new Date());
                 getProductDataByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         setList(items);
