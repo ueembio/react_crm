@@ -12,6 +12,10 @@ import $ from 'jquery';
 import "react-datepicker/dist/react-datepicker.css";
 
 
+
+const fs = require('fs');
+const { Parser } = require('json2csv');
+
 const columns = [
     {
         name: 'Name',
@@ -137,6 +141,21 @@ function Data({ setAlert }) {
         }
     }
 
+    function exportToCSV() {
+        console.log('exportToCSV');
+        const fields = ['Name', 'hardware_serial', 'temperature', 'dt'];
+        const opts = { fields };
+
+        try {
+            const parser = new Parser(opts);
+            const csv = parser.parse(products);
+            console.log(csv);
+            fs.writeFile('111.csv', csv);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -167,11 +186,14 @@ function Data({ setAlert }) {
                 <div id="divmychart" className="col-md-12">
                     <canvas id="mychart"></canvas>
                 </div>
+
                 <div className="col-md-12">
                     <div id="status">
                     </div>
+                    <div>
+                        <button className="btn btn-secondary" onClick={exportToCSV}>Export to CSV</button>
+                    </div>
                 </div>
-
 
                 <div className="col-md-12">
                     <DataTable
@@ -215,7 +237,7 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
     var ctx = c.getContext('2d');
 
     divstatus.innerHTML = "Total Records: " + chartData.length;
-    
+
     /*
     if (chartData.length === 0) {
         console.log('chartData.length === 0');
@@ -344,13 +366,13 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
             }
         }
     };
-    
+
     if (window.chart) {
         window.chart.destroy();
         window.chart = null;
         console.log('destroy old');
     }
-    
+
     window.chart = new Chart(ctx, config);
     window.chart.update();
 }
