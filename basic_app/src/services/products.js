@@ -141,3 +141,12 @@ export function getProductAlertsByDate(id, startDate, endDate) {
     }
   }).then(data => data.json())
 }
+
+export function updateAlertSetMarkAsRead(id) {
+  return fetch(`${process.env.REACT_APP_API_BASE_URL}/update_alert_mark_as_read/` + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(data => data.json())
+}

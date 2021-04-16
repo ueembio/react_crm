@@ -284,6 +284,23 @@ app.get('/product_alerts/:id/:startDate/:endDate', function (req, res) {
   });
 });
 
+app.put('/update_alert_mark_as_read/:id', (req, res) => {
+  console.log('in put update_alert_mark_as_read');
+  console.log(req.params.id)
+  
+  var sql = `UPDATE alert SET ActionTaken=1, ActionTakenOn=now() WHERE Id=${req.params.id}`;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+      logger.info('error in saving database.');
+    } else {
+      console.log('data updated in alert');
+      logger.info('successfully updated in database.');
+    }
+    res.status(200).json({ 'message': 'Data updated successfully' });
+  });
+});
+
 // Companies API
 app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';

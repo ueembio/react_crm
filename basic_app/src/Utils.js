@@ -65,7 +65,6 @@ export const formatDateTime = (date) => {
     if (date === '') {
         return '';
     }
-
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),

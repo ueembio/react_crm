@@ -1,45 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { formatDateTime, getTemperatureUnit, convertCToF } from "../../Utils"
-import { getProduct, getProductAlertsByDate } from '../../services/products';
+import { formatDateTime } from "../../Utils"
+import { getProduct, getProductAlertsByDate, updateAlertSetMarkAsRead } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
 
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const columns = [
-    {
-        name: 'Name',
-        selector: 'Name',
-        sortable: true,
-    },
-    {
-        name: 'Hardware Serial',
-        selector: 'hardware_serial',
-        sortable: true
-    },
-    {
-        name: 'Temperature (°' + getTemperatureUnit() + ')',
-        selector: 'temperature',
-        sortable: true,
-        right: true,
-        cell: row => {
-            if (getTemperatureUnit() === 'F')
-                return <div>{convertCToF(row.temperature)}</div>
-            return <div>{row.temperature}</div>
-        }
-    },
-    {
-        name: 'Data Received On',
-        sortable: true,
-        selector: 'dt',
-        cell: row => <div>{formatDateTime(row.dt)}</div>,
-    }
-];
-
-
 function Alerts({ setAlert }) {
+
+    const columns = [
+        {
+            name: 'Alert Message',
+            selector: 'Message',
+            sortable: true,
+            width: '550px'
+        },
+        {
+            name: 'Alert Time',
+            sortable: true,
+            selector: 'DT',
+            cell: row => <div>{formatDateTime(row.DT)}</div>,
+            width: '200px'
+        },
+        {
+            name: 'Read Status',
+            selector: 'ActionTaken',
+            sortable: true,
+            cell: row => {
+                if (!row.ActionTaken)
+                    return <div>Unread</div>
+                return <div>Read</div>
+            },
+            width: '150px'
+        },
+        {
+            name: 'Alert Read On',
+            selector: 'ActionTakenOn',
+            sortable: true,
+            cell: row => <div>{formatDateTime(row.ActionTakenOn)}</div>,
+            width: '200px'
+        },
+        {
+            name: 'Action',
+            selector: 'Action',
+            sortable: true,
+            cell: row => {
+                if (!row.ActionTaken)
+                    return <div><button class="btn btn-sm btn-primary" onClick={markAsRead} id={row.Id}>Action</button></div>
+                return <div></div>
+            }
+        }
+    ];
+
+    const conditionalRowStyles = [
+        {
+            when: row => row.ActionTaken == 0,
+            style: {
+                backgroundColor: 'orange',
+                color: 'white',
+                '&:hover': {
+                    cursor: 'pointer',
+                },
+            },
+        }
+    ];
 
     var date = new Date();
     date.setDate(date.getDate() - 7);
@@ -49,8 +75,7 @@ function Alerts({ setAlert }) {
     const [title, setTitle] = useState('');
     const [startDate, setStartDate] = useState(date);
     const [endDate, setEndDate] = useState(new Date());
-    const [showing, setShowing] = useState(true);
-    
+
     useEffect(() => {
         getProduct(id)
             .then(items => {
@@ -60,7 +85,6 @@ function Alerts({ setAlert }) {
                 getProductAlertsByDate(id, formatDateTime(startDate), formatDateTime(endDate))
                     .then(items => {
                         console.log('getProductAlertsByDate returned');
-                        console.log(items);
                         setList(items);
                     });
             });
@@ -80,6 +104,19 @@ function Alerts({ setAlert }) {
                     });
             });
     }
+
+    const markAsRead = (e) => {
+        console.log(e.target.id);
+        if (e.target.id) {
+            updateAlertSetMarkAsRead(e.target.id);
+            getProductAlertsByDate(id, formatDateTime(startDate), formatDateTime(endDate))
+                .then(items => {
+                    console.log('getProductAlertsByDate returned');
+                    setList(items);
+                });
+        }
+    }
+
 
     return (
         <div className="container-fluid">
@@ -119,9 +156,10 @@ function Alerts({ setAlert }) {
                         title={title}
                         columns={columns}
                         data={products}
-                        paginationPerPage={5}
-                        paginationRowsPerPageOptions={[5]}
-                        pagination>
+                        paginationPerPage={10}
+                        paginationRowsPerPageOptions={[10]}
+                        pagination
+                        conditionalRowStyles={conditionalRowStyles}>
                     </DataTable>
                 </div>
 
