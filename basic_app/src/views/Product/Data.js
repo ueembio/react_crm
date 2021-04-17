@@ -4,6 +4,7 @@ import { formatDateTime, getTemperatureUnit, convertCToF } from "../../Utils"
 import { getProduct, getProductData, getProductDataByDate } from '../../services/products';
 import DatePicker from "react-datepicker";
 import DataTable from 'react-data-table-component';
+import { saveAs } from 'file-saver';
 import { Line, Bar } from 'react-chartjs-2';
 import Chart from 'chart.js';
 import moment from 'moment'
@@ -60,7 +61,7 @@ function Data({ setAlert }) {
     const [showing, setShowing] = useState(true);
     var chartData = [];
     var chartDataAverage = [];
-
+    
     useEffect(() => {
         getProduct(id)
             .then(items => {
@@ -149,8 +150,12 @@ function Data({ setAlert }) {
         try {
             const parser = new Parser(opts);
             const csv = parser.parse(products);
-            console.log(csv);
-            fs.writeFile('111.csv', csv);
+            //console.log(csv);
+            //console.log(Object.prototype.toString.call(csv));
+    
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, 'sendor_data.csv');
+
         } catch (err) {
             console.error(err);
         }
@@ -194,7 +199,7 @@ function Data({ setAlert }) {
                         <button className="btn btn-secondary" onClick={exportToCSV}>Export to CSV</button>
                     </div>
                 </div>
-
+  
                 <div className="col-md-12">
                     <DataTable
                         title={title}
