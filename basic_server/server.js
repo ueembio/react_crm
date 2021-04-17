@@ -184,17 +184,34 @@ app.post('/products', (req, res) => {
   console.log(req.body.item.itemDescription);
   console.log(req.body.item.itemSKU);
 
-  var sql = `INSERT INTO product (Name, Description, SKU, Price) VALUES ('${req.body.item.itemName}', '${req.body.item.itemDescription}', '${req.body.item.itemSKU}', '0.00')`;
+  var sql = `SELECT * FROM product WHERE SKU='${req.body.item.itemSKU}'`;
+  console.log(sql);
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
-      logger.info('error in saving database.');
-    } else {
-      console.log('data inserted in product');
-      logger.info('successfully saved in database.');
+      logger.info('error in select product.');
     }
-    res.status(200).json({ 'message': 'Data inserted successfully' });
+    console.log('result.length:' + result.length);
+    if (result.length > 0) {
+      res.status(200).json({ 'message': 'Sensor hardware serial already exists' });
+    }
+    else {
+
+      sql = `INSERT INTO product (Name, Description, SKU, Price) VALUES ('${req.body.item.itemName}', '${req.body.item.itemDescription}', '${req.body.item.itemSKU}', '0.00')`;
+      connection.query(sql, (error, result) => {
+        if (error) {
+          console.log(error);
+          logger.info('error in saving database.');
+        } else {
+          console.log('data inserted in product');
+          logger.info('successfully saved in database.');
+        }
+        res.status(200).json({ 'message': 'Sensor information saved successfully' });
+      });
+
+    }
   });
+
 });
 
 app.get('/product_data/:id', function (req, res) {
@@ -287,7 +304,7 @@ app.get('/product_alerts/:id/:startDate/:endDate', function (req, res) {
 app.put('/update_alert_mark_as_read/:id', (req, res) => {
   console.log('in put update_alert_mark_as_read');
   console.log(req.params.id)
-  
+
   var sql = `UPDATE alert SET ActionTaken=1, ActionTakenOn=now() WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
