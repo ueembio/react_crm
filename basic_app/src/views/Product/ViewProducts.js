@@ -81,7 +81,6 @@ function ViewProducts() {
               <th>Sensor Name</th>
               <th>Description</th>
               <th>Hardware Serial No.</th>
-              <th>Created On</th>
               <th>Last Data Received On</th>
               <th>Temperature (°{getTemperatureUnit()})</th>
               <th>Action</th>
@@ -93,7 +92,6 @@ function ViewProducts() {
                 <td>{product.Name}</td>
                 <td>{product.Description}</td>
                 <td>{product.SKU}</td>
-                <td>{formatDate(product.DT)}</td>
                 <td>{formatDateTime(product.datareceivedon)}</td>
                 <td><ConvertTemperature value={product.temperature} /></td>
                 <td>

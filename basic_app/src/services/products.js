@@ -142,6 +142,31 @@ export function getProductAlertsByDate(id, startDate, endDate) {
   }).then(data => data.json())
 }
 
+export function getAlertsByDate(startDate, endDate) {
+  console.log('getAlertsByDate');
+  var isAdmin = getIsAdmin();
+  if (isAdmin == 1) {
+    console.log('(isAdmin === 1)');
+    console.log(startDate);
+    console.log(endDate);
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/alerts/${startDate}/${endDate}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(data => data.json());
+  }
+  else {
+    var id = getLoggedInUserId();
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/alerts_by_user/${id}/${startDate}/${endDate}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(data => data.json());
+  }
+}
+
 export function updateAlertSetMarkAsRead(id) {
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/update_alert_mark_as_read/` + id, {
     method: 'PUT',

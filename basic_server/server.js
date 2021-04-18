@@ -83,7 +83,8 @@ app.use('/login', (req, res) => {
 // Products API
 app.get('/products', (req, res) => {
   var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
-    FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')`;
+    FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
+    ORDER BY datareceivedon DESC`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -260,7 +261,8 @@ app.get('/products_by_user/:id', function (req, res) {
       LEFT JOIN company c ON c.Id=pr.CompanyId
       LEFT JOIN users u ON u.CompanyId=pr.CompanyId
       LEFT JOIN device_state ds ON p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
-    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.id;
+    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.id +
+    ` ORDER BY datareceivedon DESC`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -318,6 +320,25 @@ app.put('/update_alert_mark_as_read/:id', (req, res) => {
       logger.info('successfully updated in database.');
     }
     res.status(200).json({ 'message': 'Data updated successfully' });
+  });
+});
+
+// Alerts API
+app.get('/alerts/:startDate/:endDate', function (req, res) {
+  console.log('in get alerts');
+  console.log(req.params.startDate)
+  console.log(req.params.endDate)
+
+  var sql = `SELECT * FROM alert
+    WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
+    ORDER BY DT DESC
+    LIMIT 5`;
+  console.log(sql);
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
   });
 });
 
