@@ -15,7 +15,7 @@ function Alerts({ setAlert }) {
             name: 'Alert Message',
             selector: 'Message',
             sortable: true,
-            width: '550px'
+            width: '500px'
         },
         {
             name: 'Alert Time',
@@ -33,14 +33,14 @@ function Alerts({ setAlert }) {
                     return <div>Unread</div>
                 return <div>Read</div>
             },
-            width: '150px'
+            width: '120px'
         },
         {
             name: 'Alert Read On',
             selector: 'ActionTakenOn',
             sortable: true,
             cell: row => <div>{formatDateTime(row.ActionTakenOn)}</div>,
-            width: '200px'
+            width: '180px'
         },
         {
             name: 'Action',
@@ -48,7 +48,7 @@ function Alerts({ setAlert }) {
             sortable: true,
             cell: row => {
                 if (!row.ActionTaken)
-                    return <div><button class="btn btn-sm btn-primary" onClick={markAsRead} id={row.Id}>Action</button></div>
+                    return <div><button class="btn btn-sm btn-primary" onClick={markAsRead} id={row.Id}>Mark As Read</button></div>
                 return <div></div>
             }
         }

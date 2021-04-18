@@ -27,6 +27,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "pakistan",
+  //password: "af2wyrka",
   database: "sensor_management"
 });
 
@@ -81,7 +82,8 @@ app.use('/login', (req, res) => {
 
 // Products API
 app.get('/products', (req, res) => {
-  var sql = 'SELECT * FROM product';
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
+    FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -253,10 +255,11 @@ app.get('/products_by_user/:id', function (req, res) {
   console.log('products_by_user');
   console.log(req.params.id)
 
-  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT 
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
     FROM product p LEFT JOIN productsrent pr ON p.Id=pr.ProductId
       LEFT JOIN company c ON c.Id=pr.CompanyId
       LEFT JOIN users u ON u.CompanyId=pr.CompanyId
+      LEFT JOIN device_state ds ON p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.id;
   connection.query(sql, function (error, result) {
     if (error)

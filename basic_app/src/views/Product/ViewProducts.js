@@ -4,12 +4,13 @@ import { getList, getListByLocation } from '../../services/products';
 import { getLocations } from '../../services/locations';
 import { formatDate, getIsAdmin, getLoggedInUserId } from "../../Utils"
 import { Table } from 'react-bootstrap';
+import { formatDateTime, getTemperatureUnit, convertCToF } from "../../Utils"
 
 function ViewProducts() {
 
   const [products, setList] = useState([]);
   const [locations, setLocations] = useState([]);
-  
+
   useEffect(() => {
     console.log('on loading');
     let mounted = true;
@@ -51,6 +52,14 @@ function ViewProducts() {
     }
   }
 
+  function ConvertTemperature(props) {
+    const value = props.value;
+    if (getTemperatureUnit() === 'F') {
+      return convertCToF(value);
+    }
+    return value;
+  }
+
   return (
     <div className="container-fluid">
 
@@ -73,6 +82,8 @@ function ViewProducts() {
               <th>Description</th>
               <th>Hardware Serial No.</th>
               <th>Created On</th>
+              <th>Last Data Received On</th>
+              <th>Temperature (°{getTemperatureUnit()})</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -83,6 +94,8 @@ function ViewProducts() {
                 <td>{product.Description}</td>
                 <td>{product.SKU}</td>
                 <td>{formatDate(product.DT)}</td>
+                <td>{formatDateTime(product.datareceivedon)}</td>
+                <td><ConvertTemperature value={product.temperature} /></td>
                 <td>
                   <Link className="btn btn-sm btn-primary" to={`/product/edit/${product.Id}`} style={{ display: (getIsAdmin() == 1) ? "show" : "none" }}>Edit</Link>
                   <Link className="btn btn-secondary" to={`/SetRule/${product.Id}`}>Alert Rule</Link>

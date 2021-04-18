@@ -13,9 +13,20 @@ import $ from 'jquery';
 import "react-datepicker/dist/react-datepicker.css";
 
 
-
 const fs = require('fs');
 const { Parser } = require('json2csv');
+
+const myNewTheme = {
+    rows: {
+        fontSize: '38px'
+    },
+    headCells: {
+        style: {
+            paddingLeft: '8px', // override the cell padding for head cells
+            paddingRight: '8px',
+        },
+    }
+}
 
 const columns = [
     {
@@ -61,7 +72,7 @@ function Data({ setAlert }) {
     const [showing, setShowing] = useState(true);
     var chartData = [];
     var chartDataAverage = [];
-    
+
     useEffect(() => {
         getProduct(id)
             .then(items => {
@@ -152,7 +163,7 @@ function Data({ setAlert }) {
             const csv = parser.parse(products);
             //console.log(csv);
             //console.log(Object.prototype.toString.call(csv));
-    
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, 'sendor_data.csv');
 
@@ -196,10 +207,10 @@ function Data({ setAlert }) {
                     <div id="status">
                     </div>
                     <div>
-                        <button className="btn btn-secondary" onClick={exportToCSV}>Export to CSV</button>
+                        <button className="btn btn-primary" onClick={exportToCSV}>Export to CSV</button>
                     </div>
                 </div>
-  
+
                 <div className="col-md-12">
                     <DataTable
                         title={title}
@@ -207,7 +218,8 @@ function Data({ setAlert }) {
                         data={products}
                         paginationPerPage={5}
                         paginationRowsPerPageOptions={[5]}
-                        pagination>
+                        pagination
+                        customTheme={myNewTheme}>
                     </DataTable>
                 </div>
 
