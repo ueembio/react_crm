@@ -50,7 +50,8 @@ function Alerts({ setAlert }) {
                 if (!row.ActionTaken)
                     return <div><button class="btn btn-sm btn-primary" onClick={markAsRead} id={row.Id}>Mark As Read</button></div>
                 return <div></div>
-            }
+            },
+            width: '150px'
         }
     ];
 

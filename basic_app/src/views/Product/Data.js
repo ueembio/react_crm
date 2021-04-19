@@ -146,6 +146,7 @@ function Data({ setAlert }) {
             chartData.push({ t: formatDateTime(dt), y: temperature });
             //data.push({ date: formatDateTime(dt), name: "name" + i, value: temperature });
         }
+        console.log(chartData);
 
         var average = (sum / products.length).toFixed(2);;
         for (let i = 0; i < items.length; i++) {
@@ -328,9 +329,7 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
                 xAxes: [{
                     type: 'time',
                     time: {
-                        displayFormats: {
-                            month: 'DD MMM-YY'
-                        }
+                        unit: 'day'
                     },
                     distribution: 'series',
                     offset: true,
