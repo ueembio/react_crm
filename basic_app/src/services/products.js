@@ -23,7 +23,30 @@ export function getList() {
         }
       }).then(data => data.json())
   }
+}
 
+export function getDashboardCounts(startDate, endDate) {
+  var isAdmin = getIsAdmin();
+  if (isAdmin == 1) {
+    console.log('(isAdmin === 1)');
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/get_dashboard_counts/${startDate}/${endDate}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json())
+  }
+  else {
+    var id = getLoggedInUserId();
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/get_dashboard_counts_by_user/${id}/${startDate}/${endDate}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json())
+  }
 }
 
 export function getListByLocation(userId, locationId) {

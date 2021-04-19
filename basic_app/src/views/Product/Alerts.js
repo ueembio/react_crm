@@ -15,14 +15,14 @@ function Alerts({ setAlert }) {
             name: 'Alert Message',
             selector: 'Message',
             sortable: true,
-            width: '500px'
+            width: '520px'
         },
         {
             name: 'Alert Time',
             sortable: true,
             selector: 'DT',
             cell: row => <div>{formatDateTime(row.DT)}</div>,
-            width: '200px'
+            width: '180px'
         },
         {
             name: 'Read Status',

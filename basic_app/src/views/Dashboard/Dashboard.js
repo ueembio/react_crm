@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDateTime, convertCToF, getIsAdmin, getLoggedInUserId } from "../../Utils"
-import { getList, getAlertsByDate } from '../../services/products';
+import { getList, getAlertsByDate, getDashboardCounts } from '../../services/products';
 import { getTemperatureUnit } from '../../Utils'
 
 export default function Dashboard() {
@@ -12,6 +12,9 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState([]);
   const [startDate, setStartDate] = useState(date);
   const [endDate, setEndDate] = useState(new Date());
+  const [maxTemperature, setMaxTemperature] = useState(0);
+  const [minTemperature, setMinTemperature] = useState(0);
+  const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
     console.log('on loading');
@@ -31,6 +34,19 @@ export default function Dashboard() {
         }
       });
 
+    getDashboardCounts(formatDateTime(startDate), formatDateTime(endDate))
+      .then(items => {
+        if (mounted) {
+          console.log('getDashboardCounts returned');
+          console.log(items);
+          if (items.length > 0) {
+            setMaxTemperature(items[0].maxTemperature);
+            setMinTemperature(items[0].minTemperature);
+            setProductCount(items[0].productCount);
+          }
+        }
+      });
+
   }, []);
 
   function ConvertTemperature(props) {
@@ -45,32 +61,32 @@ export default function Dashboard() {
     <section className="content">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-3 col-6">
-            <div className="small-box bg-danger">
+          <div className="col-lg-4 col-6">
+            <div className="small-box bg-info">
               <div className="inner">
-                <h3>25°{getTemperatureUnit()}</h3>
-                <p>Highest Temperature</p>
+                <h3><ConvertTemperature value={maxTemperature} /> °{getTemperatureUnit()}</h3>
+                <p>Maximum Temperature in last 24 Hours</p>
               </div>
               <div className="icon">
                 <i className="ion ion-bag"></i>
               </div>
-              <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
+              <a href="#" style={{ display: 'none' }} className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div className="col-lg-3 col-6">
+          <div className="col-lg-4 col-6">
 
-            <div className="small-box bg-success">
+            <div className="small-box bg-info">
               <div className="inner">
-                <h3>3°{getTemperatureUnit()}</h3>
-                <p>Lowest Temperature</p>
+                <h3><ConvertTemperature value={minTemperature} /> °{getTemperatureUnit()}</h3>
+                <p>Minimum Temperature in last 24 Hours</p>
               </div>
               <div className="icon">
                 <i className="ion ion-stats-bars"></i>
               </div>
-              <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
+              <a href="#" style={{ display: 'none' }} className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div className="col-lg-3 col-6">
+          <div className="col-lg-3 col-6" style={{ display: 'none' }}>
             <div className="small-box bg-info">
               <div className="inner">
                 <h3>14</h3>
@@ -79,19 +95,19 @@ export default function Dashboard() {
               <div className="icon">
                 <i className="ion ion-person-add"></i>
               </div>
-              <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
+              <a href="#" style={{ display: 'none' }} className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div className="col-lg-3 col-6">
-            <div className="small-box bg-warning">
+          <div className="col-lg-4 col-6">
+            <div className="small-box bg-info">
               <div className="inner">
-                <h3>5</h3>
-                <p>Device Registrations</p>
+                <h3>{productCount}</h3>
+                <p>Total Sensors</p>
               </div>
               <div className="icon">
                 <i className="ion ion-pie-graph"></i>
               </div>
-              <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
+              <a href="#" style={{ display: 'none' }} className="small-box-footer">More info <i className="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
