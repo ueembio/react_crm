@@ -342,6 +342,30 @@ app.get('/alerts/:startDate/:endDate', function (req, res) {
   });
 });
 
+app.get('/alerts_by_user/:id/:startDate/:endDate', function (req, res) {
+  console.log('in get alerts_by_user');
+  console.log(req.params.id)
+  console.log(req.params.startDate)
+  console.log(req.params.endDate)
+
+  var sql = `SELECT a.Message,a.DT
+    FROM alert a left join product p on a.ProductId=p.Id
+      LEFT JOIN productsrent pr ON p.Id=pr.ProductId
+      LEFT JOIN company c ON c.Id=pr.CompanyId
+      LEFT JOIN users u ON u.CompanyId=pr.CompanyId
+    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND
+      a.DT >= '${req.params.startDate}' AND a.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'
+    ORDER BY a.DT DESC
+    LIMIT 5`;
+  console.log(sql);
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
 // Companies API
 app.get('/company', (req, res) => {
   var sql = 'SELECT * FROM company';
