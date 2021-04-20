@@ -247,6 +247,9 @@ var handleLoad = function (chartData, chartDataAverage, id, startDate, endDate, 
     console.log('handleLoad');
 
     var divstatus = document.getElementById('status');
+    if (divstatus === undefined){
+        return;
+    }
 
     document.getElementById("divmychart").innerHTML = "";
     document.getElementById("divmychart").innerHTML = '<canvas id="mychart"></canvas>';

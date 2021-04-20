@@ -85,6 +85,7 @@ app.get('/products', (req, res) => {
   var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
     FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     ORDER BY datareceivedon DESC`;
+  console.log(sql);
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
