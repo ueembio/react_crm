@@ -8,7 +8,7 @@ import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import Breadcrumb from './Breadcrumb';
-
+import ErrorBoundary from './ErrorBoundary'
 
 function App() {
 
@@ -26,6 +26,11 @@ function App() {
         <Breadcrumb></Breadcrumb>
         <Content></Content>
       </div>
+
+      <ErrorBoundary>
+        <p>Some error occurred!</p>
+      </ErrorBoundary>
+      
       <Footer></Footer>
     </BrowserRouter>
   );
