@@ -277,12 +277,14 @@ app.get('/products_by_user_by_location/:userId/:locationId', function (req, res)
   console.log(req.params.userId)
   console.log(req.params.locationId)
 
-  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT 
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
     FROM product p LEFT JOIN productsrent pr ON p.Id=pr.ProductId
       LEFT JOIN company c ON c.Id=pr.CompanyId
       LEFT JOIN users u ON u.CompanyId=pr.CompanyId
+      LEFT JOIN device_state ds ON p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.userId +
-    ` AND p.ProductLocationId=` + req.params.locationId;
+      ` AND p.ProductLocationId=` + req.params.locationId;
+  console.log(sql);
   connection.query(sql, function (error, result) {
     if (error)
       throw error;
@@ -391,7 +393,7 @@ app.get('/get_dashboard_counts_by_user/:id/:startDate/:endDate', function (req, 
   console.log(req.params.startDate)
   console.log(req.params.endDate)
 
-  var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, count(ds.device_id) productCount
+  var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, (SELECT count(ds.device_id) FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU LEFT JOIN productsrent pr ON p.Id=pr.ProductId LEFT JOIN company c ON c.Id=pr.CompanyId LEFT JOIN users u ON u.CompanyId=pr.CompanyId WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id='${req.params.id}') AS productCount    
     FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU
           LEFT JOIN productsrent pr ON p.Id=pr.ProductId
           LEFT JOIN company c ON c.Id=pr.CompanyId
