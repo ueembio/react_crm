@@ -39,15 +39,22 @@ function ViewProducts() {
     //let element = e.target.childNodes[index]
     //let id = element.getAttribute('id');
     console.log(value);
+    let mounted = true;
     if (value === '0') {
       console.log('all locations');
       getList().then(items => {
-        setList(items)
+        if (mounted){
+          console.log(items);
+          setList(items);
+        }
       });
     }
     else {
       getListByLocation(getLoggedInUserId(), value).then(items => {
-        setList(items)
+        if (mounted) {
+          console.log(items);
+          setList(items);
+        }
       });
     }
   }

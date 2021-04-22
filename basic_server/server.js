@@ -272,10 +272,24 @@ app.get('/products_by_user/:id', function (req, res) {
   });
 });
 
+app.get('/products_by_location/:locationId', (req, res) => {
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
+    FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
+    WHERE p.ProductLocationId=` + req.params.locationId +
+    ` ORDER BY datareceivedon DESC`;
+  console.log(sql);
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    //console.log(result);
+    res.status(200).json(result)
+  });
+});
+
 app.get('/products_by_user_by_location/:userId/:locationId', function (req, res) {
   console.log('products_by_user_by_location');
-  console.log(req.params.userId)
-  console.log(req.params.locationId)
+  console.log(req.params.userId);
+  console.log(req.params.locationId);
 
   var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
     FROM product p LEFT JOIN productsrent pr ON p.Id=pr.ProductId
@@ -283,7 +297,7 @@ app.get('/products_by_user_by_location/:userId/:locationId', function (req, res)
       LEFT JOIN users u ON u.CompanyId=pr.CompanyId
       LEFT JOIN device_state ds ON p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id=` + req.params.userId +
-      ` AND p.ProductLocationId=` + req.params.locationId;
+    ` AND p.ProductLocationId=` + req.params.locationId;
   console.log(sql);
   connection.query(sql, function (error, result) {
     if (error)
@@ -696,9 +710,8 @@ app.get('/locations_by_user/:id', function (req, res) {
   console.log('locations_by_user');
   console.log(req.params.id)
 
-  var sql = `SELECT Id, Name
-    FROM product_location  
-    WHERE UserId=` + req.params.id;
+  //var sql = `SELECT Id, Name FROM product_location WHERE UserId=` + req.params.id;
+  var sql = `SELECT Id, Name FROM product_location`;
   connection.query(sql, function (error, result) {
     if (error)
       throw error;

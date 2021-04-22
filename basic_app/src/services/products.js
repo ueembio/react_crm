@@ -50,13 +50,26 @@ export function getDashboardCounts(startDate, endDate) {
 }
 
 export function getListByLocation(userId, locationId) {
-  return fetch(`${process.env.REACT_APP_API_BASE_URL}/products_by_user_by_location/` + userId + '/' + locationId,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(data => data.json())
+  var isAdmin = getIsAdmin();
+  if (isAdmin == 1) {
+    console.log('(isAdmin === 1)');
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/products_by_location/` + locationId,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json());
+  }
+  else {
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/products_by_user_by_location/` + userId + '/' + locationId,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(data => data.json());
+  }
 }
 
 export function getAvailableProducts() {
