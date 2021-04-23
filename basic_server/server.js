@@ -390,14 +390,39 @@ app.get('/get_dashboard_counts/:startDate/:endDate', function (req, res) {
   console.log(req.params.startDate)
   console.log(req.params.endDate)
 
-  var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, (SELECT count(*) FROM device_state) productCount
+  var sql1 = `SELECT device_id, DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') maxTemperature
     FROM device_data
-    WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'`;
-  console.log(sql);
-  connection.query(sql, function (error, result) {
+    WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
+    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') DESC LIMIT 1`;
+  console.log(sql1);
+  connection.query(sql1, function (error, result1) {
     if (error)
       throw error;
-    res.status(200).json(result)
+
+    var sql2 = `SELECT device_id, DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') minTemperature
+    FROM device_data
+    WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
+    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') ASC LIMIT 1`;
+    console.log(sql2);
+    connection.query(sql2, function (error, result2) {
+      if (error)
+        throw error;
+
+      var sql3 = `SELECT count(*) productCount FROM device_state`;
+      console.log(sql3);
+      connection.query(sql3, function (error, result3) {
+        if (error)
+          throw error;
+
+        //console.log(result1);
+        //console.log(result2);
+        //console.log(result3);
+        var results = [result1, result2, result3];
+        console.log(results);
+        res.status(200).json(results);
+
+      });
+    });
   });
 });
 
@@ -407,18 +432,44 @@ app.get('/get_dashboard_counts_by_user/:id/:startDate/:endDate', function (req, 
   console.log(req.params.startDate)
   console.log(req.params.endDate)
 
-  var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, (SELECT count(ds.device_id) FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU LEFT JOIN productsrent pr ON p.Id=pr.ProductId LEFT JOIN company c ON c.Id=pr.CompanyId LEFT JOIN users u ON u.CompanyId=pr.CompanyId WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id='${req.params.id}') AS productCount    
+  var sql1 = `SELECT ds.device_id, ds.DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') maxTemperature    
     FROM device_data ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU
           LEFT JOIN productsrent pr ON p.Id=pr.ProductId
           LEFT JOIN company c ON c.Id=pr.CompanyId
           LEFT JOIN users u ON u.CompanyId=pr.CompanyId
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND
-      ds.DT >= '${req.params.startDate}' AND ds.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'`;
-  console.log(sql);
-  connection.query(sql, function (error, result) {
+      ds.DT >= '${req.params.startDate}' AND ds.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'
+    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') DESC LIMIT 1`;
+  console.log(sql1);
+  connection.query(sql1, function (error, result1) {
     if (error)
       throw error;
-    res.status(200).json(result)
+
+    var sql2 = `SELECT ds.device_id, ds.DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') minTemperature    
+    FROM device_data ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU
+          LEFT JOIN productsrent pr ON p.Id=pr.ProductId
+          LEFT JOIN company c ON c.Id=pr.CompanyId
+          LEFT JOIN users u ON u.CompanyId=pr.CompanyId
+    WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND
+      ds.DT >= '${req.params.startDate}' AND ds.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'
+    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') ASC LIMIT 1`;
+    console.log(sql2);
+    connection.query(sql2, function (error, result2) {
+      if (error)
+        throw error;
+
+      var sql3 = `SELECT count(ds.device_id) AS productCount FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU LEFT JOIN productsrent pr ON p.Id=pr.ProductId LEFT JOIN company c ON c.Id=pr.CompanyId LEFT JOIN users u ON u.CompanyId=pr.CompanyId WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id='${req.params.id}'`;
+      console.log(sql3);
+      connection.query(sql3, function (error, result3) {
+        if (error)
+          throw error;
+
+        var results = [result1, result2, result3];
+        console.log(results);
+        res.status(200).json(results);
+
+      });
+    });
   });
 });
 

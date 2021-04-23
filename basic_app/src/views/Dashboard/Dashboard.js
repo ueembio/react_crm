@@ -39,10 +39,14 @@ export default function Dashboard() {
         if (mounted) {
           console.log('getDashboardCounts returned');
           console.log(items);
-          if (items.length > 0) {
-            setMaxTemperature(items[0].maxTemperature);
-            setMinTemperature(items[0].minTemperature);
-            setProductCount(items[0].productCount);
+          if (items[0].length > 0) {
+            setMaxTemperature(items[0][0].maxTemperature);
+          }
+          if (items[1].length > 0) {
+            setMinTemperature(items[1][0].minTemperature);
+          }
+          if (items[2].length > 0) {
+            setProductCount(items[2][0].productCount);
           }
         }
       });
