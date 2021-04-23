@@ -384,14 +384,14 @@ app.get('/alerts_by_user/:id/:startDate/:endDate', function (req, res) {
   });
 });
 
-// Dashboar
+// Dashboard
 app.get('/get_dashboard_counts/:startDate/:endDate', function (req, res) {
   console.log('in get get_dashboard_counts');
   console.log(req.params.startDate)
   console.log(req.params.endDate)
 
   var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, (SELECT count(*) FROM device_state) productCount
-    FROM device_state
+    FROM device_data
     WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'`;
   console.log(sql);
   connection.query(sql, function (error, result) {
@@ -408,7 +408,7 @@ app.get('/get_dashboard_counts_by_user/:id/:startDate/:endDate', function (req, 
   console.log(req.params.endDate)
 
   var sql = `SELECT max(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) maxTemperature, min(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '')) minTemperature, (SELECT count(ds.device_id) FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU LEFT JOIN productsrent pr ON p.Id=pr.ProductId LEFT JOIN company c ON c.Id=pr.CompanyId LEFT JOIN users u ON u.CompanyId=pr.CompanyId WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND u.Id='${req.params.id}') AS productCount    
-    FROM device_state ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU
+    FROM device_data ds left join product p on REPLACE(JSON_EXTRACT(ds.data, "$.hardware_serial"), '"', '')=p.SKU
           LEFT JOIN productsrent pr ON p.Id=pr.ProductId
           LEFT JOIN company c ON c.Id=pr.CompanyId
           LEFT JOIN users u ON u.CompanyId=pr.CompanyId
@@ -666,6 +666,17 @@ app.get('/location/:id', function (req, res) {
       throw error;
     console.log(result[0]);
     res.status(200).json(result[0])
+  });
+});
+
+app.delete('/location/:id', function (req, res) {
+  console.log(req.params.id)
+
+  var sql = 'DELETE FROM product_location WHERE Id=' + req.params.id;
+  connection.query(sql, function (error, result) {
+    if (error)
+      throw error;
+    res.status(200).json('ok')
   });
 });
 

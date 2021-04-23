@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { getLocations } from '../../services/locations';
-import { formatDate, getIsAdmin } from "../../Utils"
+import { getLocations, deleteLocation } from '../../services/locations';
 import { Table } from 'react-bootstrap';
 import { getLoggedInUserId } from '../../Utils';
 
@@ -17,8 +16,18 @@ function ViewLocations() {
         }
       })
     return () => mounted = false;
-  }, [])
+  }, []);
 
+  function deleteLoc(e, locationId) {
+    e.preventDefault();
+    console.log(locationId);
+    deleteLocation(locationId)
+    
+    getLocations(getLoggedInUserId())
+      .then(items => {
+        setLocations(items)
+      })
+  }
 
   return (
     <div className="container-fluid">
@@ -38,6 +47,7 @@ function ViewLocations() {
                 <td>{location.Name}</td>
                 <td>
                   <Link className="btn btn-sm btn-primary" to={`/EditLocation/${location.Id}`}>Edit</Link>
+                  <Link className="btn btn-sm btn-info" onClick={((e) => deleteLoc(e, location.Id))}>Delete</Link>
                 </td>
               </tr>
             ))}

@@ -6,7 +6,7 @@ import { getTemperatureUnit } from '../../Utils'
 export default function Dashboard() {
 
   var date = new Date();
-  date.setDate(date.getDate() - 7);
+  date.setDate(date.getDate() - 1);
 
   const [products, setList] = useState([]);
   const [alerts, setAlerts] = useState([]);

@@ -38,3 +38,12 @@ export function addLocation(item) {
         body: JSON.stringify({ item })
     }).then(data => data.json())
 }
+
+export function deleteLocation(id) {
+    return fetch(`${process.env.REACT_APP_API_BASE_URL}/location/` + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(data => data.json())
+}
