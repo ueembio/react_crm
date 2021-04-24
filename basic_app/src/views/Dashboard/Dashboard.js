@@ -8,10 +8,13 @@ export default function Dashboard() {
   var date = new Date();
   date.setDate(date.getDate() - 1);
 
+  var date2 = new Date();
+  date2.setDate(date2.getDate() + 1);
+
   const [products, setList] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [startDate, setStartDate] = useState(date);
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(date2);
   const [maxTemperature, setMaxTemperature] = useState(0);
   const [minTemperature, setMinTemperature] = useState(0);
   const [productCount, setProductCount] = useState(0);

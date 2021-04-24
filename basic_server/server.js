@@ -393,7 +393,7 @@ app.get('/get_dashboard_counts/:startDate/:endDate', function (req, res) {
   var sql1 = `SELECT device_id, DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') maxTemperature
     FROM device_data
     WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
-    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') DESC LIMIT 1`;
+    ORDER BY CAST(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') AS FLOAT) DESC LIMIT 1`;
   console.log(sql1);
   connection.query(sql1, function (error, result1) {
     if (error)
@@ -402,7 +402,7 @@ app.get('/get_dashboard_counts/:startDate/:endDate', function (req, res) {
     var sql2 = `SELECT device_id, DT, REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') minTemperature
     FROM device_data
     WHERE DT >= '${req.params.startDate}' AND DT <= '${req.params.endDate}'
-    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') ASC LIMIT 1`;
+    ORDER BY CAST(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') AS FLOAT) ASC LIMIT 1`;
     console.log(sql2);
     connection.query(sql2, function (error, result2) {
       if (error)
@@ -439,7 +439,7 @@ app.get('/get_dashboard_counts_by_user/:id/:startDate/:endDate', function (req, 
           LEFT JOIN users u ON u.CompanyId=pr.CompanyId
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND
       ds.DT >= '${req.params.startDate}' AND ds.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'
-    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') DESC LIMIT 1`;
+    ORDER BY CAST(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') AS FLOAT) DESC LIMIT 1`;
   console.log(sql1);
   connection.query(sql1, function (error, result1) {
     if (error)
@@ -452,7 +452,7 @@ app.get('/get_dashboard_counts_by_user/:id/:startDate/:endDate', function (req, 
           LEFT JOIN users u ON u.CompanyId=pr.CompanyId
     WHERE pr.RentDT IS NOT NULL AND pr.ReturnDT IS NULL AND
       ds.DT >= '${req.params.startDate}' AND ds.DT <= '${req.params.endDate}' AND u.Id='${req.params.id}'
-    ORDER BY REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') ASC LIMIT 1`;
+    ORDER BY CAST(REPLACE(JSON_EXTRACT(data, "$.payload_fields.TempC_SHT"), '"', '') AS FLOAT) ASC LIMIT 1`;
     console.log(sql2);
     connection.query(sql2, function (error, result2) {
       if (error)
