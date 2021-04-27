@@ -13,6 +13,8 @@ function SetRule({ setAlert }) {
     var [itemMinThreshold, setItemMinThreshold] = useState();
     var [itemMaxThreshold, setItemMaxThreshold] = useState();
     const [itemThresholdInterval, setItemThresholdInterval] = useState();
+    const [itemThresholdSinceLastMessageReceivedInSeconds, setItemThresholdSinceLastMessageReceivedInSeconds] = useState();
+    
     useEffect(() => {
         getProduct(id)
             .then(items => {
@@ -28,6 +30,7 @@ function SetRule({ setAlert }) {
                     setItemMaxThreshold(items.MaxThreshold);
                 }
                 setItemThresholdInterval(items.MaxThresholdIntervalInSeconds);
+                setItemThresholdSinceLastMessageReceivedInSeconds(items.ThresholdSinceLastMessageReceivedInSeconds);
             })
     }, []);
 
@@ -56,7 +59,7 @@ function SetRule({ setAlert }) {
             itemMinThreshold = convertFToC(itemMinThreshold);
             itemMaxThreshold = convertFToC(itemMaxThreshold);
         }
-        updateProductSetRule(id, { itemMinThreshold, itemMaxThreshold, itemThresholdInterval });
+        updateProductSetRule(id, { itemMinThreshold, itemMaxThreshold, itemThresholdInterval, itemThresholdSinceLastMessageReceivedInSeconds });
 
         history.push("/ViewProducts");
     };
@@ -101,6 +104,11 @@ function SetRule({ setAlert }) {
                                     <label for="exampleInputSKU">Max Threshold Interval (seconds)</label>
                                     <input type="number" className="form-control" id="exampleInputThresholdInterval" placeholder="Max Threshold Interval (seconds)" name="thresholdinterval" defaultValue={itemThresholdInterval}
                                         onChange={event => setItemThresholdInterval(event.target.value)} />
+                                </div>
+                                <div className="form-group">
+                                    <label for="exampleInputSKU">Threshold Since Last Message Received (seconds)</label>
+                                    <input type="number" className="form-control" id="exampleInputThresholdSinceInterval" placeholder="Threshold Since Last Message Received (seconds)" name="thresholdsinceinterval" defaultValue={itemThresholdSinceLastMessageReceivedInSeconds}
+                                        onChange={event => setItemThresholdSinceLastMessageReceivedInSeconds(event.target.value)} />
                                 </div>
                             </div>
                             <div className="card-footer">

@@ -7,6 +7,7 @@ function AddProduct({ setAlert }) {
     const [itemName, setItemName] = useState("");
     const [itemDescription, setItemDescription] = useState("");
     const [itemSKU, setItemSKU] = useState("");
+    const [itemHeliumId, setItemHeliumId] = useState("");
     const history = useHistory();
 
     //Comment Added
@@ -26,7 +27,7 @@ function AddProduct({ setAlert }) {
             alert('please enter name');
             return;
         }
-        addProduct({ itemName, itemDescription, itemSKU });
+        addProduct({ itemName, itemDescription, itemSKU, itemHeliumId });
         history.push({
             pathname: '/ViewProducts/',
             search: '?query=abc',
@@ -55,6 +56,10 @@ function AddProduct({ setAlert }) {
                                 <div className="form-group">
                                     <label for="exampleInputSKU">Hardware Serial No.</label>
                                     <input type="text" className="form-control" id="exampleInputSKU" placeholder="Hardware Serial Number" onChange={event => setItemSKU(event.target.value)} value={itemSKU} />
+                                </div>
+                                <div className="form-group">
+                                    <label for="exampleInputHeliumId">Helium Id</label>
+                                    <input type="text" className="form-control" id="exampleInputHeliumId" placeholder="Helium Id" onChange={event => setItemHeliumId(event.target.value)} value={itemHeliumId} />
                                 </div>
                             </div>
                             <div className="card-footer">

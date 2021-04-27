@@ -82,7 +82,7 @@ app.use('/login', (req, res) => {
 
 // Products API
 app.get('/products', (req, res) => {
-  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
+  var sql = `SELECT p.Id, p.Name, p.Description, p.SKU, p.DT, p.HeliumID, p.ThresholdSinceLastMessageReceivedInSeconds, ds.dt datareceivedon, REPLACE(JSON_EXTRACT(ds.data, "$.payload_fields.TempC_SHT"), '"', '') as temperature
     FROM product p left join device_state ds on p.sku=REPLACE(JSON_EXTRACT(data, "$.hardware_serial"), '"', '')
     ORDER BY datareceivedon DESC`;
   console.log(sql);
@@ -126,10 +126,8 @@ app.put('/products/:id', (req, res) => {
   console.log('in put command');
   console.log(req.params.id)
   console.log(req.body.item);
-  console.log(req.body.item.name);
-  console.log(req.body.item.pnumber);
-
-  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}' WHERE Id=${req.params.id}`;
+  
+  var sql = `UPDATE product SET Name='${req.body.item.itemName}', Description='${req.body.item.itemDescription}', SKU='${req.body.item.itemSKU}', HeliumId='${req.body.item.itemHeliumId}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -149,8 +147,9 @@ app.put('/update_product_set_rule/:id', (req, res) => {
   console.log(req.body.item.itemMinThreshold);
   console.log(req.body.item.itemMaxThreshold);
   console.log(req.body.item.itemThresholdInterval);
-
-  var sql = `UPDATE product SET MinThreshold='${req.body.item.itemMinThreshold}', MaxThreshold='${req.body.item.itemMaxThreshold}', MaxThresholdIntervalInSeconds='${req.body.item.itemThresholdInterval}' WHERE Id=${req.params.id}`;
+  console.log(req.body.item.itemThresholdSinceLastMessageReceivedInSeconds);
+  
+  var sql = `UPDATE product SET MinThreshold='${req.body.item.itemMinThreshold}', MaxThreshold='${req.body.item.itemMaxThreshold}', MaxThresholdIntervalInSeconds='${req.body.item.itemThresholdInterval}', ThresholdSinceLastMessageReceivedInSeconds='${req.body.item.itemThresholdSinceLastMessageReceivedInSeconds}' WHERE Id=${req.params.id}`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -187,6 +186,7 @@ app.post('/products', (req, res) => {
   console.log(req.body.item.itemName);
   console.log(req.body.item.itemDescription);
   console.log(req.body.item.itemSKU);
+  console.log(req.body.item.itemHeliumId);
 
   var sql = `SELECT * FROM product WHERE SKU='${req.body.item.itemSKU}'`;
   console.log(sql);
@@ -201,7 +201,7 @@ app.post('/products', (req, res) => {
     }
     else {
 
-      sql = `INSERT INTO product (Name, Description, SKU, Price) VALUES ('${req.body.item.itemName}', '${req.body.item.itemDescription}', '${req.body.item.itemSKU}', '0.00')`;
+      sql = `INSERT INTO product (Name, Description, SKU, Price, HeliumId) VALUES ('${req.body.item.itemName}', '${req.body.item.itemDescription}', '${req.body.item.itemSKU}', '0.00', '${req.body.item.itemHeliumId}')`;
       connection.query(sql, (error, result) => {
         if (error) {
           console.log(error);

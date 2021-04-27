@@ -10,6 +10,7 @@ function EditProduct({ setAlert }) {
     const [itemName, setItemName] = useState();
     const [itemDescription, setItemDescription] = useState();
     const [itemSKU, setItemSKU] = useState();
+    const [itemHeliumId, setItemHeliumId] = useState();
     
     useEffect(() => {
         getProduct(id)
@@ -17,6 +18,7 @@ function EditProduct({ setAlert }) {
                 setItemName(items.Name);
                 setItemDescription(items.Description);
                 setItemSKU(items.SKU);
+                setItemHeliumId(items.HeliumId);
             })
     }, []);
 
@@ -35,7 +37,7 @@ function EditProduct({ setAlert }) {
             alert('please enter name');
             return;
         }
-        updateProduct(id, { itemName, itemDescription, itemSKU });
+        updateProduct(id, { itemName, itemDescription, itemSKU, itemHeliumId });
         history.push("/ViewProducts");
     };
 
@@ -64,6 +66,11 @@ function EditProduct({ setAlert }) {
                                     <label for="exampleInputSKU">Hardware Serial No.</label>
                                     <input type="text" className="form-control" id="exampleInputSKU" placeholder="Hardware Serial Number" name="sku" defaultValue={itemSKU}
                                         onChange={event => setItemSKU(event.target.value)} />
+                                </div>
+                                <div className="form-group">
+                                    <label for="exampleInputHeliumId">Helium Id</label>
+                                    <input type="text" className="form-control" id="exampleInputHeliumId" placeholder="Helium Id" name="heliumid" defaultValue={itemHeliumId}
+                                        onChange={event => setItemHeliumId(event.target.value)} />
                                 </div>
                             </div>
                             <div className="card-footer">
